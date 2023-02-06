@@ -14,7 +14,13 @@ import {
   ContainerConsultButton,
   ContainerOptions,
   Date,
+  Divider10,
+  Divider20,
+  Divider5,
+  Pause,
+  PulaLinha,
   TextOptions,
+  TitlePage,
 } from "./styles";
 
 interface dataForm {
@@ -82,7 +88,9 @@ const Record: React.FC = () => {
 
   return (
     <>
-      <Panel header={<h3 className="title">Registro de Ponto</h3>}>
+      <Panel
+        header={<TitlePage className="title">Registro de Ponto</TitlePage>}
+      >
         <Breadcrumb>
           <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
           <Breadcrumb.Item active>Registro de Ponto</Breadcrumb.Item>
@@ -94,7 +102,7 @@ const Record: React.FC = () => {
                 .locale("pt-br")
                 .format("DD [de] MMMM [de] YYYY")}
           </Date>
-          <div style={{ padding: 20 }} />
+          <Divider20 />
           <Form onChange={handleChange}>
             <Form.Group>
               <ContainerOptions>
@@ -103,7 +111,7 @@ const Record: React.FC = () => {
               </ContainerOptions>
             </Form.Group>
 
-            <div style={{ padding: 10 }} />
+            <Divider10 />
             <Form.Group>
               <ContainerOptions>
                 <TextOptions>Entrada: </TextOptions>
@@ -111,9 +119,9 @@ const Record: React.FC = () => {
               </ContainerOptions>
             </Form.Group>
 
-            <div style={{ padding: 10 }} />
+            <Divider10 />
 
-            <span>Almoço/Jantar:</span>
+            <Pause>Almoço/Jantar:</Pause>
 
             <ContainerOptions>
               <Form.Group>
@@ -122,10 +130,10 @@ const Record: React.FC = () => {
                 <TextOptions style={{ paddingLeft: 20 }}>Termino: </TextOptions>
                 <Form.Control name="pause_termino" type="time" />
               </Form.Group>
-              <div style={{ padding: 5 }} />
+              <Divider5 />
             </ContainerOptions>
 
-            <div style={{ padding: 10 }} />
+            <Divider10 />
 
             <>
               <Form.Group>
@@ -138,13 +146,13 @@ const Record: React.FC = () => {
                   />
                 </ContainerOptions>
               </Form.Group>
-              <div style={{ padding: 10 }} />
+              <Divider10 />
               <Form.Group>
                 <TextOptions>Atividades:</TextOptions>
                 <Form.HelpText tooltip>
                   Insira o nº da consulta e o que foi realizado no dia.
                 </Form.HelpText>
-                <br />
+                <PulaLinha />
                 <ContainerActivities>
                   <ContainerConsult>
                     <Consult>Consulta:</Consult>
@@ -168,7 +176,7 @@ const Record: React.FC = () => {
               </Form.Group>
             </>
           </Form>
-          <div style={{ padding: 20 }} />
+          <Divider20 />
           {Object.keys(consults).length !== 0 && (
             <>
               <Table data={consults} autoHeight>

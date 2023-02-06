@@ -9,7 +9,15 @@ import {
   Table,
 } from "rsuite";
 import { FormData } from "../../types";
-import { NoData } from "./styles";
+import {
+  Collaborator,
+  ContainerButton,
+  Divider30,
+  NoData,
+  PulaLinha,
+  TitlePage,
+  TitleRegistry,
+} from "./styles";
 
 const ReleaseHour: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
@@ -119,7 +127,13 @@ const ReleaseHour: React.FC = () => {
 
   return (
     <>
-      <Panel header={<h3 className="title">Liberação de Ficha Home-Office</h3>}>
+      <Panel
+        header={
+          <TitlePage className="title">
+            Liberação de Ficha Home-Office
+          </TitlePage>
+        }
+      >
         <Breadcrumb>
           <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
           <Breadcrumb.Item active>
@@ -136,11 +150,11 @@ const ReleaseHour: React.FC = () => {
           }}
           onClean={() => setSelect("")}
         />
-        <div style={{ padding: 30 }} />
+        <Divider30 />
         {select !== "" && (
           <>
-            <h5>Colaborador(a): {select}</h5>
-            <br />
+            <Collaborator>Colaborador(a): {select}</Collaborator>
+            <PulaLinha />
             <Table data={dateFuncionario} autoHeight>
               <Column width={150}>
                 <HeaderCell>Data</HeaderCell>
@@ -190,7 +204,7 @@ const ReleaseHour: React.FC = () => {
                 </Cell>
               </Column>
             </Table>
-            <div style={{ textAlign: "end", paddingTop: 50 }}>
+            <ContainerButton>
               <Button
                 color="green"
                 appearance="primary"
@@ -201,7 +215,7 @@ const ReleaseHour: React.FC = () => {
               <Button color="red" appearance="primary" style={{ width: 130 }}>
                 Reprovar
               </Button>
-            </div>
+            </ContainerButton>
           </>
         )}
       </Panel>
@@ -214,8 +228,8 @@ const ReleaseHour: React.FC = () => {
       >
         <Drawer.Body>
           <Form formDefaultValue={formData}>
-            <h4>Registro de Ponto - {select}</h4>
-            <br />
+            <TitleRegistry>Registro de Ponto - {select}</TitleRegistry>
+            <PulaLinha />
             <Form.ControlLabel>Data:</Form.ControlLabel>
             <Form.Control name="date" disabled={disabled} />
             <Form.ControlLabel>Entrada:</Form.ControlLabel>

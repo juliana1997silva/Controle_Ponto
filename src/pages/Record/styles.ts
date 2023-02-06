@@ -4,6 +4,23 @@ export const Title = styled.h3`
   text-align: center;
   margin-bottom: 2%;
 `;
+export const Divider20 = styled.div`
+  padding: 20px;
+`;
+
+export const Divider10 = styled.div`
+  padding: 10px;
+`;
+
+export const Divider5 = styled.div`
+  padding: 5px;
+`;
+
+export const PulaLinha = styled.br``;
+
+export const Pause = styled.span``;
+
+export const TitlePage = styled.h3``;
 
 export const Container = styled.div`
   padding: 10px;

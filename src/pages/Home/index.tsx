@@ -1,6 +1,7 @@
 import { Panel } from "rsuite";
 import ChartBar from "./ChartBar";
 import ChartLine from "./ChartLine";
+import { TitlePage } from "./styles";
 
 const Home: React.FC = () => {
   const dataBar: [category: string, ...values: number[]][] | undefined = [
@@ -19,7 +20,7 @@ const Home: React.FC = () => {
     ["03/02", 10],
   ];
   return (
-    <Panel header={<h3 className="title">Dashboard</h3>}>
+    <Panel header={<TitlePage className="title">Dashboard</TitlePage>}>
       <ChartBar
         name="Exemplo BarChart"
         data={dataBar}
