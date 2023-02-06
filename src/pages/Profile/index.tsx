@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Breadcrumb, Button, Form, Modal, Panel } from "rsuite";
-import { ContainerHeader } from "./styles";
+import { Collaborator, ContainerHeader, PulaLinha, TitlePage } from "./styles";
 
 const Profile: React.FC = () => {
   const [showModalPassword, setShowModalPassword] = useState(false);
@@ -16,7 +16,7 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <Panel header={<h3 className="title">Perfil</h3>}>
+      <Panel header={<TitlePage className="title">Perfil</TitlePage>}>
         <ContainerHeader
           style={{ display: "flex", justifyContent: "space-between" }}
         >
@@ -35,8 +35,8 @@ const Profile: React.FC = () => {
         </ContainerHeader>
 
         <Form formDefaultValue={dataProfile}>
-          <h4>Dados do Colaborador</h4>
-          <br />
+          <Collaborator>Dados do Colaborador</Collaborator>
+          <PulaLinha />
           <Form.Group controlId="name">
             <Form.ControlLabel>Nome Completo</Form.ControlLabel>
             <Form.Control name="name" disabled />
