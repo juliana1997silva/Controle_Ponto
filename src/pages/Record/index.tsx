@@ -1,4 +1,5 @@
 import moment from "moment";
+import "moment/locale/pt-br"; //importação efetuar a tradução da data para portugues
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,7 +23,8 @@ interface dataForm {
   checkout?: string;
   pause_inicio?: string;
   pause_termino?: string;
-  activities?: string;
+  consult?: string;
+  description?: string;
 }
 
 interface dataConsult {
@@ -33,51 +35,34 @@ interface dataConsult {
 const Record: React.FC = () => {
   const [formData, setFormData] = useState<dataForm>({} as dataForm);
   const [disabled, setDisabled] = useState(false);
-  const [dataConsult, setDataConsult] = useState<dataConsult>(
-    {} as dataConsult
-  );
-  const [consults, setConsults] = useState<dataConsult[]>({} as dataConsult[]);
+  const [consults] = useState<dataConsult[]>([]);
   const { Column, HeaderCell, Cell } = Table;
 
   const handleConsultAdd = useCallback(() => {
-    if (
-      dataConsult.consult === undefined ||
-      dataConsult.description === undefined
-    ) {
+    if (formData.consult === undefined || formData.description === undefined) {
       toast.error("Favor preencha os campos de 'Atividades' !", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 1500,
       });
     } else {
-      const consulta = [];
-      consulta.push({
-        consult: dataConsult.consult,
-        description: dataConsult.description,
+      consults.push({
+        consult: formData.consult,
+        description: formData.description,
       });
-
-      setConsults(consulta);
     }
-    setDataConsult({
-      ...dataConsult,
+
+    setFormData({
+      ...formData,
       consult: "",
       description: "",
     });
-  }, [setConsults, dataConsult, setDataConsult, consults]);
+  }, [formData, setFormData, consults]);
 
   const handleChange = useCallback(
     (form: dataForm) => {
-      console.log(form);
       setFormData(form);
     },
     [setFormData]
-  );
-
-  const handleChangeConsult = useCallback(
-    (form: dataConsult) => {
-      console.log(form);
-      setDataConsult(form);
-    },
-    [setDataConsult]
   );
 
   useEffect(() => {
@@ -87,14 +72,13 @@ const Record: React.FC = () => {
       formData.date === undefined ||
       formData.pause_inicio === undefined ||
       formData.pause_termino === undefined ||
-      dataConsult.consult === undefined ||
-      dataConsult.description === undefined
+      consults.length === 0
     ) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [setDisabled, formData, dataConsult]);
+  }, [setDisabled, formData, consults]);
 
   return (
     <>
@@ -106,7 +90,9 @@ const Record: React.FC = () => {
         <ContainerCard>
           <Date>
             {formData.date &&
-              moment(formData.date).format("DD [de] MMMM [de] YYYY")}
+              moment(formData.date)
+                .locale("pt-br")
+                .format("DD [de] MMMM [de] YYYY")}
           </Date>
           <div style={{ padding: 20 }} />
           <Form onChange={handleChange}>
@@ -134,7 +120,7 @@ const Record: React.FC = () => {
                 <TextOptions>Início </TextOptions>
                 <Form.Control name="pause_inicio" type="time" />
                 <TextOptions style={{ paddingLeft: 20 }}>Termino: </TextOptions>
-                <Form.Control name="pause_inicio" type="time" />
+                <Form.Control name="pause_termino" type="time" />
               </Form.Group>
               <div style={{ padding: 5 }} />
             </ContainerOptions>
@@ -159,41 +145,33 @@ const Record: React.FC = () => {
                   Insira o nº da consulta e o que foi realizado no dia.
                 </Form.HelpText>
                 <br />
-
-                <Form onChange={handleChangeConsult}>
-                  <ContainerActivities>
-                    <ContainerConsult>
-                      <Consult>Consulta:</Consult>
-                      <Form.Control name="consult" />
-                    </ContainerConsult>
-                    <ContainerConsult>
-                      <Consult>Resumo:</Consult>
-                      <Form.Control name="description" />
-                    </ContainerConsult>
-                    <ContainerConsultButton>
-                      <Button
-                        color="green"
-                        appearance="primary"
-                        onClick={handleConsultAdd}
-                        style={{ width: 100 }}
-                      >
-                        Adicionar
-                      </Button>
-                    </ContainerConsultButton>
-                  </ContainerActivities>
-                </Form>
+                <ContainerActivities>
+                  <ContainerConsult>
+                    <Consult>Consulta:</Consult>
+                    <Form.Control name="consult" />
+                  </ContainerConsult>
+                  <ContainerConsult>
+                    <Consult>Resumo:</Consult>
+                    <Form.Control name="description" />
+                  </ContainerConsult>
+                  <ContainerConsultButton>
+                    <Button
+                      color="green"
+                      appearance="primary"
+                      onClick={handleConsultAdd}
+                      style={{ width: 100 }}
+                    >
+                      Adicionar
+                    </Button>
+                  </ContainerConsultButton>
+                </ContainerActivities>
               </Form.Group>
-              {disabled && (
-                <ContainerButton>
-                  <ButtonRegistry>Registrar</ButtonRegistry>
-                </ContainerButton>
-              )}
             </>
           </Form>
           <div style={{ padding: 20 }} />
           {Object.keys(consults).length !== 0 && (
             <>
-              <Table data={consults}>
+              <Table data={consults} autoHeight>
                 <Column width={300}>
                   <HeaderCell>Consulta</HeaderCell>
                   <Cell dataKey="consult" />
@@ -204,6 +182,11 @@ const Record: React.FC = () => {
                 </Column>
               </Table>
             </>
+          )}
+          {disabled && (
+            <ContainerButton>
+              <ButtonRegistry>Registrar</ButtonRegistry>
+            </ContainerButton>
           )}
         </ContainerCard>
       </Panel>

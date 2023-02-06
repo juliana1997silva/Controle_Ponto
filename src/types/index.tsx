@@ -1,5 +1,5 @@
 export interface FormData {
-  activities: string;
+  activities?: [];
   bank_hours: string;
   checkin: string;
   checkout: string;

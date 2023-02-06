@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Button, Drawer, Form, Panel, SelectPicker, Table } from "rsuite";
-import Textarea from "../../components/TextArea";
+import {
+  Breadcrumb,
+  Button,
+  Drawer,
+  Form,
+  Panel,
+  SelectPicker,
+  Table,
+} from "rsuite";
 import { FormData } from "../../types";
-import { Container } from "./styles";
+import { NoData } from "./styles";
 
 const ReleaseHour: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
@@ -41,7 +48,16 @@ const ReleaseHour: React.FC = () => {
       pause_checkout: "13:00",
       checkout: "17:00",
       bank_hours: "00:00",
-      activities: "Desenvolvimento .......",
+      activities: [
+        {
+          consult: "25368",
+          description: "Teste 0001",
+        },
+        {
+          consult: "58693",
+          description: "Teste 0002",
+        },
+      ],
     },
     {
       date: "31/01/2023",
@@ -50,7 +66,16 @@ const ReleaseHour: React.FC = () => {
       pause_checkout: "13:00",
       checkout: "17:00",
       bank_hours: "00:00",
-      activities: "Desenvolvimento .......",
+      activities: [
+        {
+          consult: "25368",
+          description: "Teste 0001",
+        },
+        {
+          consult: "58693",
+          description: "Teste 0002",
+        },
+      ],
     },
     {
       date: "01/02/2023",
@@ -59,7 +84,16 @@ const ReleaseHour: React.FC = () => {
       pause_checkout: "13:00",
       checkout: "17:00",
       bank_hours: "00:00",
-      activities: "Desenvolvimento .......",
+      activities: [
+        {
+          consult: "25368",
+          description: "Teste 0001",
+        },
+        {
+          consult: "58693",
+          description: "Teste 0002",
+        },
+      ],
     },
     {
       date: "02/02/2023",
@@ -68,7 +102,6 @@ const ReleaseHour: React.FC = () => {
       pause_checkout: "13:00",
       checkout: "17:00",
       bank_hours: "00:00",
-      activities: "Desenvolvimento .......",
     },
     {
       date: "03/02/2023",
@@ -77,7 +110,6 @@ const ReleaseHour: React.FC = () => {
       pause_checkout: "13:00",
       checkout: "17:00",
       bank_hours: "00:00",
-      activities: "Desenvolvimento .......",
     },
   ];
 
@@ -88,6 +120,12 @@ const ReleaseHour: React.FC = () => {
   return (
     <>
       <Panel header={<h3 className="title">Liberação de Ficha Home-Office</h3>}>
+        <Breadcrumb>
+          <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
+          <Breadcrumb.Item active>
+            Liberação de Ficha Home-Office
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <SelectPicker
           data={data}
           style={{ width: 224 }}
@@ -103,8 +141,6 @@ const ReleaseHour: React.FC = () => {
           <>
             <h5>Colaborador(a): {select}</h5>
             <br />
-            <Container />
-            <Container />
             <Table data={dateFuncionario} autoHeight>
               <Column width={150}>
                 <HeaderCell>Data</HeaderCell>
@@ -192,12 +228,25 @@ const ReleaseHour: React.FC = () => {
             <Form.Control name="checkout" disabled={disabled} />
             <Form.ControlLabel>Banco de Horas</Form.ControlLabel>
             <Form.Control name="bank_hours" disabled={disabled} />
-            <Form.ControlLabel>Atividades</Form.ControlLabel>
-            <Form.Control
-              name="activities"
-              disabled={disabled}
-              accepter={Textarea}
-            />
+            {formData.activities !== undefined ? (
+              <>
+                {console.log(formData.activities)}
+                <Table data={formData.activities}>
+                  <Column>
+                    <HeaderCell>Consulta:</HeaderCell>
+                    <Cell dataKey="consult" />
+                  </Column>
+                  <Column>
+                    <HeaderCell>Resumo:</HeaderCell>
+                    <Cell dataKey="description" />
+                  </Column>
+                </Table>
+              </>
+            ) : (
+              <>
+                <NoData>Sem Consulta</NoData>
+              </>
+            )}
           </Form>
         </Drawer.Body>
       </Drawer>
