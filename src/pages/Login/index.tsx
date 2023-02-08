@@ -36,7 +36,7 @@ const Login: React.FC = () => {
           <br />
           <Form.Group>
             <TitleForm>Senha:</TitleForm> <br /> <br />
-            <Form.Control name="password" />
+            <Form.Control name="password" type="password" />
           </Form.Group>
           <Button onClick={handleSubmit}>Entrar</Button>
         </Form>
