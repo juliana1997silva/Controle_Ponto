@@ -5,7 +5,7 @@ import { dataLogin, useAuth } from "../../hooks/hooksAuth";
 import { Button, Container, Header, TitleForm } from "./styles";
 
 const Login: React.FC = () => {
-  const { login, showRegistry, dataForm, setDataForm, user } = useAuth();
+  const { login, showRegistry, dataForm, setDataForm } = useAuth();
 
   const handleChange = useCallback(
     (form: dataLogin) => {
@@ -17,7 +17,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = useCallback(() => {
     login(dataForm);
-  }, [dataForm]);
+  }, [login, dataForm]);
 
   if (showRegistry) {
     window.location.pathname = "/home";

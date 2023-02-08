@@ -75,7 +75,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
       }
       console.log(dataForm);
     },
-    [setUser, setShowRegistry, setDataForm, dataForm]
+    [setUser, setShowRegistry, dataForm]
   );
 
   return (
