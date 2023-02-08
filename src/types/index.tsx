@@ -1,3 +1,7 @@
+export interface IProps {
+  children: React.ReactNode;
+}
+
 export interface FormData {
   activities?: [];
   bank_hours: string;

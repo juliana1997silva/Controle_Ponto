@@ -1,13 +1,23 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { Form } from "rsuite";
 import logoConecto from "../../assets/logo.png";
-import { Button, Container, Header, InputForm, TitleForm } from "./styles";
+import { dataLogin, useAuth } from "../../hooks/hooksAuth";
+import { Button, Container, Header, TitleForm } from "./styles";
 
 const Login: React.FC = () => {
-  const [showRegistry, setShowRegistry] = useState(false);
+  const { login, showRegistry, dataForm, setDataForm, user } = useAuth();
+
+  const handleChange = useCallback(
+    (form: dataLogin) => {
+      console.log("handleChange => ", form);
+      setDataForm(form);
+    },
+    [setDataForm]
+  );
+
   const handleSubmit = useCallback(() => {
-    setShowRegistry(true);
-  }, [setShowRegistry]);
+    login(dataForm);
+  }, [dataForm]);
 
   if (showRegistry) {
     window.location.pathname = "/home";
@@ -18,15 +28,15 @@ const Login: React.FC = () => {
         <Header>
           <img alt="Conecto Sistemas Ltda" src={logoConecto} />
         </Header>
-        <Form style={{ textAlign: "center" }}>
+        <Form onChange={handleChange} style={{ textAlign: "center" }}>
           <Form.Group>
-            <TitleForm>CPF:</TitleForm> <br />
-            <InputForm name="cpf" />
+            <TitleForm>Login:</TitleForm> <br /> <br />
+            <Form.Control name="login" />
           </Form.Group>
           <br />
           <Form.Group>
-            <TitleForm>Senha:</TitleForm> <br />
-            <InputForm name="password" />
+            <TitleForm>Senha:</TitleForm> <br /> <br />
+            <Form.Control name="password" />
           </Form.Group>
           <Button onClick={handleSubmit}>Entrar</Button>
         </Form>
