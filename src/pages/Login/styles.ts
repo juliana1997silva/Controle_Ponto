@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 424px;
-  height: 634px;
+  width: 450px;
+  height: 450px;
   box-shadow: 10px 5px 5px 5px #dcdcdc;
   position: absolute;
   top: 50%;
@@ -39,4 +39,8 @@ export const Button = styled.button`
   font-size: 18px;
   font-weight: bold;
   color: #fff;
+`;
+
+export const TitlePage = styled.h3`
+  text-align: center;
 `;

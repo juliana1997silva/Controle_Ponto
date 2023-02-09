@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { toast } from "react-toastify";
 import api from "../services/api";
 import { IProps } from "../types";
@@ -40,8 +46,8 @@ interface ParameterData {
 
 interface HooksAuthData {
   login(data: dataLogin): void;
-  showRegistry: boolean;
-  setShowRegistry(showRegistry: boolean): void;
+  showHome: boolean;
+  setShowHome(showHome: boolean): void;
   user: IUserData;
   setUser(user: IUserData): void;
   dataForm: dataLogin;
@@ -51,7 +57,7 @@ interface HooksAuthData {
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
 
 const AuthContextProvider: React.FC<IProps> = ({ children }) => {
-  const [showRegistry, setShowRegistry] = useState(false);
+  const [showHome, setShowHome] = useState(false);
   const [user, setUser] = useState<IUserData>({} as IUserData);
   const [dataForm, setDataForm] = useState<dataLogin>({} as dataLogin);
 
@@ -65,25 +71,27 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
 
       if (loginData) {
         console.log(loginData.data);
-        if (loginData.data.logged) {
-          setUser(loginData.data);
-          setShowRegistry(true);
-        } else {
+        if (!loginData.data.logged) {
           window.location.reload();
           toast.error("Erro ao realizar Login");
         }
+        setUser(loginData.data);
+        setShowHome(true);
       }
-      console.log(dataForm);
     },
-    [setUser, setShowRegistry, dataForm]
+    [setUser, setShowHome, dataForm, user]
   );
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <AuthContext.Provider
       value={{
         login,
-        showRegistry,
-        setShowRegistry,
+        showHome,
+        setShowHome,
         user,
         setUser,
         dataForm,

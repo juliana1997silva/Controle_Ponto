@@ -1,9 +1,12 @@
+import React, { useEffect } from "react";
 import { Panel } from "rsuite";
+import { useAuth } from "../../hooks/hooksAuth";
 import ChartBar from "./ChartBar";
 import ChartLine from "./ChartLine";
 import { TitlePage } from "./styles";
 
 const Home: React.FC = () => {
+  const { user } = useAuth();
   const dataBar: [category: string, ...values: number[]][] | undefined = [
     ["31/01", 8, 2],
     ["30/01", 8, 1],
@@ -19,6 +22,10 @@ const Home: React.FC = () => {
     ["02/02", 15],
     ["03/02", 10],
   ];
+
+  useEffect(() => {
+    console.log(user);
+  });
   return (
     <Panel header={<TitlePage className="title">Dashboard</TitlePage>}>
       <ChartBar
