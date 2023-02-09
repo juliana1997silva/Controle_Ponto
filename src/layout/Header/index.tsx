@@ -1,6 +1,6 @@
 import AdminIcon from "@rsuite/icons/Admin";
 import ExitIcon from "@rsuite/icons/Exit";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Dropdown, IconButton } from "rsuite";
 import logoConecto from "../../assets/logoConecto.png";
 import { useAuth } from "../../hooks/hooksAuth";
@@ -8,8 +8,6 @@ import { Container, ContainerAvatar, NameUser } from "./styles";
 
 const Header: React.FC = () => {
   const { user } = useAuth();
-  const [logout, setLogout] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
 
   const renderIconButton = (props: any, ref: any) => {
     return (
@@ -27,17 +25,6 @@ const Header: React.FC = () => {
     );
   };
 
-  useEffect(() => {
-    console.log(user.logged === true);
-  });
-
-  if (logout) {
-    window.location.pathname = "";
-  }
-
-  if (showProfile) {
-    window.location.pathname = "/profile";
-  }
   return (
     <Container>
       <img
@@ -51,15 +38,8 @@ const Header: React.FC = () => {
           <NameUser>{user?.user?.name}</NameUser>
 
           <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
-            <Dropdown.Item
-              onSelect={() => setShowProfile(true)}
-              icon={<AdminIcon />}
-            >
-              Meu Perfil
-            </Dropdown.Item>
-            <Dropdown.Item onSelect={() => setLogout(true)} icon={<ExitIcon />}>
-              Sair
-            </Dropdown.Item>
+            <Dropdown.Item icon={<AdminIcon />}>Meu Perfil</Dropdown.Item>
+            <Dropdown.Item icon={<ExitIcon />}>Sair</Dropdown.Item>
           </Dropdown>
         </ContainerAvatar>
       )}

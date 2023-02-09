@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 450px;
-  height: 450px;
+  height: 80%;
   box-shadow: 10px 5px 5px 5px #dcdcdc;
   position: absolute;
   top: 50%;
@@ -41,6 +41,8 @@ export const Button = styled.button`
   color: #fff;
 `;
 
-export const TitlePage = styled.h3`
+export const ImgPage = styled.img``;
+
+export const DivImg = styled.div`
   text-align: center;
 `;

@@ -1,11 +1,6 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // css do toast
 import api from "../services/api";
 import { IProps } from "../types";
 
@@ -52,12 +47,15 @@ interface HooksAuthData {
   setUser(user: IUserData): void;
   dataForm: dataLogin;
   setDataForm(dataForm: dataLogin): void;
+  errorLogin: boolean;
+  setErrorLogin(errorLogin: boolean): void;
 }
 
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
 
 const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [showHome, setShowHome] = useState(false);
+  const [errorLogin, setErrorLogin] = useState(false);
   const [user, setUser] = useState<IUserData>({} as IUserData);
   const [dataForm, setDataForm] = useState<dataLogin>({} as dataLogin);
 
@@ -71,20 +69,16 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
 
       if (loginData) {
         console.log(loginData.data);
-        if (!loginData.data.logged) {
-          window.location.reload();
-          toast.error("Erro ao realizar Login");
+        if (loginData.data.logged === true) {
+          setUser(loginData.data);
+          setShowHome(true);
+        } else {
+          toast.error("Tente Novamente !");
         }
-        setUser(loginData.data);
-        setShowHome(true);
       }
     },
     [setUser, setShowHome, dataForm, user]
   );
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <AuthContext.Provider
@@ -96,6 +90,8 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         setUser,
         dataForm,
         setDataForm,
+        errorLogin,
+        setErrorLogin,
       }}
     >
       {children}

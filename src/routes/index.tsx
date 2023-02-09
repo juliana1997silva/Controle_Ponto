@@ -15,34 +15,53 @@ import PrivateRoute from "./PrivateRoute";
 // import ReleaseHour from "../pages/ReleaseHour";
 // import Report from "../pages/Report";
 
-const Login = React.lazy(() => import('../pages/Login'))
-const Home = React.lazy(() => import('../pages/Home'))
+const Login = React.lazy(() => import("../pages/Login"));
+const Home = React.lazy(() => import("../pages/Home"));
+const CheckPoint = React.lazy(() => import("../pages/CheckPoint"));
 
 export function Router() {
-
   return (
     <Routes>
-      <Route index element={
-        <React.Suspense fallback={<Fallback />}>
-          <Login />
-        </React.Suspense>
-      } />
+      <Route
+        index
+        element={
+          <React.Suspense fallback={<Fallback />}>
+            <Login />
+          </React.Suspense>
+        }
+      />
       <Route path="/" element={<Master />}>
-        <Route path='/dashboard' element={
-          <React.Suspense fallback={<Fallback />}>
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          </React.Suspense>
-        } />
-        <Route path="*" element={
-          <React.Suspense fallback={<Fallback />}>
-            <PrivateRoute>
-              <NoMatch />
-            </PrivateRoute>
-          </React.Suspense>
-        } />
+        <Route
+          path="/dashboard"
+          element={
+            <React.Suspense fallback={<Fallback />}>
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="/checkpoint"
+          element={
+            <React.Suspense fallback={<Fallback />}>
+              <PrivateRoute>
+                <CheckPoint />
+              </PrivateRoute>
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <React.Suspense fallback={<Fallback />}>
+              <PrivateRoute>
+                <NoMatch />
+              </PrivateRoute>
+            </React.Suspense>
+          }
+        />
       </Route>
     </Routes>
   );
-};
+}

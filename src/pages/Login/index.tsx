@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
-import { Form, Header, Panel } from "rsuite";
+import { Navigate } from "react-router";
+import { Form, Panel } from "rsuite";
+import logoConecto from "../../assets/logo.png";
 import { dataLogin, useAuth } from "../../hooks/hooksAuth";
-import HeaderTempus from "../../layout/Header";
-import Home from "../Home";
-import { Button, Container, TitleForm, TitlePage } from "./styles";
+import { Button, Container, DivImg, ImgPage, TitleForm } from "./styles";
 
 const Login: React.FC = () => {
-  const { login, showHome, dataForm, setDataForm } = useAuth();
+  const { login, dataForm, setDataForm, showHome, user } = useAuth();
 
   const handleChange = useCallback(
     (form: dataLogin) => {
@@ -20,17 +20,18 @@ const Login: React.FC = () => {
     login(dataForm);
   }, [login, dataForm]);
 
-  if (showHome) {
-    return <Home />;
+  if (showHome && user.logged) {
+    return <Navigate to={"/dashboard"} />;
   }
 
   return (
     <>
-      <Header>
-        <HeaderTempus />
-      </Header>
       <Container>
-        <Panel header={<TitlePage>Tempus</TitlePage>}>
+        <Panel>
+          <DivImg>
+            <ImgPage src={logoConecto} />
+          </DivImg>
+
           <Form onChange={handleChange} style={{ textAlign: "center" }}>
             <Form.Group>
               <TitleForm>Login:</TitleForm> <br /> <br />
