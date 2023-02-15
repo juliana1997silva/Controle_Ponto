@@ -13,7 +13,11 @@ const Frame: React.FC = () => {
       <Sidenav>
         <Sidenav.Body>
           <Nav>
-            <Nav.Item eventKey="1" icon={<DashboardIcon />} href="/dashboard">
+            <Nav.Item
+              eventKey="1"
+              icon={<DashboardIcon />}
+              onSelect={() => navegate("/dashboard")}
+            >
               Dashboard
             </Nav.Item>
             <Nav.Item

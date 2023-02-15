@@ -10,7 +10,6 @@ const Login: React.FC = () => {
 
   const handleChange = useCallback(
     (form: dataLogin) => {
-      console.log("handleChange => ", form);
       setDataForm(form);
     },
     [setDataForm]

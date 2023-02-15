@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Panel } from "rsuite";
 import { useAuth } from "../../hooks/hooksAuth";
 import ChartBar from "./ChartBar";
@@ -23,9 +23,6 @@ const Home: React.FC = () => {
     ["03/02", 10],
   ];
 
-  useEffect(() => {
-    console.log(user);
-  });
   return (
     <Panel header={<TitlePage className="title">Dashboard</TitlePage>}>
       <ChartBar
