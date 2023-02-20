@@ -3,7 +3,7 @@ import { Navigate } from "react-router";
 import { Form, Panel } from "rsuite";
 import logoConecto from "../../assets/logo.png";
 import { dataLogin, useAuth } from "../../hooks/hooksAuth";
-import { Button, Container, DivImg, ImgPage, TitleForm } from "./styles";
+import { Button, DivImg, ImgPage, TitleForm } from "./styles";
 
 const Login: React.FC = () => {
   const { login, dataForm, setDataForm, showHome, user } = useAuth();
@@ -25,26 +25,24 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <Container>
-        <Panel>
-          <DivImg>
-            <ImgPage src={logoConecto} />
-          </DivImg>
+      <Panel>
+        <DivImg>
+          <ImgPage src={logoConecto} />
+        </DivImg>
 
-          <Form onChange={handleChange} style={{ textAlign: "center" }}>
-            <Form.Group>
-              <TitleForm>Login:</TitleForm> <br /> <br />
-              <Form.Control name="login" />
-            </Form.Group>
-            <br />
-            <Form.Group>
-              <TitleForm>Senha:</TitleForm> <br /> <br />
-              <Form.Control name="password" type="password" />
-            </Form.Group>
-            <Button onClick={handleSubmit}>Entrar</Button>
-          </Form>
-        </Panel>
-      </Container>
+        <Form onChange={handleChange} style={{ textAlign: "center" }}>
+          <Form.Group>
+            <TitleForm>Login:</TitleForm> <br /> <br />
+            <Form.Control name="login" />
+          </Form.Group>
+          <br />
+          <Form.Group>
+            <TitleForm>Senha:</TitleForm> <br /> <br />
+            <Form.Control name="password" type="password" />
+          </Form.Group>
+          <Button onClick={handleSubmit}>Entrar</Button>
+        </Form>
+      </Panel>
     </>
   );
 };

@@ -1,3 +1,4 @@
+import CheckOutlineIcon from "@rsuite/icons/CheckOutline";
 import DashboardIcon from "@rsuite/icons/legacy/Dashboard";
 import TaskIcon from "@rsuite/icons/Task";
 import React from "react";
@@ -27,19 +28,13 @@ const Frame: React.FC = () => {
             >
               Registro Ponto
             </Nav.Item>
-            {/*  <Nav.Item eventKey="3" icon={<DocPassIcon />} href="/release">
-              Liberar Ficha
+            <Nav.Item
+              eventKey="3"
+              icon={<CheckOutlineIcon />}
+              onSelect={() => navegate("/release-checkpoint")}
+            >
+              Liberação Ficha
             </Nav.Item>
-            <Nav.Item eventKey="4" icon={<DocPassIcon />} href="/report">
-              Relatório
-            </Nav.Item>
-             <Nav.Menu eventKey="4" title="Relatorios" icon={<WavePointIcon />}>
-              <Nav.Item eventKey="4-1" href="/weekly">
-                Relatorio Semanal
-              </Nav.Item>
-              <Nav.Item eventKey="4-2">Relatorio Mensal</Nav.Item>
-              <Nav.Item eventKey="4-3">Relatorio Quadrimestral</Nav.Item>
-            </Nav.Menu> */}
           </Nav>
         </Sidenav.Body>
       </Sidenav>

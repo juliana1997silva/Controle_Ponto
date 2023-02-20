@@ -1,15 +1,15 @@
 import React from "react";
 import AppProvider from "./hooks";
-import CheckPointPage from "./Point";
+import Profile from "./Profile";
 
-const PageCheckPoint: React.FC = () => {
+const PageProfile: React.FC = () => {
   return (
     <>
       <AppProvider>
-        <CheckPointPage />
+        <Profile />
       </AppProvider>
     </>
   );
 };
 
-export default PageCheckPoint;
+export default PageProfile;

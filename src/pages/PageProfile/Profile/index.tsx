@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Breadcrumb, Button, Form, Modal, Panel } from "rsuite";
-import { Collaborator, ContainerHeader, PulaLinha, TitlePage } from "./styles";
+import {
+  Collaborator,
+  ContainerHeader,
+  PulaLinha,
+  TitlePage,
+} from "../Profile/styles";
 
 const Profile: React.FC = () => {
   const [showModalPassword, setShowModalPassword] = useState(false);

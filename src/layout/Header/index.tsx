@@ -2,7 +2,7 @@ import AdminIcon from "@rsuite/icons/Admin";
 import ExitIcon from "@rsuite/icons/Exit";
 import React from "react";
 import { Dropdown, IconButton } from "rsuite";
-import logoConecto from "../../assets/logoConecto.png";
+import logoConecto from "../../assets/logo_conecto.png";
 import { useAuth } from "../../hooks/hooksAuth";
 import { Container, ContainerAvatar, NameUser } from "./styles";
 

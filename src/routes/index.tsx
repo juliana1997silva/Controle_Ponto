@@ -5,15 +5,8 @@ import { Route, Routes } from "react-router-dom";
 import Fallback from "../components/Fallback";
 import Master from "../layout/Master";
 import NoMatch from "../layout/NoMatch";
+import PageRelease from "../pages/PageRelease";
 import PrivateRoute from "./PrivateRoute";
-
-// import Master from "../layout/Master";
-// import Home from "../pages/Home";
-// import Login from "../pages/Login";
-// import Profile from "../pages/Profile";
-// import Record from "../pages/Record";
-// import ReleaseHour from "../pages/ReleaseHour";
-// import Report from "../pages/Report";
 
 const Login = React.lazy(() => import("../pages/Login"));
 const Home = React.lazy(() => import("../pages/Home"));
@@ -47,6 +40,16 @@ export function Router() {
             <React.Suspense fallback={<Fallback />}>
               <PrivateRoute>
                 <CheckPoint />
+              </PrivateRoute>
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="/release-checkpoint"
+          element={
+            <React.Suspense fallback={<Fallback />}>
+              <PrivateRoute>
+                <PageRelease />
               </PrivateRoute>
             </React.Suspense>
           }
