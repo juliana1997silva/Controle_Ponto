@@ -4,7 +4,7 @@ export interface IProps {
 
 export interface FormData {
   activities?: [];
-  bank_hours: string;
+  hour_NoCommercial?: [];
   checkin: string;
   checkout: string;
   date: string;

@@ -4,7 +4,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { Dropdown, IconButton } from "rsuite";
 import fotoPerfil from "../../assets/foto perfil.jpg";
-import logoConecto from "../../assets/logo_conecto.png";
+import logoTempus from "../../assets/logoTempus.png";
 import { useAuth } from "../../hooks/hooksAuth";
 import { Container, ContainerAvatar, NameUser } from "./styles";
 
@@ -37,9 +37,9 @@ const Header: React.FC = () => {
   return (
     <Container>
       <img
-        src={logoConecto}
-        alt="Logo Conecto"
-        style={{ height: 70, width: 70 }}
+        src={logoTempus}
+        alt="Logo Tempus"
+        style={{ height: 70, width: 70, marginLeft: 20 }}
         onClick={() => navegate("/dashboard")}
       />
       {user.logged === true && (

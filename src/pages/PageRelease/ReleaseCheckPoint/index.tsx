@@ -1,20 +1,28 @@
+import BlockIcon from "@rsuite/icons/Block";
+import CheckIcon from "@rsuite/icons/Check";
+import VisibleIcon from "@rsuite/icons/Visible";
 import React, { useEffect, useState } from "react";
 import {
-  Breadcrumb,
-  Button,
+  ButtonGroup,
+  Divider,
   Drawer,
   Form,
+  IconButton,
   Panel,
   SelectPicker,
   Table,
+  Tooltip,
+  Whisper,
 } from "rsuite";
+import BreadcrumbComponent from "../../../components/Breadcrumb";
 import { FormData } from "../../../types";
 import {
-  Collaborator,
-  ContainerButton,
+  Circle,
+  ContainerStatus,
   Divider30,
   NoData,
   PulaLinha,
+  Status,
   TitlePage,
   TitleRegistry,
 } from "./styles";
@@ -55,7 +63,18 @@ const ReleaseCheckPoint: React.FC = () => {
       pause_checkin: "12:00",
       pause_checkout: "13:00",
       checkout: "17:00",
-      bank_hours: "00:00",
+      hour_NoCommercial: [
+        {
+          checkin: "17:01",
+          pause_checkin: "18:30",
+          pause_checkout: "19:00",
+          checkout: "20:45",
+        },
+        {
+          checkin: "21:00",
+          checkout: "21:20",
+        },
+      ],
       activities: [
         {
           consult: "25368",
@@ -66,6 +85,7 @@ const ReleaseCheckPoint: React.FC = () => {
           description: "Teste 0002",
         },
       ],
+      status: true,
     },
     {
       date: "31/01/2023",
@@ -73,7 +93,6 @@ const ReleaseCheckPoint: React.FC = () => {
       pause_checkin: "12:00",
       pause_checkout: "13:00",
       checkout: "17:00",
-      bank_hours: "00:00",
       activities: [
         {
           consult: "25368",
@@ -84,6 +103,7 @@ const ReleaseCheckPoint: React.FC = () => {
           description: "Teste 0002",
         },
       ],
+      status: false,
     },
     {
       date: "01/02/2023",
@@ -102,6 +122,7 @@ const ReleaseCheckPoint: React.FC = () => {
           description: "Teste 0002",
         },
       ],
+      status: true,
     },
     {
       date: "02/02/2023",
@@ -109,7 +130,18 @@ const ReleaseCheckPoint: React.FC = () => {
       pause_checkin: "12:00",
       pause_checkout: "13:00",
       checkout: "17:00",
-      bank_hours: "00:00",
+      hour_NoCommercial: [
+        {
+          checkin: "17:01",
+          pause_checkin: "18:30",
+          pause_checkout: "19:00",
+          checkout: "20:45",
+        },
+        {
+          checkin: "21:00",
+          checkout: "21:20",
+        },
+      ],
     },
     {
       date: "03/02/2023",
@@ -118,98 +150,197 @@ const ReleaseCheckPoint: React.FC = () => {
       pause_checkout: "13:00",
       checkout: "17:00",
       bank_hours: "00:00",
+      status: false,
     },
   ];
 
   useEffect(() => {
     console.log(select);
-  });
+    console.log(formData.hour_NoCommercial);
+  }, [formData]);
 
   return (
     <>
       <Panel
-        header={<TitlePage className="title">Liberação de Ficha</TitlePage>}
+        header={<TitlePage className="title">Liberar Ficha Semanal</TitlePage>}
       >
-        <Breadcrumb>
-          <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-          <Breadcrumb.Item active>Liberação de Ficha</Breadcrumb.Item>
-        </Breadcrumb>
+        <BreadcrumbComponent
+          active="Liberar Ficha Semanal"
+          hrefBack="/dashboard"
+          label="Dashboard"
+        />
         <SelectPicker
           data={data}
-          style={{ width: 224 }}
           searchable={false}
           placeholder="Selecione o Colaborador"
           onSelect={(v) => {
             setSelect(v);
           }}
           onClean={() => setSelect("")}
+          block
         />
+
         <Divider30 />
         {select !== "" && (
           <>
-            <Collaborator>Colaborador(a): {select}</Collaborator>
-            <PulaLinha />
             <Table data={dateFuncionario} autoHeight>
               <Column width={150}>
                 <HeaderCell>Data</HeaderCell>
                 <Cell dataKey="date" />
               </Column>
-              <Column width={150}>
+              <Column width={110}>
                 <HeaderCell>Entrada</HeaderCell>
                 <Cell dataKey="checkin" />
               </Column>
-              <Column width={150}>
+              <Column width={110}>
                 <HeaderCell>Inicio Pausa</HeaderCell>
                 <Cell dataKey="pause_checkin" />
               </Column>
-              <Column width={150}>
+              <Column width={110}>
                 <HeaderCell>Termino Pausa</HeaderCell>
                 <Cell dataKey="pause_checkout" />
               </Column>
-              <Column width={150}>
+              <Column width={110}>
                 <HeaderCell>Saída</HeaderCell>
                 <Cell dataKey="checkout" />
               </Column>
-              <Column width={150}>
-                <HeaderCell>Banco de Horas</HeaderCell>
-                <Cell dataKey="bank_hours" />
+              <Column width={120} align="center">
+                <HeaderCell>Consultas</HeaderCell>
+                <Cell>
+                  {(rowData: any) => {
+                    return (
+                      <>
+                        {rowData.activities ? (
+                          <ContainerStatus>
+                            <Circle
+                              style={{
+                                backgroundColor: "green",
+                              }}
+                            />
+                            <Status>SIM</Status>
+                          </ContainerStatus>
+                        ) : (
+                          <ContainerStatus>
+                            <Circle
+                              style={{
+                                backgroundColor: "red",
+                              }}
+                            />
+                            <Status>NÃO</Status>
+                          </ContainerStatus>
+                        )}
+                      </>
+                    );
+                  }}
+                </Cell>
               </Column>
-              <Column width={300}>
+              <Column width={150} align="center">
+                <HeaderCell>Horário Não Comercial</HeaderCell>
+                <Cell>
+                  {(rowData: any) => {
+                    return (
+                      <>
+                        {rowData.hour_NoCommercial ? (
+                          <ContainerStatus>
+                            <Circle
+                              style={{
+                                backgroundColor: "green",
+                              }}
+                            />
+                            <Status>SIM</Status>
+                          </ContainerStatus>
+                        ) : (
+                          <ContainerStatus>
+                            <Circle
+                              style={{
+                                backgroundColor: "red",
+                              }}
+                            />
+                            <Status>NÃO</Status>
+                          </ContainerStatus>
+                        )}
+                      </>
+                    );
+                  }}
+                </Cell>
+              </Column>
+              <Column width={300} align="center">
                 <HeaderCell>Ações</HeaderCell>
                 <Cell>
                   {(rowData: any, rowIndex: any) => {
                     return (
                       <>
-                        <Button
-                          color="green"
-                          appearance="primary"
-                          onClick={() => {
-                            console.log(rowData);
-                            setOpenModal(true);
-                            setFormData(rowData);
-                            setDisabled(true);
-                          }}
-                        >
-                          Visualizar
-                        </Button>
+                        <ButtonGroup>
+                          {rowData.status === true ? (
+                            <Whisper
+                              placement="top"
+                              controlId="control-id-focus"
+                              trigger="hover"
+                              speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
+                            >
+                              <IconButton
+                                icon={<VisibleIcon />}
+                                onClick={() => {
+                                  setOpenModal(true);
+                                  setFormData(rowData);
+                                }}
+                                appearance="primary"
+                                style={{ backgroundColor: "#00a6a6" }}
+                              />
+                            </Whisper>
+                          ) : (
+                            <>
+                              <Whisper
+                                placement="top"
+                                controlId="control-id-focus"
+                                trigger="hover"
+                                speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
+                              >
+                                <IconButton
+                                  icon={<VisibleIcon />}
+                                  onClick={() => {
+                                    setOpenModal(true);
+                                    setFormData(rowData);
+                                  }}
+                                  appearance="primary"
+                                  style={{ backgroundColor: "#00a6a6" }}
+                                />
+                              </Whisper>
+                              <Whisper
+                                placement="top"
+                                controlId="control-id-focus"
+                                trigger="hover"
+                                speaker={<Tooltip>Aprovar</Tooltip>}
+                              >
+                                <IconButton
+                                  icon={<CheckIcon />}
+                                  onClick={() => console.log(rowData)}
+                                  appearance="primary"
+                                  color="green"
+                                />
+                              </Whisper>
+                              <Whisper
+                                placement="top"
+                                controlId="control-id-focus"
+                                trigger="hover"
+                                speaker={<Tooltip>Reprovar</Tooltip>}
+                              >
+                                <IconButton
+                                  icon={<BlockIcon />}
+                                  onClick={() => console.log(rowData)}
+                                  appearance="primary"
+                                  color="red"
+                                />
+                              </Whisper>
+                            </>
+                          )}
+                        </ButtonGroup>
                       </>
                     );
                   }}
                 </Cell>
               </Column>
             </Table>
-            <ContainerButton>
-              <Button
-                color="green"
-                appearance="primary"
-                style={{ width: 130, margin: 10 }}
-              >
-                Aprovar
-              </Button>
-              <Button color="red" appearance="primary" style={{ width: 130 }}>
-                Reprovar
-              </Button>
-            </ContainerButton>
           </>
         )}
       </Panel>
@@ -222,7 +353,7 @@ const ReleaseCheckPoint: React.FC = () => {
       >
         <Drawer.Body>
           <Form formDefaultValue={formData}>
-            <TitleRegistry>Registro de Ponto - {select}</TitleRegistry>
+            <TitleRegistry>{select}</TitleRegistry>
             <PulaLinha />
             <Form.ControlLabel>Data:</Form.ControlLabel>
             <Form.Control name="date" disabled={disabled} />
@@ -234,18 +365,43 @@ const ReleaseCheckPoint: React.FC = () => {
             <Form.Control name="pause_checkout" disabled={disabled} />
             <Form.ControlLabel>Saida</Form.ControlLabel>
             <Form.Control name="checkout" disabled={disabled} />
-            <Form.ControlLabel>Banco de Horas</Form.ControlLabel>
-            <Form.Control name="bank_hours" disabled={disabled} />
+            <Divider>Horário Não Comercial</Divider>
+            {formData.hour_NoCommercial !== undefined && (
+              <>
+                {console.log(formData.hour_NoCommercial)}
+
+                <Table data={formData.hour_NoCommercial}>
+                  <Column>
+                    <HeaderCell>Entrada:</HeaderCell>
+                    <Cell dataKey="checkin" />
+                  </Column>
+                  <Column>
+                    <HeaderCell>Inicio Pausa:</HeaderCell>
+                    <Cell dataKey="pause_checkin" />
+                  </Column>
+                  <Column>
+                    <HeaderCell>Termino Pausa:</HeaderCell>
+                    <Cell dataKey="pause_checkout" />
+                  </Column>
+                  <Column>
+                    <HeaderCell>Sáida:</HeaderCell>
+                    <Cell dataKey="checkout" />
+                  </Column>
+                </Table>
+              </>
+            )}
+            <Divider>Consultas Registradas no dia</Divider>
             {formData.activities !== undefined ? (
               <>
+                <span>Consultas</span>
                 {console.log(formData.activities)}
                 <Table data={formData.activities}>
                   <Column>
-                    <HeaderCell>Consulta:</HeaderCell>
+                    <HeaderCell>Nº:</HeaderCell>
                     <Cell dataKey="consult" />
                   </Column>
                   <Column>
-                    <HeaderCell>Resumo:</HeaderCell>
+                    <HeaderCell>Descrição:</HeaderCell>
                     <Cell dataKey="description" />
                   </Column>
                 </Table>
@@ -255,6 +411,7 @@ const ReleaseCheckPoint: React.FC = () => {
                 <NoData>Sem Consulta</NoData>
               </>
             )}
+            <Divider />
           </Form>
         </Drawer.Body>
       </Drawer>

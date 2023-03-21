@@ -4,7 +4,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-image: linear-gradient(to right, #fff, #ff4500);
+  background-image: linear-gradient(to right, #fff, #00a6a6);
   height: 5%;
 `;
 

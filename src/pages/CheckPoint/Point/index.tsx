@@ -1,6 +1,19 @@
+import CheckIcon from "@rsuite/icons/Check";
+import EditIcon from "@rsuite/icons/Edit";
+import HistoryIcon from "@rsuite/icons/History";
+import MessageIcon from "@rsuite/icons/Message";
+import PageIcon from "@rsuite/icons/Page";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Button, Panel, Table } from "rsuite";
+import nextId from "react-id-generator";
+import {
+  ButtonGroup,
+  IconButton,
+  Panel,
+  Table,
+  Tooltip,
+  Whisper,
+} from "rsuite";
 import BreadcrumbComponent from "../../../components/Breadcrumb";
 import { useAuth } from "../../../hooks/hooksAuth";
 import Consult from "../components/Consult";
@@ -12,7 +25,6 @@ const { Column, HeaderCell, Cell, ColumnGroup } = Table;
 
 const Point: React.FC = () => {
   const {
-    dataModal,
     setDataModal,
     setOpenModal,
     setOpenCommercial,
@@ -25,7 +37,6 @@ const Point: React.FC = () => {
   const value = moment().locale("pt-br").month(mes).year(ano);
 
   const calendar = new Array();
-
   const [data, setData] = useState<dataForm[]>([]);
 
   moment.updateLocale("pt", {
@@ -61,14 +72,43 @@ const Point: React.FC = () => {
 
   const EditableCell = ({ rowData, dataKey, onChange, ...props }: any) => {
     const editing = rowData.status === "EDIT";
-    let value = "";
-    if (dataKey) if (rowData[dataKey]) value = rowData[dataKey];
+    //let value = "";
+    //if (dataKey) if (rowData[dataKey]) value = rowData[dataKey];
     return (
       <Cell {...props} className={editing ? "table-content-editing" : ""}>
         {editing ? (
           <input
             className="rs-input"
             defaultValue={rowData[dataKey]}
+            //value={rowData[dataKey] ? rowData[dataKey] : value}
+            onChange={(event) => {
+              onChange && onChange(rowData.id, dataKey, event.target.value);
+            }}
+            type="time"
+          />
+        ) : (
+          <span className="table-content-edit-span">{rowData[dataKey]}</span>
+        )}
+      </Cell>
+    );
+  };
+
+  const EditableCellLocation = ({
+    rowData,
+    dataKey,
+    onChange,
+    ...props
+  }: any) => {
+    const editing = rowData.status === "EDIT";
+    //let value = "";
+    //if (dataKey) if (rowData[dataKey]) value = rowData[dataKey];
+    return (
+      <Cell {...props} className={editing ? "table-content-editing" : ""}>
+        {editing ? (
+          <input
+            className="rs-input"
+            defaultValue={rowData[dataKey]}
+            //value={rowData[dataKey] ? rowData[dataKey] : value}
             onChange={(event) => {
               onChange && onChange(rowData.id, dataKey, event.target.value);
             }}
@@ -80,29 +120,28 @@ const Point: React.FC = () => {
     );
   };
 
-  const handleChange = (date: any, key: any, value: any) => {
+  const handleChange = (id: any, key: any, value: any) => {
     const nextData: any = Object.assign([], data);
-    nextData.find((item: any) => item.date === date)[key] = value;
-    console.log(nextData);
+    nextData.find((item: any) => item.id === id)[key] = value;
     setData(nextData);
   };
 
-  const handleEditState = (date: any) => {
+  const handleEditState = (id: any) => {
     const nextData = Object.assign([], data);
-    const activeItem: any = nextData.find((item: any) => item.date === date);
+    const activeItem: any = nextData.find((item: any) => item.id === id);
     activeItem.status = activeItem.status ? null : "EDIT";
     setData(nextData);
   };
 
-  const weekDayName = new Array(
+  const weekDayName = [
     "domingo",
     "segunda",
     "terça",
     "quarta",
     "quinta",
     "sexta",
-    "sábado"
-  );
+    "sábado",
+  ];
 
   useEffect(() => {
     //const startDay = value.clone().startOf("month");
@@ -152,6 +191,7 @@ const Point: React.FC = () => {
     const date = calendar.map((month) => {
       return month.map((day: any, index: any) => {
         return {
+          id: nextId("date-"),
           date: moment(day._d).format("DD/MMMM/YYYY"),
           entry_time:
             weekDayName[day._d.getDay()] === "domingo" ||
@@ -161,7 +201,7 @@ const Point: React.FC = () => {
           location:
             weekDayName[day._d.getDay()] === "domingo" ||
             weekDayName[day._d.getDay()] === "sábado"
-              ? ""
+              ? "Descanso"
               : "Home_Office",
           lunch_entry_time:
             weekDayName[day._d.getDay()] === "domingo" ||
@@ -188,8 +228,16 @@ const Point: React.FC = () => {
       });
     });
     setData(date[0]);
-    //console.log(calendar);
-  }, []);
+    console.log(date);
+  }, [
+    calendar,
+    user.user.parameter.entry_time,
+    user.user.parameter.lunch_entry_time,
+    user.user.parameter.lunch_out_time,
+    user.user.parameter.out_time,
+    value,
+    weekDayName,
+  ]);
 
   return (
     <>
@@ -217,39 +265,125 @@ const Point: React.FC = () => {
 
           <Column width={150} align="center">
             <HeaderCell>Local</HeaderCell>
-            <EditableCell dataKey="location" onChange={handleChange} />
+            <EditableCellLocation dataKey="location" onChange={handleChange} />
           </Column>
           <ColumnGroup header="Horário Comercial" align="center">
-            <Column width={100} colSpan={4}>
+            <Column width={110} colSpan={4}>
               <HeaderCell>Entrada</HeaderCell>
               <EditableCell dataKey="entry_time" onChange={handleChange} />
             </Column>
-            <Column width={100}>
+            <Column width={110}>
               <HeaderCell>Inicio Pausa</HeaderCell>
               <EditableCell
                 dataKey="lunch_entry_time"
                 onChange={handleChange}
               />
             </Column>
-            <Column width={100}>
+            <Column width={110}>
               <HeaderCell>Termino Pausa</HeaderCell>
               <EditableCell dataKey="lunch_out_time" onChange={handleChange} />
             </Column>
-            <Column width={100}>
+            <Column width={110}>
               <HeaderCell>Saída</HeaderCell>
               <EditableCell dataKey="out_time" onChange={handleChange} />
             </Column>
           </ColumnGroup>
 
-          <Column width={300}>
+          <Column width={300} align="center">
             <HeaderCell>Ações</HeaderCell>
             <Cell>
               {(rowData: any) => {
+                console.log(rowData.status);
                 return (
-                  <>
-                    <Button
+                  <ButtonGroup>
+                    {rowData?.status === "EDIT" ? (
+                      <Whisper
+                        placement="top"
+                        controlId="control-id-focus"
+                        trigger="hover"
+                        speaker={<Tooltip>Salvar Alteração</Tooltip>}
+                      >
+                        <IconButton
+                          icon={<CheckIcon />}
+                          onClick={() => handleEditState(rowData.id)}
+                          appearance="primary"
+                          color="green"
+                        />
+                      </Whisper>
+                    ) : (
+                      <Whisper
+                        placement="top"
+                        controlId="control-id-focus"
+                        trigger="hover"
+                        speaker={<Tooltip>Editar</Tooltip>}
+                      >
+                        <IconButton
+                          icon={<EditIcon />}
+                          onClick={() => handleEditState(rowData.id)}
+                          appearance="primary"
+                          style={{ backgroundColor: "#00a6a6" }}
+                        />
+                      </Whisper>
+                    )}
+
+                    <Whisper
+                      placement="top"
+                      controlId="control-id-focus"
+                      trigger="hover"
+                      speaker={<Tooltip>Adicionar Consultas</Tooltip>}
+                    >
+                      <IconButton
+                        icon={<PageIcon />}
+                        onClick={() => {
+                          setOpenModal(true);
+                          console.log(rowData);
+                          setDataModal(rowData);
+                        }}
+                        appearance="primary"
+                        color="blue"
+                      />
+                    </Whisper>
+
+                    <Whisper
+                      placement="top"
+                      controlId="control-id-focus"
+                      trigger="hover"
+                      speaker={
+                        <Tooltip>Adicionar Horário Não Comercial</Tooltip>
+                      }
+                    >
+                      <IconButton
+                        icon={<HistoryIcon />}
+                        onClick={() => {
+                          setOpenCommercial(true);
+                          console.log(rowData);
+                          setDataModal(rowData);
+                        }}
+                        appearance="primary"
+                        color="yellow"
+                      />
+                    </Whisper>
+                    <Whisper
+                      placement="top"
+                      controlId="control-id-focus"
+                      trigger="hover"
+                      speaker={<Tooltip>Adicionar Observação</Tooltip>}
+                    >
+                      <IconButton
+                        icon={<MessageIcon />}
+                        onClick={() => {
+                          setOpenCommercial(true);
+                          console.log(rowData);
+                          setDataModal(rowData);
+                        }}
+                        appearance="primary"
+                        color="cyan"
+                      />
+                    </Whisper>
+
+                    {/* <Button
                       appearance="link"
-                      onClick={() => handleEditState(rowData.date)}
+                      onClick={() => handleEditState(rowData.id)}
                     >
                       {rowData?.status === "EDIT" ? "Save" : "Edit"}
                     </Button>
@@ -272,8 +406,8 @@ const Point: React.FC = () => {
                       }}
                     >
                       Não Comercial
-                    </Button>
-                  </>
+                    </Button> */}
+                  </ButtonGroup>
                 );
               }}
             </Cell>

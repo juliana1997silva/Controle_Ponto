@@ -10,7 +10,7 @@ const Dashboard: React.FC = () => {
     <>
       <ContainerGlobal>
         <Card
-          color={"green"}
+          color={"#00a6a6"}
           key="1"
           icon={mdiAlarm}
           graphic={false}
@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
           subtitle="BANCO DE HORAS"
         />
         <Card
-          color={"#4682B4"}
+          color={"#2386d6"}
           key="2"
           icon={mdiFileDocumentOutline}
           graphic={false}

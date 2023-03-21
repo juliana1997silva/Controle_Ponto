@@ -67,7 +67,11 @@ const RegistrationUsers: React.FC = () => {
           <Divider />
           <DivButton>
             <ButtonToolbar>
-              <Button color="green" appearance="primary" type="submit">
+              <Button
+                appearance="primary"
+                type="submit"
+                style={{ backgroundColor: "#00a6a6" }}
+              >
                 Salvar
               </Button>
               <Button color="red" appearance="primary">

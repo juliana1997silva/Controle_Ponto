@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  width: 450px;
-  height: 80%;
-  box-shadow: 10px 5px 5px 5px #dcdcdc;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-  border-radius: 15px;
+export const Global = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-image: linear-gradient(to right, #c9ecec, #00a6a6);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 export const Header = styled.div`
@@ -33,7 +33,7 @@ export const Button = styled.button`
   width: 200px;
   height: 40px;
   border-radius: 10px;
-  background-color: #228b22;
+  background-color: #00a6a6;
   border: 0px;
   margin-top: 10%;
   font-size: 18px;
