@@ -4,12 +4,13 @@ import React from "react";
 interface dataLinechart {
   name: string;
   data: [category: string, ...values: number[]][] | undefined;
+  style?: React.CSSProperties | undefined;
 }
 
-const ChartLine: React.FC<dataLinechart> = ({ name, data }) => {
+const ChartLine: React.FC<dataLinechart> = ({ name, data, style }) => {
   return (
     <>
-      <LineChart name={name} data={data} />
+      <LineChart name={name} data={data} style={style} />
     </>
   );
 };

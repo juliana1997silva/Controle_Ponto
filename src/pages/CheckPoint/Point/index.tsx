@@ -1,8 +1,6 @@
-import CollaspedOutlineIcon from "@rsuite/icons/CollaspedOutline";
-import ExpandOutlineIcon from "@rsuite/icons/ExpandOutline";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Button, IconButton, Input, Panel, Table } from "rsuite";
+import { Button, Input, Panel, Table } from "rsuite";
 import BreadcrumbComponent from "../../../components/Breadcrumb";
 import { useAuth } from "../../../hooks/hooksAuth";
 import Consult from "../components/Consult";
@@ -24,9 +22,6 @@ const Point: React.FC = () => {
   const mes = new Date().getMonth();
   const ano = new Date().getFullYear();
   const { user } = useAuth();
-  const rowKey = "date";
-
-  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const value = moment().locale("pt-br").month(mes).year(ano);
 
   const calendar = new Array();
@@ -85,78 +80,6 @@ const Point: React.FC = () => {
     );
   };
 
-  const ExpandCell = ({
-    rowData,
-    dataKey,
-    expandedRowKeys,
-    onChange,
-    ...props
-  }: any) => (
-    <Cell {...props} style={{ padding: 5 }}>
-      <IconButton
-        appearance="subtle"
-        onClick={() => {
-          onChange(rowData);
-        }}
-        icon={
-          expandedRowKeys.some(
-            (key: any) => key === rowData[rowData.rowKey]
-          ) ? (
-            <CollaspedOutlineIcon />
-          ) : (
-            <ExpandOutlineIcon />
-          )
-        }
-      />
-    </Cell>
-  );
-
-  const renderRowExpanded = (rowData: any) => {
-    return (
-      <div style={{ height: "100%" }}>
-        {!rowData.activities ? (
-          <>
-            <span>Sem consulta registrada !</span>
-          </>
-        ) : (
-          <>
-            <div>
-              <Table data={rowData.activities}>
-                <Column>
-                  <HeaderCell>Consulta:</HeaderCell>
-                  <Cell dataKey="consult" />
-                </Column>
-                <Column>
-                  <HeaderCell>Descrição:</HeaderCell>
-                  <Cell dataKey="description" />
-                </Column>
-              </Table>
-            </div>
-          </>
-        )}
-      </div>
-    );
-  };
-
-  const handleExpanded = (rowData: any, dataKey: any) => {
-    let open = false;
-    const nextExpandedRowKeys: any = [];
-
-    expandedRowKeys.forEach((key) => {
-      if (key === rowData[rowKey]) {
-        open = true;
-      } else {
-        nextExpandedRowKeys.push(key);
-      }
-    });
-
-    if (!open) {
-      nextExpandedRowKeys.push(rowData[rowKey]);
-    }
-
-    setExpandedRowKeys(nextExpandedRowKeys);
-  };
-
   const handleChange = (date: any, key: any, value: any) => {
     const nextData: any = Object.assign([], data);
     nextData.find((item: any) => item.date === date)[key] = value;
@@ -171,12 +94,32 @@ const Point: React.FC = () => {
     setData(nextData);
   };
 
-  useEffect(() => {
-    const startDay = value.clone().startOf("month");
-    const endDay = value.clone().endOf("month");
-    const day = startDay.clone().subtract(1, "day");
+  const weekDayName = new Array(
+    "domingo",
+    "segunda",
+    "terça",
+    "quarta",
+    "quinta",
+    "sexta",
+    "sábado"
+  );
 
+  useEffect(() => {
+    //const startDay = value.clone().startOf("month");
+    // const endDay = value.clone().endOf("month");
+    const startDay = value.clone().startOf("week");
+    const endDay = value.clone().endOf("week");
+    //console.log(endDay);
+    const day = startDay.clone().subtract(1, "day");
     while (day.isBefore(endDay, "day")) {
+      calendar.push(
+        Array(7)
+          .fill(0)
+          .map(() => day.add(1, "day").clone())
+      );
+    }
+
+    /* while (day.isBefore(endDay, "day")) {
       if (value.format("MMMM") === "Fevereiro") {
         calendar.push(
           Array(28)
@@ -204,17 +147,37 @@ const Point: React.FC = () => {
             .map(() => day.add(1, "day").clone())
         );
       }
-    }
+    } */
 
     const date = calendar.map((month) => {
       return month.map((day: any, index: any) => {
         return {
-          date: moment(day._d).format("DD/MMM/YYYY"),
-          entry_time: user.user.parameter.entry_time,
-          location: "Home_Office",
-          lunch_entry_time: user.user.parameter.lunch_entry_time,
-          lunch_out_time: user.user.parameter.lunch_out_time,
-          out_time: user.user.parameter.out_time,
+          date: moment(day._d).format("DD/MMMM/YYYY"),
+          entry_time:
+            weekDayName[day._d.getDay()] === "domingo" ||
+            weekDayName[day._d.getDay()] === "sábado"
+              ? ""
+              : user.user.parameter.entry_time,
+          location:
+            weekDayName[day._d.getDay()] === "domingo" ||
+            weekDayName[day._d.getDay()] === "sábado"
+              ? ""
+              : "Home_Office",
+          lunch_entry_time:
+            weekDayName[day._d.getDay()] === "domingo" ||
+            weekDayName[day._d.getDay()] === "sábado"
+              ? ""
+              : user.user.parameter.lunch_entry_time,
+          lunch_out_time:
+            weekDayName[day._d.getDay()] === "domingo" ||
+            weekDayName[day._d.getDay()] === "sábado"
+              ? ""
+              : user.user.parameter.lunch_out_time,
+          out_time:
+            weekDayName[day._d.getDay()] === "domingo" ||
+            weekDayName[day._d.getDay()] === "sábado"
+              ? ""
+              : user.user.parameter.out_time,
           status: null,
           activities: [
             { consult: "2611", description: "Teste 001" },
@@ -225,8 +188,8 @@ const Point: React.FC = () => {
       });
     });
     setData(date[0]);
-    console.log(dataModal);
-  }, [dataModal]);
+    //console.log(calendar);
+  }, []);
 
   return (
     <>
@@ -246,19 +209,8 @@ const Point: React.FC = () => {
           height={420}
           headerHeight={80}
           bordered
-          rowKey={rowKey}
-          expandedRowKeys={expandedRowKeys}
-          renderRowExpanded={renderRowExpanded}
         >
-          <Column width={50}>
-            <HeaderCell>#</HeaderCell>
-            <ExpandCell
-              dataKey="date"
-              expandedRowKeys={expandedRowKeys}
-              onChange={handleExpanded}
-            />
-          </Column>
-          <Column width={150} sortable align="center">
+          <Column width={150} align="center">
             <HeaderCell>Data</HeaderCell>
             <Cell dataKey="date" />
           </Column>

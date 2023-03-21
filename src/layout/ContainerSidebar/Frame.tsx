@@ -1,4 +1,5 @@
 import CheckOutlineIcon from "@rsuite/icons/CheckOutline";
+import DocPassIcon from "@rsuite/icons/DocPass";
 import DashboardIcon from "@rsuite/icons/legacy/Dashboard";
 import TaskIcon from "@rsuite/icons/Task";
 import React from "react";
@@ -34,6 +35,20 @@ const Frame: React.FC = () => {
               onSelect={() => navegate("/release-checkpoint")}
             >
               Liberação Ficha
+            </Nav.Item>
+            <Nav.Item
+              eventKey="4"
+              icon={<CheckOutlineIcon />}
+              onSelect={() => navegate("/teste")}
+            >
+              Teste Calendario
+            </Nav.Item>
+            <Nav.Item
+              eventKey="5"
+              icon={<DocPassIcon />}
+              onSelect={() => navegate("/users-registration")}
+            >
+              Cadastro Usuarios
             </Nav.Item>
           </Nav>
         </Sidenav.Body>

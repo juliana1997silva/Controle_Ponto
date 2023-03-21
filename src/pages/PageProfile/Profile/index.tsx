@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Breadcrumb, Button, Form, Modal, Panel } from "rsuite";
+import { Button, Form, Modal, Panel } from "rsuite";
+import BreadcrumbComponent from "../../../components/Breadcrumb";
 import {
   Collaborator,
   ContainerHeader,
@@ -25,10 +26,11 @@ const Profile: React.FC = () => {
         <ContainerHeader
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          <Breadcrumb>
-            <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-            <Breadcrumb.Item active>Perfil</Breadcrumb.Item>
-          </Breadcrumb>
+          <BreadcrumbComponent
+            active="Perfil"
+            hrefBack="/dashboard"
+            label="Dashboard"
+          />
 
           <Button
             appearance="primary"
@@ -95,8 +97,10 @@ const Profile: React.FC = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button appearance="primary">Ok</Button>
-          <Button appearance="subtle">Cancel</Button>
+          <Button appearance="primary" color="green">
+            Alterar
+          </Button>
+          <Button appearance="subtle">Cancelar</Button>
         </Modal.Footer>
       </Modal>
     </>
