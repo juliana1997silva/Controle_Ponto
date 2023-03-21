@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Button, Input, Panel, Table } from "rsuite";
+import { Button, Panel, Table } from "rsuite";
 import BreadcrumbComponent from "../../../components/Breadcrumb";
 import { useAuth } from "../../../hooks/hooksAuth";
 import Consult from "../components/Consult";
@@ -66,11 +66,11 @@ const Point: React.FC = () => {
     return (
       <Cell {...props} className={editing ? "table-content-editing" : ""}>
         {editing ? (
-          <Input
+          <input
             className="rs-input"
-            defaultValue={rowData[dataKey] ? rowData[dataKey] : value}
+            defaultValue={rowData[dataKey]}
             onChange={(event) => {
-              onChange && onChange(rowData.date, dataKey, event);
+              onChange && onChange(rowData.id, dataKey, event.target.value);
             }}
           />
         ) : (
