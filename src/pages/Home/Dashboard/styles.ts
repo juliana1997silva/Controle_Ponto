@@ -13,3 +13,7 @@ export const Container = styled.div`
   justify-content: space-between;
   padding: 20px;
 `;
+
+export const ContainerGrafic = styled.div`
+  width: 48%;
+`;

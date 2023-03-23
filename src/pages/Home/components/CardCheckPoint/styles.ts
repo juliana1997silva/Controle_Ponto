@@ -1,13 +1,5 @@
 import styled from "styled-components";
 
-export const ContainerGlobal = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-inline: 5px;
-  width: 48%;
-`;
-
 export const Container = styled.div`
   height: 500px;
   border-radius: 10px;

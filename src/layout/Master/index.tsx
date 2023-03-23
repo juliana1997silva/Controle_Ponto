@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Container, Content, Footer, Header, Sidebar } from "rsuite";
+import { Container, Content, Footer, Header } from "rsuite";
 import ContainerSidebar from "../ContainerSidebar";
 
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
 import Copyright from "../../layout/Copyright";
 import HeaderTempus from "../Header";
 
@@ -15,9 +15,7 @@ const Master: React.FC = () => {
           <HeaderTempus />
         </Header>
         <Container>
-          <Sidebar>
-            <ContainerSidebar />
-          </Sidebar>
+          <ContainerSidebar />
           <Content>
             <Outlet />
           </Content>
