@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // css do toast
+import Loading from "../components/Loading";
 import api from "../services/api";
 import { IProps } from "../types";
 
@@ -55,12 +56,14 @@ const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
 
 const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [showHome, setShowHome] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errorLogin, setErrorLogin] = useState(false);
   const [user, setUser] = useState<IUserData>({} as IUserData);
   const [dataForm, setDataForm] = useState<dataLogin>({} as dataLogin);
 
   const login = useCallback(
     async (data: dataLogin) => {
+      setLoading(true);
       const loginData = await api
         .post(`/v1/user/auth`, data)
         .catch(function (error) {
@@ -75,10 +78,16 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         } else {
           toast.error("Tente Novamente !");
         }
+
+        setLoading(false);
       }
     },
-    [setUser, setShowHome]
+    [setUser, setShowHome, setLoading]
   );
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <AuthContext.Provider

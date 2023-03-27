@@ -11,6 +11,7 @@ import "rsuite/dist/rsuite.min.css";
 const Frame: React.FC = () => {
   const navegate = useNavigate();
   const [expanded, setExpanded] = useState(true);
+
   return (
     <div>
       <Sidebar

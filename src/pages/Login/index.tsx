@@ -1,16 +1,31 @@
-import React, { useCallback } from "react";
+import EyeIcon from "@rsuite/icons/legacy/Eye";
+import EyeSlashIcon from "@rsuite/icons/legacy/EyeSlash";
+import React, { useCallback, useState } from "react";
 import { Navigate } from "react-router";
-import { Form, Panel } from "rsuite";
+import { Form, InputGroup, Panel } from "rsuite";
 import logoTempus from "../../assets/logoTempus.png";
 import { dataLogin, useAuth } from "../../hooks/hooksAuth";
-import { Button, DivImg, Global, ImgPage, TitleForm } from "./styles";
+import {
+  Button,
+  ContainerForm,
+  DivImg,
+  Global,
+  ImgPage,
+  TitleForm,
+} from "./styles";
 
 const Login: React.FC = () => {
   const { login, dataForm, setDataForm, showHome, user } = useAuth();
+  const [visible, setVisible] = useState(false);
+
+  const handleChangePassword = () => {
+    setVisible(!visible);
+  };
 
   const handleChange = useCallback(
     (form: dataLogin) => {
       setDataForm(form);
+      console.log(form);
     },
     [setDataForm]
   );
@@ -35,25 +50,32 @@ const Login: React.FC = () => {
           <ImgPage src={logoTempus} style={{ width: "40%", height: "50%" }} />
         </DivImg>
         <div style={{ padding: 20 }} />
-        <Form onChange={handleChange} style={{ textAlign: "center" }}>
-          <Form.Group>
-            <TitleForm>Login:</TitleForm> <br /> <br />
-            <Form.Control
-              name="login"
-              style={{ borderColor: "#a39999", height: 40, width: "100%" }}
-            />
-          </Form.Group>
-          <br />
-          <Form.Group>
-            <TitleForm>Senha:</TitleForm> <br /> <br />
-            <Form.Control
-              name="password"
-              type="password"
-              style={{ borderColor: "#a39999", height: 40, width: "100%" }}
-            />
-          </Form.Group>
-          <Button onClick={handleSubmit}>Entrar</Button>
-        </Form>
+        <ContainerForm>
+          <Form onChange={handleChange}>
+            <Form.Group>
+              <TitleForm>Login:</TitleForm> <br /> <br />
+              <InputGroup>
+                <Form.Control name="login" />
+                <span className="animation-bottom"></span>
+              </InputGroup>
+            </Form.Group>
+            <br />
+            <Form.Group>
+              <TitleForm>Senha:</TitleForm> <br /> <br />
+              <InputGroup>
+                <Form.Control
+                  name="password"
+                  type={visible ? "text" : "password"}
+                />
+
+                <InputGroup.Button onClick={handleChangePassword}>
+                  {visible ? <EyeIcon /> : <EyeSlashIcon />}
+                </InputGroup.Button>
+              </InputGroup>
+            </Form.Group>
+            <Button onClick={handleSubmit}>Entrar</Button>
+          </Form>
+        </ContainerForm>
       </Panel>
     </Global>
   );

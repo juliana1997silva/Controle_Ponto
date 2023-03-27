@@ -12,6 +12,19 @@ export const Global = styled.div`
   background-size: cover;
 `;
 
+export const ContainerForm = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  .rs-input {
+    height: 40px;
+  }
+`;
+
+export const SpanInput = styled.span``;
+
 export const Header = styled.div`
   text-align: center;
   margin-bottom: 10%;
