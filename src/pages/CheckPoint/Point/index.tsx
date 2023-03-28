@@ -188,7 +188,7 @@ const Point: React.FC = () => {
       }
     } */
 
-    const date = calendar.map((month) => {
+    const date = calendar.map((month: any) => {
       return month.map((day: any, index: any) => {
         return {
           id: nextId("date-"),
@@ -230,13 +230,13 @@ const Point: React.FC = () => {
     setData(date[0]);
     console.log(date);
   }, [
-    calendar,
+    weekDayName,
     user.user.parameter.entry_time,
     user.user.parameter.lunch_entry_time,
     user.user.parameter.lunch_out_time,
     user.user.parameter.out_time,
     value,
-    weekDayName,
+    calendar,
   ]);
 
   return (

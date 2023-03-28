@@ -21,6 +21,7 @@ const Header: React.FC = () => {
           <img
             style={{ width: 50, height: 50, borderRadius: 20, margin: 0 }}
             src={fotoPerfil}
+            alt="Foto Perfil"
           />
         }
         circle
