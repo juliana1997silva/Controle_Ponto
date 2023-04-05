@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css"; // css do toast
 import { IProps } from "../../../types";
 
 export interface dataForm {
+  id: string;
   date?: any;
   entry_time?: string;
   location?: string;

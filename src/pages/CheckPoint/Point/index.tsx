@@ -72,19 +72,15 @@ const Point: React.FC = () => {
 
   const EditableCell = ({ rowData, dataKey, onChange, ...props }: any) => {
     const editing = rowData.status === "EDIT";
-    //let value = "";
-    //if (dataKey) if (rowData[dataKey]) value = rowData[dataKey];
     return (
       <Cell {...props} className={editing ? "table-content-editing" : ""}>
         {editing ? (
           <input
             className="rs-input"
             defaultValue={rowData[dataKey]}
-            //value={rowData[dataKey] ? rowData[dataKey] : value}
             onChange={(event) => {
               onChange && onChange(rowData.id, dataKey, event.target.value);
             }}
-            type="time"
           />
         ) : (
           <span className="table-content-edit-span">{rowData[dataKey]}</span>
@@ -125,8 +121,7 @@ const Point: React.FC = () => {
     nextData.find((item: any) => item.id === id)[key] = value;
     setData(nextData);
   };
-
-  const handleEditState = (id: any) => {
+  const handleEditState = (id: string) => {
     const nextData = Object.assign([], data);
     const activeItem: any = nextData.find((item: any) => item.id === id);
     activeItem.status = activeItem.status ? null : "EDIT";
@@ -228,16 +223,8 @@ const Point: React.FC = () => {
       });
     });
     setData(date[0]);
-    console.log(date);
-  }, [
-    weekDayName,
-    user.user.parameter.entry_time,
-    user.user.parameter.lunch_entry_time,
-    user.user.parameter.lunch_out_time,
-    user.user.parameter.out_time,
-    value,
-    calendar,
-  ]);
+    //console.log(date);
+  }, []);
 
   return (
     <>
@@ -293,7 +280,7 @@ const Point: React.FC = () => {
             <HeaderCell>Ações</HeaderCell>
             <Cell>
               {(rowData: any) => {
-                console.log(rowData.status);
+                //console.log(rowData.status);
                 return (
                   <ButtonGroup>
                     {rowData?.status === "EDIT" ? (
@@ -319,7 +306,10 @@ const Point: React.FC = () => {
                       >
                         <IconButton
                           icon={<EditIcon />}
-                          onClick={() => handleEditState(rowData.id)}
+                          onClick={() => {
+                            handleEditState(rowData.id);
+                            console.log(rowData.id);
+                          }}
                           appearance="primary"
                           style={{ backgroundColor: "#00a6a6" }}
                         />

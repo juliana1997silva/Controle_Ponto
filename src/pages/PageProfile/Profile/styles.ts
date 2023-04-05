@@ -10,3 +10,7 @@ export const TitlePage = styled.h3``;
 export const Collaborator = styled.h4``;
 
 export const PulaLinha = styled.br``;
+
+export const ContainerButtonPhone = styled.div`
+  margin-inline: 20px;
+`;

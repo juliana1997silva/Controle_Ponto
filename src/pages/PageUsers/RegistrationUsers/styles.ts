@@ -11,6 +11,10 @@ export const DivHour = styled.div`
 
 export const DivPause = styled.div``;
 
+export const DivDivider = styled.div`
+  padding: 10px;
+`;
+
 export const DivButton = styled.div`
   text-align: end;
 `;

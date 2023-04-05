@@ -25,7 +25,7 @@ const Card: React.FC<DataCard> = ({
 
   return (
     <ContainerGlobal>
-      <Container style={styles} key={key}>
+      <Container style={styles}>
         <div
           style={{
             margin: 10,

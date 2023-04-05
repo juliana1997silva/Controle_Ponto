@@ -43,13 +43,13 @@ const Frame: React.FC = () => {
               >
                 Liberação Ficha
               </Nav.Item>
-              <Nav.Item
+              {/* <Nav.Item
                 eventKey="4"
                 icon={<CheckOutlineIcon />}
                 onSelect={() => navegate("/teste")}
               >
                 Teste Calendario
-              </Nav.Item>
+  </Nav.Item>*/}
               <Nav.Item
                 eventKey="5"
                 icon={<DocPassIcon />}

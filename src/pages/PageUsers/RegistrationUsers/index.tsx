@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, ButtonToolbar, Divider, Form, Panel, Schema } from "rsuite";
 import BreadcrumbComponent from "../../../components/Breadcrumb";
-import { DivButton, DivHour, DivPause, TitlePage } from "./styles";
+import { DivButton, DivDivider, DivHour, DivPause, TitlePage } from "./styles";
 
 const RegistrationUsers: React.FC = () => {
   const { StringType } = Schema.Types;
@@ -15,6 +15,8 @@ const RegistrationUsers: React.FC = () => {
     lunch_entry_time: StringType().isRequired("Este Campo é Obrigatório"),
     lunch_out_time: StringType().isRequired("Este Campo é Obrigatório"),
     out_time: StringType().isRequired("Este Campo é Obrigatório"),
+    user: StringType().isRequired("Este Campo é Obrigatório"),
+    password: StringType().isRequired("Este Campo é Obrigatório"),
   });
   return (
     <>
@@ -63,6 +65,14 @@ const RegistrationUsers: React.FC = () => {
             </DivHour>
             <Form.ControlLabel>Saída:</Form.ControlLabel>
             <Form.Control name="out_time" type="time" />
+          </Form.Group>
+          <Form.Group controlId="user_access">
+            <Divider>Dados de Acesso</Divider>
+            <Form.ControlLabel>Usuário:</Form.ControlLabel>
+            <Form.Control name="user" />
+            <DivDivider />
+            <Form.ControlLabel>Senha:</Form.ControlLabel>
+            <Form.Control name="password" type="password" />
           </Form.Group>
           <Divider />
           <DivButton>

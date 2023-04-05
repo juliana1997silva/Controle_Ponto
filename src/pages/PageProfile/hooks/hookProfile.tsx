@@ -1,12 +1,16 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import "react-toastify/dist/ReactToastify.css"; // css do toast
 import { IProps } from "../../../types";
 
-interface HooksProfileData {}
+interface HooksProfileData {
+  showModalPassword: boolean;
+  setShowModalPassword(showModalPassword: boolean): void;
+}
 
 const ProfileContext = createContext<HooksProfileData>({} as HooksProfileData);
 
 const ProfileContextProvider: React.FC<IProps> = ({ children }) => {
+  const [showModalPassword, setShowModalPassword] = useState(false);
   /* const login = useCallback(
     async (data: dataLogin) => {
       const loginData = await api
@@ -29,7 +33,14 @@ const ProfileContextProvider: React.FC<IProps> = ({ children }) => {
   ); */
 
   return (
-    <ProfileContext.Provider value={{}}>{children}</ProfileContext.Provider>
+    <ProfileContext.Provider
+      value={{
+        showModalPassword,
+        setShowModalPassword,
+      }}
+    >
+      {children}
+    </ProfileContext.Provider>
   );
 };
 

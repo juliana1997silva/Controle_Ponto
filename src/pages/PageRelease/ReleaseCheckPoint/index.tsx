@@ -3,6 +3,7 @@ import CheckIcon from "@rsuite/icons/Check";
 import VisibleIcon from "@rsuite/icons/Visible";
 import React, { useEffect, useState } from "react";
 import {
+  Button,
   ButtonGroup,
   Divider,
   Drawer,
@@ -18,9 +19,9 @@ import BreadcrumbComponent from "../../../components/Breadcrumb";
 import { FormData } from "../../../types";
 import {
   Circle,
+  ContainerButtonPDF,
   ContainerStatus,
   Divider30,
-  NoData,
   PulaLinha,
   Status,
   TitlePage,
@@ -33,6 +34,8 @@ const ReleaseCheckPoint: React.FC = () => {
   const [disabled, setDisabled] = useState(false);
   const [select, setSelect] = useState("");
   const [formData, setFormData] = useState<FormData>({} as FormData);
+  const [buttonPDF, setButtonPDF] = useState(false);
+  const [moodStyles, setMoodStyles] = useState(false);
   const data = [
     {
       role: "Juliana Silva de Jesus",
@@ -40,9 +43,9 @@ const ReleaseCheckPoint: React.FC = () => {
       label: "Juliana Silva de Jesus",
     },
     {
-      role: "Guilherme Silva de Jesus",
-      value: "Guilherme Silva de Jesus",
-      label: "Guilherme Silva de Jesus",
+      role: "Lucia Silva de Jesus",
+      value: "Lucia Silva de Jesus",
+      label: "Lucia Silva de Jesus",
     },
     {
       role: "Maria Silva de Jesus",
@@ -176,7 +179,10 @@ const ReleaseCheckPoint: React.FC = () => {
           onSelect={(v) => {
             setSelect(v);
           }}
-          onClean={() => setSelect("")}
+          onClean={() => {
+            setSelect("");
+            setButtonPDF(false);
+          }}
           block
         />
 
@@ -314,7 +320,11 @@ const ReleaseCheckPoint: React.FC = () => {
                               >
                                 <IconButton
                                   icon={<CheckIcon />}
-                                  onClick={() => console.log(rowData)}
+                                  onClick={() => {
+                                    console.log(rowData);
+                                    setButtonPDF(true);
+                                    setMoodStyles(true);
+                                  }}
                                   appearance="primary"
                                   color="green"
                                 />
@@ -343,6 +353,16 @@ const ReleaseCheckPoint: React.FC = () => {
             </Table>
           </>
         )}
+        {buttonPDF && (
+          <ContainerButtonPDF>
+            <Button
+              appearance="primary"
+              style={{ backgroundColor: "#00a6a6", width: 150 }}
+            >
+              Gerar PDF
+            </Button>
+          </ContainerButtonPDF>
+        )}
       </Panel>
 
       <Drawer
@@ -365,10 +385,11 @@ const ReleaseCheckPoint: React.FC = () => {
             <Form.Control name="pause_checkout" disabled={disabled} />
             <Form.ControlLabel>Saida</Form.ControlLabel>
             <Form.Control name="checkout" disabled={disabled} />
-            <Divider>Horário Não Comercial</Divider>
+
             {formData.hour_NoCommercial !== undefined && (
               <>
                 {console.log(formData.hour_NoCommercial)}
+                <Divider>Horário Não Comercial</Divider>
 
                 <Table data={formData.hour_NoCommercial}>
                   <Column>
@@ -390,14 +411,14 @@ const ReleaseCheckPoint: React.FC = () => {
                 </Table>
               </>
             )}
-            <Divider>Consultas Registradas no dia</Divider>
-            {formData.activities !== undefined ? (
+
+            {formData.activities !== undefined && (
               <>
-                <span>Consultas</span>
+                <Divider>Consultas Registradas no dia</Divider>
                 {console.log(formData.activities)}
                 <Table data={formData.activities}>
                   <Column>
-                    <HeaderCell>Nº:</HeaderCell>
+                    <HeaderCell>Nº Consulta:</HeaderCell>
                     <Cell dataKey="consult" />
                   </Column>
                   <Column>
@@ -405,10 +426,6 @@ const ReleaseCheckPoint: React.FC = () => {
                     <Cell dataKey="description" />
                   </Column>
                 </Table>
-              </>
-            ) : (
-              <>
-                <NoData>Sem Consulta</NoData>
               </>
             )}
             <Divider />

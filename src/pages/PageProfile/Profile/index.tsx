@@ -1,15 +1,36 @@
-import React, { useState } from "react";
-import { Button, Form, Modal, Panel } from "rsuite";
-import BreadcrumbComponent from "../../../components/Breadcrumb";
+import React, { useCallback, useState } from "react";
 import {
-  Collaborator,
-  ContainerHeader,
-  PulaLinha,
-  TitlePage,
-} from "../Profile/styles";
+  Button,
+  Form,
+  Loader,
+  Message,
+  Panel,
+  Uploader,
+  useToaster,
+} from "rsuite";
+import BreadcrumbComponent from "../../../components/Breadcrumb";
+import ResetPassword from "../components/ResetPassword";
+import { useProfile } from "../hooks/hookProfile";
+import { ContainerHeader, PulaLinha, TitlePage } from "./styles";
+
+import AvatarIcon from "@rsuite/icons/legacy/Avatar";
+
+function previewFile(file: any, callback: any) {
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    callback(reader.result);
+  };
+  reader.readAsDataURL(file);
+}
 
 const Profile: React.FC = () => {
-  const [showModalPassword, setShowModalPassword] = useState(false);
+  const { showModalPassword, setShowModalPassword } = useProfile();
+  const toaster = useToaster();
+  const [uploading, setUploading] = useState(false);
+  const [fileInfo, setFileInfo] = useState(null);
+  const [buttonPhone, setButtonPhone] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [mode, setMode] = useState<"create" | "edit">("create");
 
   const dataProfile = {
     name: "Juliana Silva de Jesus",
@@ -19,6 +40,26 @@ const Profile: React.FC = () => {
     mail: "jjesus@conecto.com.br",
     phone: "(11) 92106-3113",
   };
+
+  const handleChange = useCallback((value: any) => {
+    console.log(value);
+    setButtonPhone(true);
+    setMode("edit");
+
+    /* value.replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2")
+      .replace(/(-\d{4})(\d+?)$/, "$1");
+ */
+
+    const phoneFormat = value
+      .replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2")
+      .replace(/(-\d{4})(\d+?)$/, "$1");
+    console.log(phoneFormat);
+    setPhone(phoneFormat);
+  }, []);
 
   return (
     <>
@@ -41,8 +82,40 @@ const Profile: React.FC = () => {
           </Button>
         </ContainerHeader>
 
+        <Uploader
+          fileListVisible={false}
+          listType="picture"
+          action="//jsonplaceholder.typicode.com/posts/"
+          onUpload={(file) => {
+            setUploading(true);
+            previewFile(file.blobFile, (value: any) => {
+              setFileInfo(value);
+            });
+          }}
+          onSuccess={(response, file) => {
+            setUploading(false);
+            toaster.push(
+              <Message type="success">Uploaded successfully</Message>
+            );
+            console.log(response);
+          }}
+          onError={() => {
+            setFileInfo(null);
+            setUploading(false);
+            toaster.push(<Message type="error">Upload failed</Message>);
+          }}
+        >
+          <button style={{ width: 150, height: 150 }}>
+            {uploading && <Loader backdrop center />}
+            {fileInfo ? (
+              <img src={fileInfo} width="100%" height="100%" />
+            ) : (
+              <AvatarIcon style={{ fontSize: 80 }} />
+            )}
+          </button>
+        </Uploader>
+
         <Form formDefaultValue={dataProfile}>
-          <Collaborator>Dados do Colaborador</Collaborator>
           <PulaLinha />
           <Form.Group controlId="name">
             <Form.ControlLabel>Nome Completo</Form.ControlLabel>
@@ -66,43 +139,35 @@ const Profile: React.FC = () => {
           </Form.Group>
           <Form.Group controlId="phone">
             <Form.ControlLabel>Telefone para Contato:</Form.ControlLabel>
-            <Form.Control name="phone" type="phone" />
+            <Form.Control
+              name="phone"
+              type="phone"
+              value={mode === "edit" ? phone : dataProfile.phone}
+              onChange={(e) => handleChange(e)}
+              maxLength={15}
+            />
+
+            {buttonPhone && (
+              <Button
+                appearance="primary"
+                style={{
+                  marginInline: 10,
+                  width: 120,
+                  backgroundColor: "#00a6a6",
+                }}
+              >
+                Salvar
+              </Button>
+            )}
           </Form.Group>
         </Form>
       </Panel>
 
-      {/* modal alteracao de senha*/}
-
-      <Modal
-        open={showModalPassword}
-        onClose={() => setShowModalPassword(false)}
-      >
-        <Modal.Header>
-          <Modal.Title>Alterar Senha de Acesso</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group>
-              <Form.ControlLabel>Senha Atual:</Form.ControlLabel>
-              <Form.Control name="password_actual" />
-            </Form.Group>
-            <Form.Group>
-              <Form.ControlLabel>Nova Senha:</Form.ControlLabel>
-              <Form.Control name="password_new" />
-            </Form.Group>
-            <Form.Group>
-              <Form.ControlLabel>Confirme a Nova Senha:</Form.ControlLabel>
-              <Form.Control name="password_confirmation" />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button appearance="primary" color="green">
-            Alterar
-          </Button>
-          <Button appearance="subtle">Cancelar</Button>
-        </Modal.Footer>
-      </Modal>
+      {showModalPassword && (
+        <>
+          <ResetPassword />
+        </>
+      )}
     </>
   );
 };

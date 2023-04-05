@@ -4,12 +4,13 @@ export const Container = styled.div`
   height: 500px;
   border-radius: 10px;
   margin: 0px;
-  text-align: center;
+  //text-align: center;
 `;
 
 export const Title = styled.span`
   color: "#dcdcdc";
   font-size: 20px;
+  margin: 30%;
 `;
 
 export const Divider = styled.div`

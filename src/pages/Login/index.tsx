@@ -25,7 +25,6 @@ const Login: React.FC = () => {
   const handleChange = useCallback(
     (form: dataLogin) => {
       setDataForm(form);
-      console.log(form);
     },
     [setDataForm]
   );

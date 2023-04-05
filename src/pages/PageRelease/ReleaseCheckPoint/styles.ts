@@ -5,10 +5,13 @@ export const Container = styled.div`
   background-color: red;
 `;
 
-export const NoData = styled.span`
-  font-size: 16px;
+export const ContainerButtonPDF = styled.div`
   display: flex;
-  margin-top: 30px;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  padding-inline: 20px;
+  margin-top: 5%;
 `;
 
 export const TitlePage = styled.h3``;
