@@ -1,5 +1,13 @@
 import React from "react";
-import { Button, ButtonToolbar, Divider, Form, Panel, Schema } from "rsuite";
+import {
+  Button,
+  ButtonToolbar,
+  Divider,
+  Form,
+  Panel,
+  Schema,
+  SelectPicker,
+} from "rsuite";
 import BreadcrumbComponent from "../../../components/Breadcrumb";
 import { DivButton, DivDivider, DivHour, DivPause, TitlePage } from "./styles";
 
@@ -18,6 +26,23 @@ const RegistrationUsers: React.FC = () => {
     user: StringType().isRequired("Este Campo é Obrigatório"),
     password: StringType().isRequired("Este Campo é Obrigatório"),
   });
+
+  const dataSelectCoordenador = [
+    {
+      role: "Wilson Felix",
+      label: "Wilson Felix",
+      value: "Wilson Felix",
+    },
+  ];
+
+  const dataSelectDepartament = [
+    {
+      role: "Desenvolvimento",
+      label: "Desenvolvimento",
+      value: "Desenvolvimento",
+    },
+  ];
+
   return (
     <>
       <Panel
@@ -43,13 +68,25 @@ const RegistrationUsers: React.FC = () => {
           </Form.Group>
           <Form.Group controlId="department">
             <Form.ControlLabel>Departamento:</Form.ControlLabel>
-            <Form.Control name="department" />
+            <Form.Control
+              name="department"
+              accepter={SelectPicker}
+              data={dataSelectDepartament}
+              searchable={false}
+              placeholder="Selecione o Departamento"
+            />
           </Form.Group>
           <Form.Group controlId="coordinator">
             <Form.ControlLabel>Coordenador:</Form.ControlLabel>
-            <Form.Control name="coordinator" />
+            <Form.Control
+              name="coordinator"
+              accepter={SelectPicker}
+              data={dataSelectCoordenador}
+              searchable={false}
+              placeholder="Selecione o Coordenador"
+            />
           </Form.Group>
-          <Form.Group controlId="hour">
+          <Form.Group>
             <Divider>Expediente</Divider>
             <Form.ControlLabel>Entrada:</Form.ControlLabel>
             <Form.Control name="entry_time" type="time" />
@@ -66,7 +103,7 @@ const RegistrationUsers: React.FC = () => {
             <Form.ControlLabel>Saída:</Form.ControlLabel>
             <Form.Control name="out_time" type="time" />
           </Form.Group>
-          <Form.Group controlId="user_access">
+          <Form.Group>
             <Divider>Dados de Acesso</Divider>
             <Form.ControlLabel>Usuário:</Form.ControlLabel>
             <Form.Control name="user" />

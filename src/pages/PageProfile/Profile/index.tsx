@@ -42,16 +42,6 @@ const Profile: React.FC = () => {
   };
 
   const handleChange = useCallback((value: any) => {
-    console.log(value);
-    setButtonPhone(true);
-    setMode("edit");
-
-    /* value.replace(/\D/g, "")
-      .replace(/(\d{2})(\d)/, "($1) $2")
-      .replace(/(\d{5})(\d)/, "$1-$2")
-      .replace(/(-\d{4})(\d+?)$/, "$1");
- */
-
     const phoneFormat = value
       .replace(/\D/g, "")
       .replace(/(\d{2})(\d)/, "($1) $2")
@@ -59,6 +49,8 @@ const Profile: React.FC = () => {
       .replace(/(-\d{4})(\d+?)$/, "$1");
     console.log(phoneFormat);
     setPhone(phoneFormat);
+    setButtonPhone(true);
+    setMode("edit");
   }, []);
 
   return (

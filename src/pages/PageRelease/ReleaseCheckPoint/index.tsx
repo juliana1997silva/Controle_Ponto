@@ -1,7 +1,7 @@
 import BlockIcon from "@rsuite/icons/Block";
 import CheckIcon from "@rsuite/icons/Check";
 import VisibleIcon from "@rsuite/icons/Visible";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -156,11 +156,6 @@ const ReleaseCheckPoint: React.FC = () => {
       status: false,
     },
   ];
-
-  useEffect(() => {
-    console.log(select);
-    console.log(formData.hour_NoCommercial);
-  }, [formData]);
 
   return (
     <>
