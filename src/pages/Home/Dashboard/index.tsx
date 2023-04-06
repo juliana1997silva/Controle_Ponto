@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     setShow(!show);
-  }, [setShow]);
+  }, [setShow, show]);
 
   return (
     <>

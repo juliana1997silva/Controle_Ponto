@@ -4,7 +4,7 @@ import { Button, Drawer, Form, Table } from "rsuite";
 import { dataHourCommercial, useCheckPoint } from "../../hooks/hookCheckPoint";
 
 const HourCommercial: React.FC = () => {
-  const { Column, HeaderCell, Cell, ColumnGroup } = Table;
+  const { Column, HeaderCell, Cell } = Table;
   const {
     setCommercialData,
     commercialData,
@@ -48,7 +48,7 @@ const HourCommercial: React.FC = () => {
       lunch_out_time_commercial: "",
       out_time_commercial: "",
     });
-  }, [commercialData, commercial, setDataModal, setCommercialData]);
+  }, [commercialData, commercial, setDataModal, setCommercialData, dataModal]);
 
   return (
     <Drawer

@@ -31,11 +31,10 @@ import {
 const ReleaseCheckPoint: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
   const [openModal, setOpenModal] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled] = useState(false);
   const [select, setSelect] = useState("");
   const [formData, setFormData] = useState<FormData>({} as FormData);
   const [buttonPDF, setButtonPDF] = useState(false);
-  const [moodStyles, setMoodStyles] = useState(false);
   const data = [
     {
       role: "Juliana Silva de Jesus",
@@ -318,7 +317,6 @@ const ReleaseCheckPoint: React.FC = () => {
                                   onClick={() => {
                                     console.log(rowData);
                                     setButtonPDF(true);
-                                    setMoodStyles(true);
                                   }}
                                   appearance="primary"
                                   color="green"

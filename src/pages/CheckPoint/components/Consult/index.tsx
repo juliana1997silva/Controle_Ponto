@@ -5,7 +5,7 @@ import { dataConsult, useCheckPoint } from "../../hooks/hookCheckPoint";
 
 const Consult: React.FC = () => {
   const { setDataModal, dataModal, openModal, setOpenModal } = useCheckPoint();
-  const { Column, HeaderCell, Cell, ColumnGroup } = Table;
+  const { Column, HeaderCell, Cell } = Table;
   const [consults, setConsults] = useState<dataConsult[]>([]);
   const [consultData, setConsultData] = useState<dataConsult>(
     {} as dataConsult
