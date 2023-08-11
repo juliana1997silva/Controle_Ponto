@@ -1,11 +1,12 @@
 import React from "react";
-import RegistrationUsers from "./RegistrationUsers";
+import AppProvider from "./hooks";
+import UserList from "./UserList";
 
 const PageUsers: React.FC = () => {
   return (
-    <>
-      <RegistrationUsers />
-    </>
+    <AppProvider>
+      <UserList />
+    </AppProvider>
   );
 };
 

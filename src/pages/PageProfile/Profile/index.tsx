@@ -61,7 +61,7 @@ const Profile: React.FC = () => {
         >
           <BreadcrumbComponent
             active="Perfil"
-            hrefBack="/dashboard"
+            href="/dashboard"
             label="Dashboard"
           />
 

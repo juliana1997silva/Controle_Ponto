@@ -1,29 +1,16 @@
 import React from "react";
-import { useNavigate } from "react-router";
 import { Breadcrumb } from "rsuite";
 
 interface breadcrumbData {
-  hrefBack: string;
-  label: string;
   active: string;
+  href: string;
+  label: string;
 }
 
-const BreadcrumbComponent: React.FC<breadcrumbData> = ({
-  hrefBack,
-  label,
-  active,
-}) => {
-  const navegate = useNavigate();
+const BreadcrumbComponent: React.FC<breadcrumbData> = ({ href, label,active }) => {
   return (
-    <Breadcrumb>
-      <Breadcrumb.Item
-        onClick={(e: any) => {
-          e.preventDefault();
-          navegate(hrefBack);
-        }}
-      >
-        {label}
-      </Breadcrumb.Item>
+    <Breadcrumb separator=">">
+      <Breadcrumb.Item href={href}>{label}</Breadcrumb.Item>
       <Breadcrumb.Item active>{active}</Breadcrumb.Item>
     </Breadcrumb>
   );

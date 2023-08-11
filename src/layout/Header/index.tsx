@@ -1,47 +1,50 @@
 import AdminIcon from "@rsuite/icons/Admin";
 import ExitIcon from "@rsuite/icons/Exit";
-import React from "react";
-import { useNavigate } from "react-router";
+import React, { useEffect, useState } from "react";
 import { Dropdown, IconButton } from "rsuite";
-import fotoPerfil from "../../assets/foto perfil.jpg";
 import logoTempus from "../../assets/logoTempus.png";
 import { useAuth } from "../../hooks/hooksAuth";
 import { Container, ContainerAvatar, NameUser } from "./styles";
 
 const Header: React.FC = () => {
   const { user } = useAuth();
-  const navegate = useNavigate();
+  const [logout, setLogout] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const renderIconButton = (props: any, ref: any) => {
     return (
       <IconButton
         {...props}
         ref={ref}
-        icon={
-          <img
-            style={{ width: 50, height: 50, borderRadius: 20, margin: 0 }}
-            src={fotoPerfil}
-            alt="Foto Perfil"
-          />
-        }
+        icon={<AdminIcon style={{ width: "100%", height: "100%" }} />}
         circle
         color="blue"
         style={{
           width: 50,
           height: 50,
-          padding: 0,
         }}
       />
     );
   };
 
+  useEffect(() => {
+    console.log(user.logged === true);
+  });
+
+  if (logout) {
+    window.location.pathname = "";
+  }
+
+  if (showProfile) {
+    window.location.pathname = "/profile";
+  }
   return (
     <Container>
       <img
         src={logoTempus}
         alt="Logo Tempus"
-        style={{ height: 70, width: 70, marginLeft: 20 }}
-        onClick={() => navegate("/dashboard")}
+        style={{ height: 70, width: 70 }}
+        onClick={() => (window.location.pathname = "/dashboard")}
       />
       {user.logged === true && (
         <ContainerAvatar>
@@ -49,12 +52,14 @@ const Header: React.FC = () => {
 
           <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
             <Dropdown.Item
+              onSelect={() => setShowProfile(true)}
               icon={<AdminIcon />}
-              onSelect={() => navegate("/profile")}
             >
               Meu Perfil
             </Dropdown.Item>
-            <Dropdown.Item icon={<ExitIcon />}>Sair</Dropdown.Item>
+            <Dropdown.Item onSelect={() => setLogout(true)} icon={<ExitIcon />}>
+              Sair
+            </Dropdown.Item>
           </Dropdown>
         </ContainerAvatar>
       )}

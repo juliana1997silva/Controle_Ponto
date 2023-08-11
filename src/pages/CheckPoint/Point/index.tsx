@@ -1,79 +1,40 @@
-import CheckIcon from "@rsuite/icons/Check";
-import EditIcon from "@rsuite/icons/Edit";
-import HistoryIcon from "@rsuite/icons/History";
-import MessageIcon from "@rsuite/icons/Message";
-import PageIcon from "@rsuite/icons/Page";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import nextId from "react-id-generator";
-import {
-  ButtonGroup,
-  IconButton,
-  Panel,
-  Table,
-  Tooltip,
-  Whisper,
-} from "rsuite";
-import BreadcrumbComponent from "../../../components/Breadcrumb";
-import { useAuth } from "../../../hooks/hooksAuth";
-import Consult from "../components/Consult";
-import HourCommercial from "../components/HourCommercial";
-import { dataForm, useCheckPoint } from "../hooks/hookCheckPoint";
-import { TitlePage } from "./styles";
+import CheckIcon from '@rsuite/icons/Check';
+import EditIcon from '@rsuite/icons/Edit';
+import HistoryIcon from '@rsuite/icons/History';
+import MessageIcon from '@rsuite/icons/Message';
+import PageIcon from '@rsuite/icons/Page';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import nextId from 'react-id-generator';
+import { ButtonGroup, IconButton, Panel, Table, Tooltip, Whisper } from 'rsuite';
+import BreadcrumbComponent from '../../../components/Breadcrumb';
+import { useAuth } from '../../../hooks/hooksAuth';
+import Consult from '../components/Consult';
+import HourCommercial from '../components/HourCommercial';
+import { dataForm, useCheckPoint } from '../hooks/hookCheckPoint';
+import { TitlePage } from './styles';
 
 const { Column, HeaderCell, Cell, ColumnGroup } = Table;
 
 const Point: React.FC = () => {
-  const {
-    setDataModal,
-    setOpenModal,
-    setOpenCommercial,
-    openCommercial,
-    openModal,
-  } = useCheckPoint();
+  const { setDataModal, setOpenModal, setOpenCommercial, openCommercial, openModal } = useCheckPoint();
   const mes = new Date().getMonth();
   const ano = new Date().getFullYear();
   const { user } = useAuth();
-  const value = moment().locale("pt-br").month(mes).year(ano);
+  const value = moment().locale('pt-br').month(mes).year(ano);
 
   const calendar = new Array();
   const [data, setData] = useState<dataForm[]>([]);
 
-  moment.updateLocale("pt", {
-    months: [
-      "Janeiro",
-      "Fevereiro",
-      "Março",
-      "Abril",
-      "Maio",
-      "Junho",
-      "Julho",
-      "Agosto",
-      "Setembro",
-      "Outubro",
-      "Novembro",
-      "Dezembro",
-    ],
-    monthsShort: [
-      "Jan",
-      "Fev",
-      "Mar",
-      "Abr",
-      "Mai",
-      "Jun",
-      "Jul",
-      "Ago",
-      "Set",
-      "Out",
-      "Nov",
-      "Dez",
-    ],
+  moment.updateLocale('pt', {
+    months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
   });
 
   const EditableCell = ({ rowData, dataKey, onChange, ...props }: any) => {
-    const editing = rowData.status === "EDIT";
+    const editing = rowData.status === 'EDIT';
     return (
-      <Cell {...props} className={editing ? "table-content-editing" : ""}>
+      <Cell {...props} className={editing ? 'table-content-editing' : ''}>
         {editing ? (
           <input
             className="rs-input"
@@ -89,17 +50,12 @@ const Point: React.FC = () => {
     );
   };
 
-  const EditableCellLocation = ({
-    rowData,
-    dataKey,
-    onChange,
-    ...props
-  }: any) => {
-    const editing = rowData.status === "EDIT";
+  const EditableCellLocation = ({ rowData, dataKey, onChange, ...props }: any) => {
+    const editing = rowData.status === 'EDIT';
     //let value = "";
     //if (dataKey) if (rowData[dataKey]) value = rowData[dataKey];
     return (
-      <Cell {...props} className={editing ? "table-content-editing" : ""}>
+      <Cell {...props} className={editing ? 'table-content-editing' : ''}>
         {editing ? (
           <input
             className="rs-input"
@@ -124,32 +80,24 @@ const Point: React.FC = () => {
   const handleEditState = (id: string) => {
     const nextData = Object.assign([], data);
     const activeItem: any = nextData.find((item: any) => item.id === id);
-    activeItem.status = activeItem.status ? null : "EDIT";
+    activeItem.status = activeItem.status ? null : 'EDIT';
     setData(nextData);
   };
 
-  const weekDayName = [
-    "domingo",
-    "segunda",
-    "terça",
-    "quarta",
-    "quinta",
-    "sexta",
-    "sábado",
-  ];
+  const weekDayName = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 
   useEffect(() => {
     //const startDay = value.clone().startOf("month");
     // const endDay = value.clone().endOf("month");
-    const startDay = value.clone().startOf("week");
-    const endDay = value.clone().endOf("week");
+    const startDay = value.clone().startOf('week');
+    const endDay = value.clone().endOf('week');
     //console.log(endDay);
-    const day = startDay.clone().subtract(1, "day");
-    while (day.isBefore(endDay, "day")) {
+    const day = startDay.clone().subtract(1, 'day');
+    while (day.isBefore(endDay, 'day')) {
       calendar.push(
         Array(7)
           .fill(0)
-          .map(() => day.add(1, "day").clone())
+          .map(() => day.add(1, 'day').clone())
       );
     }
 
@@ -186,39 +134,27 @@ const Point: React.FC = () => {
     const date = calendar.map((month: any) => {
       return month.map((day: any, index: any) => {
         return {
-          id: nextId("date-"),
-          date: moment(day._d).format("DD/MMMM/YYYY"),
+          id: nextId('date-'),
+          date: moment(day._d).format('DD/MMMM/YYYY'),
           entry_time:
-            weekDayName[day._d.getDay()] === "domingo" ||
-            weekDayName[day._d.getDay()] === "sábado"
-              ? ""
-              : user.user.parameter.entry_time,
-          location:
-            weekDayName[day._d.getDay()] === "domingo" ||
-            weekDayName[day._d.getDay()] === "sábado"
-              ? "Descanso"
-              : "Home_Office",
+            weekDayName[day._d.getDay()] === 'domingo' || weekDayName[day._d.getDay()] === 'sábado' ? '' : user.user?.parameter?.entry_time,
+          location: weekDayName[day._d.getDay()] === 'domingo' || weekDayName[day._d.getDay()] === 'sábado' ? 'Descanso' : 'Home_Office',
           lunch_entry_time:
-            weekDayName[day._d.getDay()] === "domingo" ||
-            weekDayName[day._d.getDay()] === "sábado"
-              ? ""
-              : user.user.parameter.lunch_entry_time,
+            weekDayName[day._d.getDay()] === 'domingo' || weekDayName[day._d.getDay()] === 'sábado'
+              ? ''
+              : user.user?.parameter?.lunch_entry_time,
           lunch_out_time:
-            weekDayName[day._d.getDay()] === "domingo" ||
-            weekDayName[day._d.getDay()] === "sábado"
-              ? ""
-              : user.user.parameter.lunch_out_time,
+            weekDayName[day._d.getDay()] === 'domingo' || weekDayName[day._d.getDay()] === 'sábado'
+              ? ''
+              : user.user?.parameter?.lunch_out_time,
           out_time:
-            weekDayName[day._d.getDay()] === "domingo" ||
-            weekDayName[day._d.getDay()] === "sábado"
-              ? ""
-              : user.user.parameter.out_time,
+            weekDayName[day._d.getDay()] === 'domingo' || weekDayName[day._d.getDay()] === 'sábado' ? '' : user.user?.parameter?.out_time,
           status: null,
           activities: [
-            { consult: "2611", description: "Teste 001" },
-            { consult: "1408", description: "Teste 002" },
-            { consult: "1502", description: "Teste 003" },
-          ],
+            { consult: '2611', description: 'Teste 001' },
+            { consult: '1408', description: 'Teste 002' },
+            { consult: '1502', description: 'Teste 003' }
+          ]
         };
       });
     });
@@ -228,23 +164,10 @@ const Point: React.FC = () => {
 
   return (
     <>
-      <Panel
-        header={<TitlePage className="title">Registro de Ponto</TitlePage>}
-      >
-        <BreadcrumbComponent
-          active="Registro de Ponto"
-          hrefBack="/dashboard"
-          label="Dashboard"
-        />
+      <Panel header={<TitlePage className="title">Registro de Ponto</TitlePage>}>
+        <BreadcrumbComponent active="Registro de Ponto" href="/dashboard" label="Dashboard" />
 
-        <Table
-          autoHeight
-          data={data}
-          cellBordered
-          height={420}
-          headerHeight={80}
-          bordered
-        >
+        <Table autoHeight data={data} cellBordered height={420} headerHeight={80} bordered>
           <Column width={150} align="center">
             <HeaderCell>Data</HeaderCell>
             <Cell dataKey="date" />
@@ -261,10 +184,7 @@ const Point: React.FC = () => {
             </Column>
             <Column width={110}>
               <HeaderCell>Inicio Pausa</HeaderCell>
-              <EditableCell
-                dataKey="lunch_entry_time"
-                onChange={handleChange}
-              />
+              <EditableCell dataKey="lunch_entry_time" onChange={handleChange} />
             </Column>
             <Column width={110}>
               <HeaderCell>Termino Pausa</HeaderCell>
@@ -283,27 +203,12 @@ const Point: React.FC = () => {
                 //console.log(rowData.status);
                 return (
                   <ButtonGroup>
-                    {rowData?.status === "EDIT" ? (
-                      <Whisper
-                        placement="top"
-                        controlId="control-id-focus"
-                        trigger="hover"
-                        speaker={<Tooltip>Salvar Alteração</Tooltip>}
-                      >
-                        <IconButton
-                          icon={<CheckIcon />}
-                          onClick={() => handleEditState(rowData.id)}
-                          appearance="primary"
-                          color="green"
-                        />
+                    {rowData.status === 'EDIT' ? (
+                      <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Salvar Alteração</Tooltip>}>
+                        <IconButton icon={<CheckIcon />} onClick={() => handleEditState(rowData.id)} appearance="primary" color="green" />
                       </Whisper>
                     ) : (
-                      <Whisper
-                        placement="top"
-                        controlId="control-id-focus"
-                        trigger="hover"
-                        speaker={<Tooltip>Editar</Tooltip>}
-                      >
+                      <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Editar</Tooltip>}>
                         <IconButton
                           icon={<EditIcon />}
                           onClick={() => {
@@ -311,17 +216,12 @@ const Point: React.FC = () => {
                             console.log(rowData.id);
                           }}
                           appearance="primary"
-                          style={{ backgroundColor: "#00a6a6" }}
+                          style={{ backgroundColor: '#00a6a6' }}
                         />
                       </Whisper>
                     )}
 
-                    <Whisper
-                      placement="top"
-                      controlId="control-id-focus"
-                      trigger="hover"
-                      speaker={<Tooltip>Adicionar Consultas</Tooltip>}
-                    >
+                    <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Adicionar Consultas</Tooltip>}>
                       <IconButton
                         icon={<PageIcon />}
                         onClick={() => {
@@ -338,9 +238,7 @@ const Point: React.FC = () => {
                       placement="top"
                       controlId="control-id-focus"
                       trigger="hover"
-                      speaker={
-                        <Tooltip>Adicionar Horário Não Comercial</Tooltip>
-                      }
+                      speaker={<Tooltip>Adicionar Horário Não Comercial</Tooltip>}
                     >
                       <IconButton
                         icon={<HistoryIcon />}
@@ -353,12 +251,7 @@ const Point: React.FC = () => {
                         color="yellow"
                       />
                     </Whisper>
-                    <Whisper
-                      placement="top"
-                      controlId="control-id-focus"
-                      trigger="hover"
-                      speaker={<Tooltip>Adicionar Observação</Tooltip>}
-                    >
+                    <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Adicionar Observação</Tooltip>}>
                       <IconButton
                         icon={<MessageIcon />}
                         onClick={() => {

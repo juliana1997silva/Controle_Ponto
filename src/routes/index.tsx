@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
 
-import Fallback from "../components/Fallback";
-import Master from "../layout/Master";
-import NoMatch from "../layout/NoMatch";
-import Calendar from "../pages/CalendarPage";
-import PageProfile from "../pages/PageProfile";
-import PageRelease from "../pages/PageRelease";
-import PageUsers from "../pages/PageUsers";
-import PrivateRoute from "./PrivateRoute";
+import Fallback from '../components/Fallback';
+import Master from '../layout/Master';
+import NoMatch from '../layout/NoMatch';
+import Calendar from '../pages/CalendarPage';
+import PrivateRoute from './PrivateRoute';
 
-const Login = React.lazy(() => import("../pages/Login"));
-const Home = React.lazy(() => import("../pages/Home"));
-const CheckPoint = React.lazy(() => import("../pages/CheckPoint"));
+const Login = React.lazy(() => import('../pages/Login'));
+const Home = React.lazy(() => import('../pages/Home'));
+const PageCheckPoint = React.lazy(() => import('../pages/CheckPoint'));
+const PageProfile = React.lazy(() => import('../pages/PageProfile'));
+const PageRelease = React.lazy(() => import('../pages/PageRelease'));
+const PageUsers = React.lazy(() => import('../pages/PageUsers'));
 
 export function Router() {
   return (
@@ -42,7 +42,7 @@ export function Router() {
           element={
             <React.Suspense fallback={<Fallback />}>
               <PrivateRoute>
-                <CheckPoint />
+                <PageCheckPoint />
               </PrivateRoute>
             </React.Suspense>
           }

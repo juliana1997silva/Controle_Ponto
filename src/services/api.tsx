@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const urlApi = "https://api.tempus.wilsonfelix.com.br";
+const urlApi = 'http://127.0.0.1:8800/api/';
 
 const api = axios.create({
   baseURL: urlApi,

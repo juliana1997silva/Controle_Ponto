@@ -1,127 +1,144 @@
-import React from "react";
-import {
-  Button,
-  ButtonToolbar,
-  Divider,
-  Form,
-  Panel,
-  Schema,
-  SelectPicker,
-} from "rsuite";
-import BreadcrumbComponent from "../../../components/Breadcrumb";
-import { DivButton, DivDivider, DivHour, DivPause, TitlePage } from "./styles";
+import EyeIcon from '@rsuite/icons/legacy/Eye';
+import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
+import { Button, ButtonToolbar, Divider, Form, InputGroup, Panel, SelectPicker } from 'rsuite';
+import BreadcrumbComponent from '../../../components/Breadcrumb';
+import api from '../../../services/api';
+import UserList from '../UserList';
+import { UsersData, useUsers } from '../hooks/hooksUsers';
+import { DivButton, DivHour, DivPause, TitlePage } from './styles';
+
+interface dataGroups {
+  id?: string;
+  name?: string;
+  level?: string;
+}
 
 const RegistrationUsers: React.FC = () => {
-  const { StringType } = Schema.Types;
-  const model = Schema.Model({
-    name: StringType().isRequired("Este Campo é Obrigatório"),
-    tel: StringType().isRequired("Este Campo é Obrigatório"),
-    mail: StringType().isRequired("Este Campo é Obrigatório"),
-    department: StringType().isRequired("Este Campo é Obrigatório"),
-    coordinator: StringType().isRequired("Este Campo é Obrigatório"),
-    entry_time: StringType().isRequired("Este Campo é Obrigatório"),
-    lunch_entry_time: StringType().isRequired("Este Campo é Obrigatório"),
-    lunch_out_time: StringType().isRequired("Este Campo é Obrigatório"),
-    out_time: StringType().isRequired("Este Campo é Obrigatório"),
-    user: StringType().isRequired("Este Campo é Obrigatório"),
-    password: StringType().isRequired("Este Campo é Obrigatório"),
+  const { RegisterUsers, formDataUser } = useUsers();
+  const [visible, setVisible] = useState(false);
+  const [formData, setFormData] = useState<UsersData>({} as UsersData);
+  const [showUsersList, setShowUsersList] = useState(false);
+  const [groups, setGroups] = useState<dataGroups[]>({} as dataGroups[]);
+
+  const handleChangePassword = () => {
+    setVisible(!visible);
+  };
+
+  const dataGroupList = Object.values(groups).map((item) => {
+    return {
+      value: item.id,
+      label: item.name
+    }
+  })
+
+  const listGroups = useCallback(() => {
+    api
+      .get('/group')
+      .then((response) => {
+        console.log(response.data);
+        setGroups(response.data);
+      })
+      .catch((error) => console.log(error));
+  }, [setGroups]);
+
+  const handleChange = useCallback(
+    (form: UsersData) => {
+      console.log(form);
+      setFormData(form);
+    },
+    [setFormData]
+  );
+
+  const handleSubmit = useCallback(() => {
+    RegisterUsers(formData);
+    setFormData({
+      entry_time: '',
+      lunch_entry_time: '',
+      lunch_out_time: '',
+      name: '',
+      out_time: '',
+      password: '',
+      phone: '',
+      email: ''
+    });
+    setShowUsersList(true);
+  }, [RegisterUsers, formData, setFormData, setShowUsersList]);
+
+  useLayoutEffect(() => {
+    if (groups.length === undefined) listGroups();
   });
 
-  const dataSelectCoordenador = [
-    {
-      role: "Wilson Felix",
-      label: "Wilson Felix",
-      value: "Wilson Felix",
-    },
-  ];
-
-  const dataSelectDepartament = [
-    {
-      role: "Desenvolvimento",
-      label: "Desenvolvimento",
-      value: "Desenvolvimento",
-    },
-  ];
-
+  if (showUsersList) {
+    return <UserList />;
+  }
   return (
     <>
-      <Panel
-        header={<TitlePage className="title">Cadastro de Usuarios</TitlePage>}
-      >
-        <BreadcrumbComponent
-          active="Cadastro de Usuarios"
-          hrefBack="/dashboard"
-          label="Dashboard"
-        />
-        <Form model={model}>
-          <Form.Group controlId="name">
-            <Form.ControlLabel>Nome:</Form.ControlLabel>
-            <Form.Control name="name" />
-          </Form.Group>
-          <Form.Group controlId="tel">
-            <Form.ControlLabel>Telefone:</Form.ControlLabel>
-            <Form.Control name="tel" />
-          </Form.Group>
-          <Form.Group controlId="mail">
-            <Form.ControlLabel>E-mail:</Form.ControlLabel>
-            <Form.Control name="mail" />
-          </Form.Group>
-          <Form.Group controlId="department">
-            <Form.ControlLabel>Departamento:</Form.ControlLabel>
+      <Panel header={<TitlePage className="title">Cadastro de Usuarios</TitlePage>}>
+        <BreadcrumbComponent active="Usuarios > Cadastro" href="/dashboard" label="Dashboard" />
+        <Form onChange={handleChange} formValue={formData}>
+          <Form.ControlLabel>Nome:</Form.ControlLabel>
+          <Form.Control name="name" defaultValue={formDataUser.name} />
+
+          <Form.ControlLabel>Telefone:</Form.ControlLabel>
+          <Form.Control name="phone" defaultValue={formDataUser.phone} />
+
+          <Form.ControlLabel>E-mail:</Form.ControlLabel>
+          <Form.Control name="email" defaultValue={formDataUser.email} />
+
+          <Form.Group controlId="group">
+            <Form.ControlLabel>Grupo:</Form.ControlLabel>
             <Form.Control
-              name="department"
+              name="group"
               accepter={SelectPicker}
-              data={dataSelectDepartament}
+              data={dataGroupList}
               searchable={false}
-              placeholder="Selecione o Departamento"
+              placeholder="Selecione o Grupo"
+              defaultValue={formDataUser.group_id}
             />
           </Form.Group>
-          <Form.Group controlId="coordinator">
-            <Form.ControlLabel>Coordenador:</Form.ControlLabel>
-            <Form.Control
-              name="coordinator"
-              accepter={SelectPicker}
-              data={dataSelectCoordenador}
-              searchable={false}
-              placeholder="Selecione o Coordenador"
-            />
-          </Form.Group>
+
           <Form.Group>
             <Divider>Expediente</Divider>
             <Form.ControlLabel>Entrada:</Form.ControlLabel>
-            <Form.Control name="entry_time" type="time" />
+            <Form.Control name="entry_time" type="time" defaultValue={formDataUser.entry_time} />
             <DivHour>
               <DivPause>
                 <Form.ControlLabel>Inicio Pausa:</Form.ControlLabel>
-                <Form.Control name="lunch_entry_time" type="time" />
+                <Form.Control name="lunch_entry_time" type="time" defaultValue={formDataUser.lunch_entry_time} />
               </DivPause>
               <DivPause>
                 <Form.ControlLabel>Termino Pausa:</Form.ControlLabel>
-                <Form.Control name="lunch_out_time" type="time" />
+                <Form.Control name="lunch_out_time" type="time" defaultValue={formDataUser.lunch_out_time} />
               </DivPause>
             </DivHour>
             <Form.ControlLabel>Saída:</Form.ControlLabel>
-            <Form.Control name="out_time" type="time" />
+            <Form.Control name="out_time" type="time" defaultValue={formDataUser.out_time} />
           </Form.Group>
           <Form.Group>
             <Divider>Dados de Acesso</Divider>
-            <Form.ControlLabel>Usuário:</Form.ControlLabel>
-            <Form.Control name="user" />
-            <DivDivider />
-            <Form.ControlLabel>Senha:</Form.ControlLabel>
-            <Form.Control name="password" type="password" />
+            <Form.Group>
+              <Form.ControlLabel>Senha:</Form.ControlLabel>
+              <InputGroup>
+                <Form.Control name="password" type={visible ? 'text' : 'password'} />
+                <InputGroup.Button onClick={handleChangePassword}>{visible ? <EyeIcon /> : <EyeSlashIcon />}</InputGroup.Button>
+              </InputGroup>
+            </Form.Group>
           </Form.Group>
           <Divider />
           <DivButton>
             <ButtonToolbar>
-              <Button
-                appearance="primary"
-                type="submit"
-                style={{ backgroundColor: "#00a6a6" }}
-              >
+              <Button appearance="primary" type="submit" style={{ backgroundColor: '#00a6a6' }} onClick={handleSubmit}>
                 Salvar
               </Button>
-              <Button color="red" appearance="primary">
+              <Button
+                color="red"
+                appearance="primary"
+                onClick={() => {
+                  setFormData({} as UsersData);
+                  setShowUsersList(true);
+                }}
+              >
                 Cancelar
               </Button>
             </ButtonToolbar>

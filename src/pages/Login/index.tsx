@@ -1,21 +1,14 @@
-import EyeIcon from "@rsuite/icons/legacy/Eye";
-import EyeSlashIcon from "@rsuite/icons/legacy/EyeSlash";
-import React, { useCallback, useState } from "react";
-import { Navigate } from "react-router";
-import { Form, InputGroup, Panel } from "rsuite";
-import logoTempus from "../../assets/logoTempus.png";
-import { dataLogin, useAuth } from "../../hooks/hooksAuth";
-import {
-  Button,
-  ContainerForm,
-  DivImg,
-  Global,
-  ImgPage,
-  TitleForm,
-} from "./styles";
+import EyeIcon from '@rsuite/icons/legacy/Eye';
+import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
+import React, { useCallback, useState } from 'react';
+import { Navigate } from 'react-router';
+import { Form, InputGroup, Panel } from 'rsuite';
+import logoTempus from '../../assets/logoTempus.png';
+import { dataLogin, useAuth } from '../../hooks/hooksAuth';
+import { Button, ContainerForm, DivImg, Global, ImgPage, TitleForm } from './styles';
 
 const Login: React.FC = () => {
-  const { login, dataForm, setDataForm, showHome, user } = useAuth();
+  const { login, dataForm, setDataForm, showHome, user, setShowHome } = useAuth();
   const [visible, setVisible] = useState(false);
 
   const handleChangePassword = () => {
@@ -30,23 +23,25 @@ const Login: React.FC = () => {
   );
 
   const handleSubmit = useCallback(() => {
-    login(dataForm);
-  }, [login, dataForm]);
+    //login(dataForm);
+    setShowHome(true);
+    console.log('logooou');
+  }, [setShowHome]);
 
-  if (showHome && user.logged) {
-    return <Navigate to={"/dashboard"} />;
+  if (showHome) {
+    return <Navigate to={'/dashboard'} />;
   }
 
   return (
     <Global>
       <Panel
         style={{
-          backgroundColor: "#fff",
-          width: "30%",
+          backgroundColor: '#fff',
+          width: '30%'
         }}
       >
         <DivImg>
-          <ImgPage src={logoTempus} style={{ width: "40%", height: "50%" }} />
+          <ImgPage src={logoTempus} style={{ width: '40%', height: '50%' }} />
         </DivImg>
         <div style={{ padding: 20 }} />
         <ContainerForm>
@@ -62,14 +57,9 @@ const Login: React.FC = () => {
             <Form.Group>
               <TitleForm>Senha:</TitleForm> <br /> <br />
               <InputGroup>
-                <Form.Control
-                  name="password"
-                  type={visible ? "text" : "password"}
-                />
+                <Form.Control name="password" type={visible ? 'text' : 'password'} />
 
-                <InputGroup.Button onClick={handleChangePassword}>
-                  {visible ? <EyeIcon /> : <EyeSlashIcon />}
-                </InputGroup.Button>
+                <InputGroup.Button onClick={handleChangePassword}>{visible ? <EyeIcon /> : <EyeSlashIcon />}</InputGroup.Button>
               </InputGroup>
             </Form.Group>
             <Button onClick={handleSubmit}>Entrar</Button>

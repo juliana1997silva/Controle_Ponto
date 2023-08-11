@@ -11,3 +11,8 @@ export interface FormData {
   pause_checkin: string;
   pause_checkout: string;
 }
+
+export interface dataSelect {
+  value: string;
+  label:string
+}

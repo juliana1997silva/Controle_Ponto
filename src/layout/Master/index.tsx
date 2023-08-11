@@ -1,13 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import { Container, Content, Footer, Header } from "rsuite";
-import ContainerSidebar from "../ContainerSidebar";
+import { Container, Content, Footer, Header, Sidebar } from 'rsuite';
+import ContainerSidebar from '../ContainerSidebar';
 
-import { Outlet } from "react-router-dom";
-import Copyright from "../../layout/Copyright";
-import HeaderTempus from "../Header";
+import { Outlet } from 'react-router';
+import Copyright from '../../layout/Copyright';
+import HeaderTempus from '../Header';
 
-const Master: React.FC = () => {
+interface useMasterProviderProps {
+  children?: React.ReactNode;
+}
+
+const Master: React.FC<useMasterProviderProps> = ({ children }) => {
   return (
     <div className="show-container">
       <Container>
@@ -15,7 +19,9 @@ const Master: React.FC = () => {
           <HeaderTempus />
         </Header>
         <Container>
-          <ContainerSidebar />
+          <Sidebar>
+            <ContainerSidebar />
+          </Sidebar>
           <Content>
             <Outlet />
           </Content>

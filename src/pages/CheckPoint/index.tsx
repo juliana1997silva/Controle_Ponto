@@ -1,12 +1,12 @@
-import React from "react";
-import AppProvider from "./hooks";
-import CheckPointPage from "./Point";
+import React from 'react';
+import Point from './Point';
+import AppProvider from './hooks';
 
 const PageCheckPoint: React.FC = () => {
   return (
     <>
       <AppProvider>
-        <CheckPointPage />
+        <Point />
       </AppProvider>
     </>
   );

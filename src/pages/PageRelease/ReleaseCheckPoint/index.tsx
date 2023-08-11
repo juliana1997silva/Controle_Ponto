@@ -163,7 +163,7 @@ const ReleaseCheckPoint: React.FC = () => {
       >
         <BreadcrumbComponent
           active="Liberar Ficha Semanal"
-          hrefBack="/dashboard"
+          href="/dashboard"
           label="Dashboard"
         />
         <SelectPicker
