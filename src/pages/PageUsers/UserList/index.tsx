@@ -6,7 +6,7 @@ import { useUsers } from '../hooks/hooksUsers';
 import { ContainerButton, TitlePage } from './styles';
 
 const UserList: React.FC = () => {
-  const { dataListUsers, listUsers,setFormDataUser } = useUsers();
+  const { dataListUsers, listUsers,setFormDataUser, setMode } = useUsers();
   const [showRegister, setShowRegister] = useState(false);
   const { Column, HeaderCell, Cell } = Table;
 
@@ -54,6 +54,7 @@ const UserList: React.FC = () => {
                     onClick={() => {
                       setShowRegister(true);
                       setFormDataUser(rowData)
+                      setMode("edit")
                     }}
                   >
                     Editar

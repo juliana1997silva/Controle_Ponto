@@ -82,24 +82,24 @@ const CalendarPage: React.FC = () => {
     [setConsultData]
   );
 
-  const handleSubmit = useCallback(() => {
-    console.log(dataCommercial.entry_time_commercial);
-    console.log(dataCommercial.out_time_commercial);
+  /* const handleSubmit = useCallback(() => {
+    console.log(dataCommercial.entry_time_nocommercial);
+    console.log(dataCommercial.out_time_nocommercial);
     if (
-      dataCommercial.entry_time_commercial !== undefined &&
-      dataCommercial.out_time_commercial !== undefined
+      dataCommercial.entry_time_nocommercial !== undefined &&
+      dataCommercial.out_time_nocommercial !== undefined
     ) {
       tableCommercial.push({
-        entry_time_commercial: dataCommercial.entry_time_commercial,
-        lunch_entry_time_commercial: dataCommercial.lunch_entry_time_commercial,
-        lunch_out_time_commercial: dataCommercial.lunch_out_time_commercial,
-        out_time_commercial: dataCommercial.out_time_commercial,
+        entry_time_nocommercial: dataCommercial.entry_time_nocommercial,
+        lunch_entry_time_nocommercial: dataCommercial.lunch_entry_time_nocommercial,
+        lunch_out_time_nocommercial: dataCommercial.lunch_out_time_nocommercial,
+        out_time_nocommercial: dataCommercial.out_time_nocommercial,
       });
       setDataCommercial({
-        entry_time_commercial: "",
-        lunch_entry_time_commercial: "",
-        lunch_out_time_commercial: "",
-        out_time_commercial: "",
+        entry_time_nocommercial: "",
+        lunch_entry_time_nocommercial: "",
+        lunch_out_time_nocommercial: "",
+        out_time_nocommercial: "",
       });
     } else {
       toast.error("Preencha os campos obrigatorios");
@@ -129,7 +129,7 @@ const CalendarPage: React.FC = () => {
     } else {
       toast.error("Preencha os campos obrigatorios");
     }
-  }, [consultData, tableConsult, setConsultData]);
+  }, [consultData, tableConsult, setConsultData]); */
 
   return (
     <>
@@ -252,7 +252,7 @@ const CalendarPage: React.FC = () => {
                     style={{
                       marginTop: 27,
                     }}
-                    onClick={handleSubmit}
+                    //onClick={handleSubmit}
                   >
                     Adicionar
                   </IconButton>
@@ -329,7 +329,7 @@ const CalendarPage: React.FC = () => {
                     style={{
                       marginTop: 27,
                     }}
-                    onClick={handleSubmitConsult}
+                    //onClick={handleSubmitConsult}
                   >
                     Adicionar
                   </IconButton>

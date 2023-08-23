@@ -3,28 +3,27 @@ import "react-toastify/dist/ReactToastify.css"; // css do toast
 import { IProps } from "../../../types";
 
 export interface dataForm {
-  id: string;
+  id?: string;
   date?: any;
   entry_time?: string;
   location?: string;
   lunch_entry_time?: string;
   lunch_out_time?: string;
   out_time?: string;
-  status?: string | null;
-  activities: dataConsult[];
-  hour_commercial: dataHourCommercial[];
+  consultation?: dataConsult;
+  hour_commercial?: dataHourCommercial;
 }
 
 export interface dataConsult {
-  consult?: string;
+  consultation?: string;
   description?: string;
 }
 
 export interface dataHourCommercial {
-  entry_time_commercial?: string;
-  lunch_entry_time_commercial?: string;
-  lunch_out_time_commercial?: string;
-  out_time_commercial?: string;
+  entry_time_nocommercial?: string;
+  lunch_entry_time_nocommercial?: string;
+  lunch_out_time_nocommercial?: string;
+  out_time_nocommercial?: string;
 }
 
 interface HooksCheckPointData {

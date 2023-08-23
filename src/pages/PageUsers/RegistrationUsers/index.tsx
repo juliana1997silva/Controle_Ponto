@@ -15,10 +15,9 @@ interface dataGroups {
 }
 
 const RegistrationUsers: React.FC = () => {
-  const { RegisterUsers, formDataUser } = useUsers();
+  const { RegisterUsers, formDataUser, setShowUsersList, showUsersList, mode, updateUsers } = useUsers();
   const [visible, setVisible] = useState(false);
   const [formData, setFormData] = useState<UsersData>({} as UsersData);
-  const [showUsersList, setShowUsersList] = useState(false);
   const [groups, setGroups] = useState<dataGroups[]>({} as dataGroups[]);
 
   const handleChangePassword = () => {
@@ -29,8 +28,8 @@ const RegistrationUsers: React.FC = () => {
     return {
       value: item.id,
       label: item.name
-    }
-  })
+    };
+  });
 
   const listGroups = useCallback(() => {
     api
@@ -51,7 +50,11 @@ const RegistrationUsers: React.FC = () => {
   );
 
   const handleSubmit = useCallback(() => {
-    RegisterUsers(formData);
+    if (mode === 'create') {
+      RegisterUsers(formData);
+    } else {
+      updateUsers(formData);
+    }
     setFormData({
       entry_time: '',
       lunch_entry_time: '',
@@ -62,11 +65,11 @@ const RegistrationUsers: React.FC = () => {
       phone: '',
       email: ''
     });
-    setShowUsersList(true);
-  }, [RegisterUsers, formData, setFormData, setShowUsersList]);
+  }, [RegisterUsers, formData, setFormData]);
 
   useLayoutEffect(() => {
     if (groups.length === undefined) listGroups();
+    setFormData(formDataUser);
   });
 
   if (showUsersList) {
@@ -76,15 +79,15 @@ const RegistrationUsers: React.FC = () => {
     <>
       <Panel header={<TitlePage className="title">Cadastro de Usuarios</TitlePage>}>
         <BreadcrumbComponent active="Usuarios > Cadastro" href="/dashboard" label="Dashboard" />
-        <Form onChange={handleChange} formValue={formData}>
+        <Form onChange={handleChange} formValue={formDataUser}>
           <Form.ControlLabel>Nome:</Form.ControlLabel>
-          <Form.Control name="name" defaultValue={formDataUser.name} />
+          <Form.Control name="name" />
 
           <Form.ControlLabel>Telefone:</Form.ControlLabel>
-          <Form.Control name="phone" defaultValue={formDataUser.phone} />
+          <Form.Control name="phone"/>
 
           <Form.ControlLabel>E-mail:</Form.ControlLabel>
-          <Form.Control name="email" defaultValue={formDataUser.email} />
+          <Form.Control name="email" />
 
           <Form.Group controlId="group">
             <Form.ControlLabel>Grupo:</Form.ControlLabel>
@@ -94,26 +97,26 @@ const RegistrationUsers: React.FC = () => {
               data={dataGroupList}
               searchable={false}
               placeholder="Selecione o Grupo"
-              defaultValue={formDataUser.group_id}
+              defaultValue={formData.group_id}
             />
           </Form.Group>
 
           <Form.Group>
             <Divider>Expediente</Divider>
             <Form.ControlLabel>Entrada:</Form.ControlLabel>
-            <Form.Control name="entry_time" type="time" defaultValue={formDataUser.entry_time} />
+            <Form.Control name="entry_time" type="time" defaultValue={formData.entry_time} />
             <DivHour>
               <DivPause>
                 <Form.ControlLabel>Inicio Pausa:</Form.ControlLabel>
-                <Form.Control name="lunch_entry_time" type="time" defaultValue={formDataUser.lunch_entry_time} />
+                <Form.Control name="lunch_entry_time" type="time" defaultValue={formData.lunch_entry_time} />
               </DivPause>
               <DivPause>
                 <Form.ControlLabel>Termino Pausa:</Form.ControlLabel>
-                <Form.Control name="lunch_out_time" type="time" defaultValue={formDataUser.lunch_out_time} />
+                <Form.Control name="lunch_out_time" type="time" defaultValue={formData.lunch_out_time} />
               </DivPause>
             </DivHour>
             <Form.ControlLabel>Saída:</Form.ControlLabel>
-            <Form.Control name="out_time" type="time" defaultValue={formDataUser.out_time} />
+            <Form.Control name="out_time" type="time" defaultValue={formData.out_time} />
           </Form.Group>
           <Form.Group>
             <Divider>Dados de Acesso</Divider>

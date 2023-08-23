@@ -17,7 +17,7 @@ const Consult: React.FC = () => {
     [setConsultData]
   );
 
-  const handleSubmitConsult = useCallback(() => {
+  /* const handleSubmitConsult = useCallback(() => {
     if (
       consultData?.consult !== undefined &&
       consultData?.description !== undefined
@@ -40,7 +40,7 @@ const Consult: React.FC = () => {
       description: "",
     });
   }, [consultData, dataModal, setDataModal, setConsultData, consults]);
-
+ */
   useEffect(() => {
     console.log(dataModal);
     console.log("consult drawer");
@@ -96,14 +96,14 @@ const Consult: React.FC = () => {
               <Button
                 appearance="primary"
                 color="green"
-                onClick={handleSubmitConsult}
+                //onClick={handleSubmitConsult}
               >
                 Adicionar
               </Button>
             </Form.Group>
           </Form>
 
-          {dataModal.activities && (
+          {/* {dataModal.activities && (
             <Table data={dataModal.activities}>
               <Column>
                 <HeaderCell>Consulta</HeaderCell>
@@ -114,7 +114,7 @@ const Consult: React.FC = () => {
                 <Cell dataKey="description" />
               </Column>
             </Table>
-          )}
+          )} */}
         </Drawer.Body>
       </Drawer>
     </>

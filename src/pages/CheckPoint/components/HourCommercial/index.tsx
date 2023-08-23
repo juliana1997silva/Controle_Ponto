@@ -22,7 +22,7 @@ const HourCommercial: React.FC = () => {
     [setCommercialData]
   );
 
-  const handleSubmitCommercial = useCallback(() => {
+  /* const handleSubmitCommercial = useCallback(() => {
     if (
       commercialData.entry_time_commercial !== undefined &&
       commercialData.out_time_commercial !== undefined
@@ -48,7 +48,7 @@ const HourCommercial: React.FC = () => {
       lunch_out_time_commercial: "",
       out_time_commercial: "",
     });
-  }, [commercialData, commercial, setDataModal, setCommercialData, dataModal]);
+  }, [commercialData, commercial, setDataModal, setCommercialData, dataModal]); */
 
   return (
     <Drawer
@@ -107,7 +107,7 @@ const HourCommercial: React.FC = () => {
             <Button
               appearance="primary"
               color="green"
-              onClick={handleSubmitCommercial}
+             // onClick={handleSubmitCommercial}
             >
               Adicionar
             </Button>
