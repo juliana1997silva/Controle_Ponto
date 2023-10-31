@@ -122,7 +122,7 @@ const ReleaseHour: React.FC = () => {
   ];
 
   useEffect(() => {
-    console.log(select);
+   // console.log(select);
   });
 
   return (
@@ -190,7 +190,7 @@ const ReleaseHour: React.FC = () => {
                           color="green"
                           appearance="primary"
                           onClick={() => {
-                            console.log(rowData);
+                           // console.log(rowData);
                             setOpenModal(true);
                             setFormData(rowData);
                             setDisabled(true);
@@ -244,7 +244,7 @@ const ReleaseHour: React.FC = () => {
             <Form.Control name="bank_hours" disabled={disabled} />
             {formData.activities !== undefined ? (
               <>
-                {console.log(formData.activities)}
+               
                 <Table data={formData.activities}>
                   <Column>
                     <HeaderCell>Consulta:</HeaderCell>

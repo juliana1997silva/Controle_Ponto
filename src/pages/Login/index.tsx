@@ -25,7 +25,7 @@ const Login: React.FC = () => {
   const handleSubmit = useCallback(() => {
     //login(dataForm);
     setShowHome(true);
-    console.log('logooou');
+   // console.log('logooou');
   }, [setShowHome]);
 
   if (showHome) {

@@ -8,7 +8,7 @@ const Point: React.FC = () => {
   const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
   const handleChange = useCallback((form: dataForm) => {
-    console.log('form normal => ', form);
+   // console.log('form normal => ', form);
   }, []);
 
   return (

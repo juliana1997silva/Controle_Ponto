@@ -41,10 +41,6 @@ const Consult: React.FC = () => {
     });
   }, [consultData, dataModal, setDataModal, setConsultData, consults]);
  */
-  useEffect(() => {
-    console.log(dataModal);
-    console.log("consult drawer");
-  });
 
   return (
     <>

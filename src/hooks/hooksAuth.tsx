@@ -67,11 +67,11 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
       const loginData = await api
         .post(`/v1/user/auth`, data)
         .catch(function (error) {
-          console.log(error);
+         // console.log(error);
         });
 
       if (loginData) {
-        console.log(loginData.data);
+        //console.log(loginData.data);
         if (loginData.data.logged === true) {
           setUser(loginData.data);
           setShowHome(true);

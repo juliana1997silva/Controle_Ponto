@@ -3,9 +3,7 @@ import { useAuth } from '../../hooks/hooksAuth';
 import Dashboard from './Dashboard';
 
 const Home: React.FC = () => {
-  useEffect(() => {
-    console.log('entrooou dashboard');
-  });
+
   const { user } = useAuth();
   const [show, setShow] = useState(false);
 

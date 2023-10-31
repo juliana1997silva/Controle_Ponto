@@ -27,10 +27,6 @@ const Header: React.FC = () => {
     );
   };
 
-  useEffect(() => {
-    console.log(user.logged === true);
-  });
-
   if (logout) {
     window.location.pathname = "";
   }

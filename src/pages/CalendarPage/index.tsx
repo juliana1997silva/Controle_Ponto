@@ -61,14 +61,14 @@ const CalendarPage: React.FC = () => {
   const handleSelectDay = useCallback(
     (date: Date) => {
       setModal(true);
-      console.log(date);
+     // console.log(date);
     },
     [setModal]
   );
 
   const handleChangeNoCommercial = useCallback(
     (form: dataHourCommercial) => {
-      console.log(form);
+      //console.log(form);
       setDataCommercial(form);
     },
     [setDataCommercial]
@@ -76,7 +76,7 @@ const CalendarPage: React.FC = () => {
 
   const handleChangeConsult = useCallback(
     (form: dataConsult) => {
-      console.log(form);
+     // console.log(form);
       setConsultData(form);
     },
     [setConsultData]

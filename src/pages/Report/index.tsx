@@ -50,7 +50,7 @@ const Report: React.FC = () => {
             <HeaderCell>Qtda. Consulta Atendida:</HeaderCell>
             <Cell>
               {(rowData: any) => {
-                console.log(rowData.activities);
+               // console.log(rowData.activities);
                 return <span>{[rowData.activities].length}</span>;
               }}
             </Cell>

@@ -315,7 +315,7 @@ const ReleaseCheckPoint: React.FC = () => {
                                 <IconButton
                                   icon={<CheckIcon />}
                                   onClick={() => {
-                                    console.log(rowData);
+                                   // console.log(rowData);
                                     setButtonPDF(true);
                                   }}
                                   appearance="primary"
@@ -330,7 +330,7 @@ const ReleaseCheckPoint: React.FC = () => {
                               >
                                 <IconButton
                                   icon={<BlockIcon />}
-                                  onClick={() => console.log(rowData)}
+                                 // onClick={() => console.log(rowData)}
                                   appearance="primary"
                                   color="red"
                                 />
@@ -381,7 +381,7 @@ const ReleaseCheckPoint: React.FC = () => {
 
             {formData.hour_NoCommercial !== undefined && (
               <>
-                {console.log(formData.hour_NoCommercial)}
+               
                 <Divider>Horário Não Comercial</Divider>
 
                 <Table data={formData.hour_NoCommercial}>
@@ -408,7 +408,7 @@ const ReleaseCheckPoint: React.FC = () => {
             {formData.activities !== undefined && (
               <>
                 <Divider>Consultas Registradas no dia</Divider>
-                {console.log(formData.activities)}
+               
                 <Table data={formData.activities}>
                   <Column>
                     <HeaderCell>Nº Consulta:</HeaderCell>

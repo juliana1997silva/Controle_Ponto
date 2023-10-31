@@ -47,7 +47,7 @@ const Profile: React.FC = () => {
       .replace(/(\d{2})(\d)/, "($1) $2")
       .replace(/(\d{5})(\d)/, "$1-$2")
       .replace(/(-\d{4})(\d+?)$/, "$1");
-    console.log(phoneFormat);
+   // console.log(phoneFormat);
     setPhone(phoneFormat);
     setButtonPhone(true);
     setMode("edit");
@@ -89,7 +89,7 @@ const Profile: React.FC = () => {
             toaster.push(
               <Message type="success">Uploaded successfully</Message>
             );
-            console.log(response);
+           // console.log(response);
           }}
           onError={() => {
             setFileInfo(null);

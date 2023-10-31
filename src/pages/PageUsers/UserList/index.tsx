@@ -6,7 +6,7 @@ import { useUsers } from '../hooks/hooksUsers';
 import { ContainerButton, TitlePage } from './styles';
 
 const UserList: React.FC = () => {
-  const { dataListUsers, listUsers, setFormDataUser, setMode, setShowUsersList } = useUsers();
+  const { dataListUsers, listUsers, setFormDataUser, setMode, setShowUsersList, releaseUsers } = useUsers();
   const [showRegister, setShowRegister] = useState(false);
   const { Column, HeaderCell, Cell } = Table;
 
@@ -42,26 +42,71 @@ const UserList: React.FC = () => {
             <Cell dataKey="email" />
           </Column>
           <Column width={300}>
+            <HeaderCell>Status</HeaderCell>
+            <Cell>
+              {(rowData: any) => {
+                return (
+                  <>
+                    {rowData.status === 1 ? (
+                      <>
+                        {/* <div style={{ height: 10, width: 10, borderRadius: 5, backgroundColor: 'green'}} /> */}
+                        <span>Ativo</span>
+                      </>
+                    ) : (
+                      <>
+                        {/* <div style={{ height: 10, width: 10, borderRadius: 5, backgroundColor: 'red', marginRight: 10 }} /> */}
+                        <span>Inativo</span>
+                      </>
+                    )}
+                  </>
+                );
+              }}
+            </Cell>
+          </Column>
+          <Column width={300}>
             <HeaderCell>Ações</HeaderCell>
             <Cell>
               {(rowData: any) => {
-                return(
-                <>
-                  <Button
-                    appearance="primary"
-                    type="submit"
-                    style={{ backgroundColor: '#93c916' }}
-                    onClick={() => {
-                      setShowRegister(true);
-                      setFormDataUser(rowData)
-                      setMode("edit");
-                      setShowUsersList(false);
-                    }}
-                  >
-                    Editar
-                  </Button>
-                </>
-                )
+                return (
+                  <>
+                    <Button
+                      appearance="primary"
+                      type="submit"
+                      style={{ backgroundColor: '#93c916' }}
+                      onClick={() => {
+                        setShowRegister(true);
+                        setFormDataUser(rowData);
+                        setMode('edit');
+                        setShowUsersList(false);
+                      }}
+                    >
+                      Editar
+                    </Button>
+                    {rowData.status === 0 ? (
+                      <Button
+                        appearance="primary"
+                        type="submit"
+                        color="green"
+                        onClick={() => {
+                          releaseUsers(rowData.id);
+                        }}
+                      >
+                        Ativar
+                      </Button>
+                    ) : (
+                      <Button
+                        appearance="primary"
+                        type="submit"
+                        color="red"
+                        onClick={() => {
+                          releaseUsers(rowData.id);
+                        }}
+                      >
+                        Desativar
+                      </Button>
+                    )}
+                  </>
+                );
               }}
             </Cell>
           </Column>

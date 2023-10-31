@@ -10,32 +10,9 @@ const GroupsRegister: React.FC = () => {
   const [formData, setFormData] = useState<GroupsData>({} as GroupsData);
   const [showList, setShowList] = useState(false);
 
-  const data = [
-    {
-      label: '1',
-      value: '1',
-      role: '1'
-    },
-    {
-      label: '2',
-      value: '2',
-      role: '2'
-    },
-    {
-      label: '3',
-      value: '3',
-      role: '3'
-    },
-    {
-      label: '4',
-      value: '4',
-      role: '4'
-    }
-  ];
-
   const handleChange = useCallback(
     (form: GroupsData) => {
-      console.log(form);
+     // console.log(form);
       setFormData(form);
     },
     [setFormData]

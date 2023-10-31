@@ -41,7 +41,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
     await api
       .get('/group')
       .then((response) => {
-        console.log(response.data);
+       // console.log(response.data);
         setDataGroups(response.data.data);
         setList(true);
       })
@@ -57,7 +57,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .post('/group', dataGroup)
         .then((response) => {
-          console.log(response.data);
+         // console.log(response.data);
           toast.success('Grupo cadastrado com sucesso !');
           listGroups();
         })
@@ -75,7 +75,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .put(`/group/${dataGroup.id}`, dataGroup)
         .then((response) => {
-          console.log(response.data);
+         // console.log(response.data);
           toast.success('Grupo atualizado com sucesso !');
           listGroups();
         })
@@ -93,7 +93,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .patch(`/group/release/${id}`)
         .then((response) => {
-          console.log(response.data);
+         // console.log(response.data);
           listGroups();
         })
         .catch((error) => {
