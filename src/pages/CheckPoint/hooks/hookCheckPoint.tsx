@@ -12,6 +12,7 @@ export interface dataForm {
   out_time?: string;
   consultation?: dataConsult;
   hour_commercial?: dataHourCommercial;
+  
 }
 
 export interface dataConsult {
