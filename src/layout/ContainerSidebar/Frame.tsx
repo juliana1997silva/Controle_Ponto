@@ -21,8 +21,14 @@ const Frame: React.FC = () => {
             <Nav.Item eventKey="3" icon={<DocPassIcon />} href="/release-checkpoint">
               Liberar Ficha
             </Nav.Item>
-            <Nav.Item eventKey="4" icon={<DocPassIcon />} href="/users-registration">
+            <Nav.Item eventKey="4" icon={<DocPassIcon />} href="/users">
               Usuarios
+            </Nav.Item>
+            <Nav.Item eventKey="5" icon={<DocPassIcon />} href="/groups">
+              Grupos
+            </Nav.Item>
+            <Nav.Item eventKey="6" icon={<DocPassIcon />} href="/coordinator">
+              Coordenadores
             </Nav.Item>
             {/* <Nav.Menu eventKey="4" title="Relatorios" icon={<WavePointIcon />}>
               <Nav.Item eventKey="4-1" href="/weekly">

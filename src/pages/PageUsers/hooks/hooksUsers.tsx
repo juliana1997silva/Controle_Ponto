@@ -15,6 +15,7 @@ export interface UsersData {
   out_time?: string;
   password?: string;
   group_id?: string;
+  coordinator_id?: string;
 }
 
 interface HooksUsersData {

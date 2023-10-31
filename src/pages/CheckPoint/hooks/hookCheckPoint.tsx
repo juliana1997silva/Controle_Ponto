@@ -12,7 +12,7 @@ export interface dataForm {
   out_time?: string;
   consultation?: dataConsult;
   hour_commercial?: dataHourCommercial;
-  
+  coordinator?: string;
 }
 
 export interface dataConsult {

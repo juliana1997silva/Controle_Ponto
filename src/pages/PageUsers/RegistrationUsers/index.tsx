@@ -15,7 +15,7 @@ interface dataGroups {
 }
 
 const RegistrationUsers: React.FC = () => {
-  const { RegisterUsers, formDataUser, setShowUsersList, showUsersList, mode, updateUsers } = useUsers();
+  const { RegisterUsers, formDataUser, setShowUsersList, showUsersList, mode, updateUsers, setFormDataUser } = useUsers();
   const [visible, setVisible] = useState(false);
   const [formData, setFormData] = useState<UsersData>({} as UsersData);
   const [groups, setGroups] = useState<dataGroups[]>({} as dataGroups[]);
@@ -84,7 +84,7 @@ const RegistrationUsers: React.FC = () => {
           <Form.Control name="name" />
 
           <Form.ControlLabel>Telefone:</Form.ControlLabel>
-          <Form.Control name="phone"/>
+          <Form.Control name="phone" />
 
           <Form.ControlLabel>E-mail:</Form.ControlLabel>
           <Form.Control name="email" />
@@ -92,14 +92,27 @@ const RegistrationUsers: React.FC = () => {
           <Form.Group controlId="group">
             <Form.ControlLabel>Grupo:</Form.ControlLabel>
             <Form.Control
-              name="group"
+              name="group_id"
               accepter={SelectPicker}
               data={dataGroupList}
               searchable={false}
               placeholder="Selecione o Grupo"
-              defaultValue={formData.group_id}
+              defaultValue={formDataUser.group_id}
             />
           </Form.Group>
+          {formData.group_id && (
+            <Form.Group controlId="coordinator">
+              <Form.ControlLabel>Coordenador:</Form.ControlLabel>
+              <Form.Control
+                name="coordinator_id"
+                accepter={SelectPicker}
+                data={dataGroupList}
+                searchable={false}
+                placeholder="Selecione o Grupo"
+                //defaultValue={formData.group_id}
+              />
+            </Form.Group>
+          )}
 
           <Form.Group>
             <Divider>Expediente</Divider>
@@ -139,6 +152,7 @@ const RegistrationUsers: React.FC = () => {
                 appearance="primary"
                 onClick={() => {
                   setFormData({} as UsersData);
+                  setFormDataUser({} as UsersData);
                   setShowUsersList(true);
                 }}
               >

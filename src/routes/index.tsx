@@ -14,6 +14,8 @@ const PageCheckPoint = React.lazy(() => import('../pages/CheckPoint'));
 const PageProfile = React.lazy(() => import('../pages/PageProfile'));
 const PageRelease = React.lazy(() => import('../pages/PageRelease'));
 const PageUsers = React.lazy(() => import('../pages/PageUsers'));
+const PageGroups = React.lazy(() => import('../pages/PageGroups'));
+const PageCoordinator = React.lazy(() => import('../pages/PageCoordinator'));
 
 export function Router() {
   return (
@@ -68,11 +70,31 @@ export function Router() {
           }
         />
         <Route
-          path="/users-registration"
+          path="/users"
           element={
             <React.Suspense fallback={<Fallback />}>
               <PrivateRoute>
                 <PageUsers />
+              </PrivateRoute>
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="/groups"
+          element={
+            <React.Suspense fallback={<Fallback />}>
+              <PrivateRoute>
+                <PageGroups />
+              </PrivateRoute>
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="/coordinator"
+          element={
+            <React.Suspense fallback={<Fallback />}>
+              <PrivateRoute>
+                <PageCoordinator />
               </PrivateRoute>
             </React.Suspense>
           }
