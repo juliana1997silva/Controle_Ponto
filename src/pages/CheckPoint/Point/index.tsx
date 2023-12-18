@@ -78,7 +78,7 @@ const Point: React.FC = () => {
     if (mode === 'edit') {
       setDisabledForm(true);
       if (dataRegisterStore) {
-        if (dataRegisterStore.business?.id) setFormDataTime(dataRegisterStore.business);
+        if (dataRegisterStore.business) setFormDataTime(dataRegisterStore.business);
         if (dataRegisterStore.consults) setDataConsults(dataRegisterStore.consults);
         if (dataRegisterStore.nonbusiness) setBusinessData(dataRegisterStore.nonbusiness);
       }
