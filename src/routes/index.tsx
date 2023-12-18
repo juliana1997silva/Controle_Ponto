@@ -5,7 +5,6 @@ import { Route, Routes } from 'react-router-dom';
 import Fallback from '../components/Fallback';
 import Master from '../layout/Master';
 import NoMatch from '../layout/NoMatch';
-import Calendar from '../pages/CalendarPage';
 import PrivateRoute from './PrivateRoute';
 
 const Login = React.lazy(() => import('../pages/Login'));
@@ -16,6 +15,7 @@ const PageRelease = React.lazy(() => import('../pages/PageRelease'));
 const PageUsers = React.lazy(() => import('../pages/PageUsers'));
 const PageGroups = React.lazy(() => import('../pages/PageGroups'));
 const PageCoordinator = React.lazy(() => import('../pages/PageCoordinator'));
+const CalendarPage = React.lazy(() => import('../pages/CalendarPage'));
 
 export function Router() {
   return (
@@ -64,7 +64,7 @@ export function Router() {
           element={
             <React.Suspense fallback={<Fallback />}>
               <PrivateRoute>
-                <Calendar />
+                <CalendarPage />
               </PrivateRoute>
             </React.Suspense>
           }

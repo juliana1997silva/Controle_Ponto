@@ -1,22 +1,13 @@
-import React, { useCallback } from "react";
-import { toast } from "react-toastify";
-import { Button, Drawer, Form, Table } from "rsuite";
-import { dataHourCommercial, useCheckPoint } from "../../hooks/hookCheckPoint";
+import React, { useCallback } from 'react';
+import { Button, Drawer, Form, Table } from 'rsuite';
+import { nonBusinessData, useCheckPoint } from '../../hooks/hookCheckPoint';
 
 const HourCommercial: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
-  const {
-    setCommercialData,
-    commercialData,
-    commercial,
-    setDataModal,
-    dataModal,
-    openCommercial,
-    setOpenCommercial,
-    setCommercial,
-  } = useCheckPoint();
+  const { setCommercialData, commercialData, commercial, setDataModal, dataModal, openCommercial, setOpenCommercial, setCommercial } =
+    useCheckPoint();
   const handleChangeCommercial = useCallback(
-    (form: dataHourCommercial) => {
+    (form: nonBusinessData) => {
       setCommercialData(form);
     },
     [setCommercialData]
@@ -107,14 +98,14 @@ const HourCommercial: React.FC = () => {
             <Button
               appearance="primary"
               color="green"
-             // onClick={handleSubmitCommercial}
+              // onClick={handleSubmitCommercial}
             >
               Adicionar
             </Button>
           </Form.Group>
         </Form>
 
-        {dataModal.hour_commercial && (
+        {/* {dataModal.hour_commercial && (
           <Table data={dataModal.hour_commercial}>
             <Column>
               <HeaderCell>Entrada</HeaderCell>
@@ -133,7 +124,7 @@ const HourCommercial: React.FC = () => {
               <Cell dataKey="out_time_commercial" />
             </Column>
           </Table>
-        )}
+        )} */}
       </Drawer.Body>
     </Drawer>
   );

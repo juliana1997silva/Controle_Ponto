@@ -30,6 +30,9 @@ const Frame: React.FC = () => {
             <Nav.Item eventKey="6" icon={<DocPassIcon />} href="/coordinator">
               Coordenadores
             </Nav.Item>
+            <Nav.Item eventKey="6" icon={<DocPassIcon />} href="/teste">
+              Agenda
+            </Nav.Item>
             {/* <Nav.Menu eventKey="4" title="Relatorios" icon={<WavePointIcon />}>
               <Nav.Item eventKey="4-1" href="/weekly">
                 Relatorio Semanal

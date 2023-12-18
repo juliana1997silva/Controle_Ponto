@@ -1,9 +1,9 @@
-import moment from "moment";
-import "moment/locale/pt-br"; //importação efetuar a tradução da data para portugues
-import React, { useCallback, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Breadcrumb, Button, Form, Panel, Table } from "rsuite";
+import moment from 'moment';
+import 'moment/locale/pt-br'; //importação efetuar a tradução da data para portugues
+import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Breadcrumb, Button, Form, Panel, Table } from 'rsuite';
 import {
   ButtonRegistry,
   Consult,
@@ -20,8 +20,8 @@ import {
   Pause,
   PulaLinha,
   TextOptions,
-  TitlePage,
-} from "./styles";
+  TitlePage
+} from './styles';
 
 interface dataForm {
   date?: string;
@@ -33,7 +33,7 @@ interface dataForm {
   description?: string;
 }
 
-interface dataConsult {
+interface consultsData {
   consult?: string;
   description?: string;
 }
@@ -41,26 +41,26 @@ interface dataConsult {
 const Record: React.FC = () => {
   const [formData, setFormData] = useState<dataForm>({} as dataForm);
   const [disabled, setDisabled] = useState(false);
-  const [consults] = useState<dataConsult[]>([]);
+  const [consults] = useState<consultsData[]>([]);
   const { Column, HeaderCell, Cell } = Table;
 
   const handleConsultAdd = useCallback(() => {
     if (formData.consult === undefined || formData.description === undefined) {
       toast.error("Favor preencha os campos de 'Atividades' !", {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 1500,
+        autoClose: 1500
       });
     } else {
       consults.push({
         consult: formData.consult,
-        description: formData.description,
+        description: formData.description
       });
     }
 
     setFormData({
       ...formData,
-      consult: "",
-      description: "",
+      consult: '',
+      description: ''
     });
   }, [formData, setFormData, consults]);
 
@@ -88,20 +88,13 @@ const Record: React.FC = () => {
 
   return (
     <>
-      <Panel
-        header={<TitlePage className="title">Registro de Ponto</TitlePage>}
-      >
+      <Panel header={<TitlePage className="title">Registro de Ponto</TitlePage>}>
         <Breadcrumb>
           <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
           <Breadcrumb.Item active>Registro de Ponto</Breadcrumb.Item>
         </Breadcrumb>
         <ContainerCard>
-          <Date>
-            {formData.date &&
-              moment(formData.date)
-                .locale("pt-br")
-                .format("DD [de] MMMM [de] YYYY")}
-          </Date>
+          <Date>{formData.date && moment(formData.date).locale('pt-br').format('DD [de] MMMM [de] YYYY')}</Date>
           <Divider20 />
           <Form onChange={handleChange}>
             <Form.Group>
@@ -139,19 +132,13 @@ const Record: React.FC = () => {
               <Form.Group>
                 <ContainerOptions>
                   <TextOptions>Saída: </TextOptions>
-                  <Form.Control
-                    name="checkout"
-                    type="time"
-                    style={{ marginLeft: 32 }}
-                  />
+                  <Form.Control name="checkout" type="time" style={{ marginLeft: 32 }} />
                 </ContainerOptions>
               </Form.Group>
               <Divider10 />
               <Form.Group>
                 <TextOptions>Atividades:</TextOptions>
-                <Form.HelpText tooltip>
-                  Insira o nº da consulta e o que foi realizado no dia.
-                </Form.HelpText>
+                <Form.HelpText tooltip>Insira o nº da consulta e o que foi realizado no dia.</Form.HelpText>
                 <PulaLinha />
                 <ContainerActivities>
                   <ContainerConsult>
@@ -163,12 +150,7 @@ const Record: React.FC = () => {
                     <Form.Control name="description" />
                   </ContainerConsult>
                   <ContainerConsultButton>
-                    <Button
-                      color="green"
-                      appearance="primary"
-                      onClick={handleConsultAdd}
-                      style={{ width: 100 }}
-                    >
+                    <Button color="green" appearance="primary" onClick={handleConsultAdd} style={{ width: 100 }}>
                       Adicionar
                     </Button>
                   </ContainerConsultButton>

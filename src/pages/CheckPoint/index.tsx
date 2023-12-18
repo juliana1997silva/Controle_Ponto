@@ -1,12 +1,12 @@
 import React from 'react';
-import Point from './Point';
 import AppProvider from './hooks';
+import ListPoint from './ListPoint';
 
 const PageCheckPoint: React.FC = () => {
   return (
     <>
       <AppProvider>
-        <Point />
+        <ListPoint />
       </AppProvider>
     </>
   );

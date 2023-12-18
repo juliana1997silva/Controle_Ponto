@@ -3,8 +3,7 @@ import { useAuth } from '../../hooks/hooksAuth';
 import Dashboard from './Dashboard';
 
 const Home: React.FC = () => {
-
-  const { user } = useAuth();
+  /* const { user } = useAuth();
   const [show, setShow] = useState(false);
 
   const dataBar: [category: string, ...values: number[]][] | undefined = [
@@ -15,7 +14,7 @@ const Home: React.FC = () => {
     ['03/02', 8, 0]
   ];
 
-  const dataConsult: [category: string, ...values: number[]][] | undefined = [
+  const consultsData: [category: string, ...values: number[]][] | undefined = [
     ['31/01', 5],
     ['30/01', 4],
     ['01/02', 9],
@@ -25,7 +24,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     setShow(true);
-  });
+  }); */
 
   return (
     <>
@@ -48,7 +47,7 @@ const Home: React.FC = () => {
         />
         <ChartLine
           name="Exemplo - Quantidade Consulta do Departamento"
-          data={dataConsult}
+          data={consultsData}
           style={{
             width: '80%'
           }}

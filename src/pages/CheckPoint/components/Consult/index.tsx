@@ -1,17 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Button, Drawer, Form, Table } from "rsuite";
-import { dataConsult, useCheckPoint } from "../../hooks/hookCheckPoint";
+import React, { useCallback, useState } from 'react';
+import { Button, Drawer, Form, Table } from 'rsuite';
+import { consultsData, useCheckPoint } from '../../hooks/hookCheckPoint';
 
 const Consult: React.FC = () => {
   const { setDataModal, dataModal, openModal, setOpenModal } = useCheckPoint();
   const { Column, HeaderCell, Cell } = Table;
-  const [consults, setConsults] = useState<dataConsult[]>([]);
-  const [consultData, setConsultData] = useState<dataConsult>(
-    {} as dataConsult
-  );
+  const [consults, setConsults] = useState<consultsData[]>([]);
+  const [consultData, setConsultData] = useState<consultsData>({} as consultsData);
   const handleChangeConsult = useCallback(
-    (form: dataConsult) => {
+    (form: consultsData) => {
       setConsultData(form);
     },
     [setConsultData]
