@@ -5,7 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { Button, Panel } from 'rsuite';
 import { useCalendar } from '../hooks/hooksCalendar';
 import EventModal from './components/EventModal';
@@ -20,25 +20,22 @@ export interface dataModal {
 }
 
 const Schedule: React.FC = () => {
-  const { listEvents, dataEvents } = useCalendar();
+  const { listEvents, dataEvents, setMode, list, openModal, setOpenModal } = useCalendar();
   const [dateSelect] = useState<string>({} as string);
-  const [editable, setEditable] = useState(false);
   const [dataModal, setDataModal] = useState<EventImpl>({} as EventImpl);
 
   const handleEventClick = useCallback(
     (clickInfo: EventClickArg) => {
-      console.log('clickInfo =>', clickInfo.event);
       setDataModal(clickInfo.event);
-      setEditable(true);
+      setOpenModal(true);
+      setMode('edit');
     },
-    [setDataModal, setEditable]
+    [setDataModal, setOpenModal, setMode]
   );
 
-  useEffect(() => {
-    if (dataEvents.length === 0) listEvents();
-  }, [dataEvents, listEvents]);
-
-  console.log(dataEvents);
+  useLayoutEffect(() => {
+    if (list === false) listEvents();
+  });
 
   return (
     <Panel header={<TitlePage className="title">Agenda</TitlePage>}>
@@ -48,31 +45,39 @@ const Schedule: React.FC = () => {
           justifyContent: 'end'
         }}
       >
-        <Button appearance="primary" color="green" onClick={() => setEditable(true)} style={{ width: 155 }}>
+        <Button appearance="primary" color="green" onClick={() => setOpenModal(true)} style={{ width: 155 }}>
           Novo Evento
         </Button>
       </div>
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        headerToolbar={{
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      {list === true && (
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          }}
+          initialView="dayGridMonth"
+          weekends
+          selectable
+          selectMirror
+          dayMaxEvents
+          nextDayThreshold={'08:00:00'}
+          initialEvents={dataEvents}
+          eventContent={renderEventContent}
+          eventClick={handleEventClick}
+          locale={ptLocale}
+        />
+      )}
+      <EventModal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          setMode('create');
         }}
-        initialView="dayGridMonth"
-        weekends
-        //editable
-        selectable
-        selectMirror
-        dayMaxEvents
-        nextDayThreshold={'08:00:00'}
-        initialEvents={dataEvents} // alternatively, use the `events` setting to fetch from a feed
-        //select={handleDateSelect}
-        eventContent={renderEventContent} // custom render function
-        eventClick={handleEventClick}
-        locale={ptLocale}
+        date={dateSelect}
+        rowData={dataModal}
       />
-      <EventModal open={editable} onClose={() => setEditable(false)} date={dateSelect} rowData={dataModal} />
     </Panel>
   );
 };

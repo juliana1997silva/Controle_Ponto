@@ -5,30 +5,22 @@ import { Button, Checkbox, CustomProvider, Form, Input, Modal, ModalProps, Stack
 import ColorPicker from 'rsuite-color-picker';
 import 'rsuite-color-picker/lib/styles.css';
 import ptBR from 'rsuite/locales/pt_BR';
-import { useCalendar } from '../../../hooks/hooksCalendar';
+import { EventsData, useCalendar } from '../../../hooks/hooksCalendar';
 
 interface EventModalProps extends ModalProps {
   date: string;
   rowData: EventImpl;
 }
 
-interface dataForm {
-  title?: string;
-  backgroundColor?: string;
-  allDay?: boolean | number;
-  start?: string;
-  end?: Date | string | null;
-}
-
 const EventModal = (props: EventModalProps) => {
   const { onClose, open, date, rowData, ...rest } = props;
-  const {createEvents} = useCalendar()
-  const [dataForm, setDataForm] = useState<dataForm>({} as dataForm);
+  const { createEvents, mode, updateEvents } = useCalendar();
+  const [dataForm, setDataForm] = useState<EventsData>({} as EventsData);
   const [disabledDate, setDisabledDate] = useState(false);
   const [check] = useState(false);
 
   const handleChange = useCallback(
-    (form: dataForm) => {
+    (form: EventsData) => {
       console.log(form);
       setDataForm(form);
     },
@@ -36,11 +28,16 @@ const EventModal = (props: EventModalProps) => {
   );
 
   const handleSubmit = useCallback(() => {
-    createEvents(dataForm);
-  }, [createEvents, dataForm]);
+    if (mode === 'create') {
+      createEvents(dataForm);
+    } else {
+      updateEvents(dataForm);
+    }
+  }, [createEvents, dataForm, updateEvents]);
 
   useEffect(() => {
     setDataForm({
+      id: rowData.id,
       allDay: rowData.allDay,
       backgroundColor: rowData.backgroundColor,
       end: moment(rowData.end).format('YYYY-MM-DDTHH:mm'),
@@ -58,7 +55,7 @@ const EventModal = (props: EventModalProps) => {
   }, [check, setDisabledDate, dataForm]);
 
   return (
-    <Modal open={open} onClose={onClose} backdrop="static" onExit={() => setDataForm({} as dataForm)} {...rest}>
+    <Modal open={open} onClose={onClose} backdrop="static" onExit={() => setDataForm({} as EventsData)} {...rest}>
       <Modal.Header>
         <Modal.Title>Adicionar Evento</Modal.Title>
       </Modal.Header>
@@ -74,7 +71,7 @@ const EventModal = (props: EventModalProps) => {
               accepter={ColorPicker}
               name="backgroundColor"
               onChange={(e) =>
-                setDataForm((prevState: dataForm) => ({
+                setDataForm((prevState: EventsData) => ({
                   ...prevState,
                   backgroundColor: e.hex
                 }))
@@ -86,7 +83,7 @@ const EventModal = (props: EventModalProps) => {
               accepter={Checkbox}
               name="allDay"
               onChange={(e: any, v: any) =>
-                setDataForm((prevState: dataForm) => ({
+                setDataForm((prevState: EventsData) => ({
                   ...prevState,
                   allDay: v
                 }))
@@ -103,6 +100,7 @@ const EventModal = (props: EventModalProps) => {
               </CustomProvider>
             </Stack>
           </Form.Group>
+
           <Form.Group controlId="end">
             <Form.ControlLabel>Término</Form.ControlLabel>
             <Stack spacing={6}>
@@ -115,7 +113,7 @@ const EventModal = (props: EventModalProps) => {
       </Modal.Body>
       <Modal.Footer>
         <Button appearance="primary" onClick={handleSubmit}>
-          Adicionar
+          {mode === 'create' ? 'Adicionar' : 'Editar'}
         </Button>
         <Button onClick={onClose} appearance="primary" color="red">
           Cancelar
