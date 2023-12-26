@@ -1,30 +1,57 @@
-import React, { useState } from 'react';
-import {  Panel } from 'rsuite';
-import { TitlePage } from './styles';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import EventModal from './components/EventModal';
-import { DateSelectArg, EventClickArg, EventContentArg } from '@fullcalendar/core';
+import { EventClickArg, EventContentArg } from '@fullcalendar/core';
+import { EventImpl } from '@fullcalendar/core/internal';
 import ptLocale from '@fullcalendar/core/locales/pt-br';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import FullCalendar from '@fullcalendar/react';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Panel } from 'rsuite';
+import { useCalendar } from '../hooks/hooksCalendar';
+import EventModal from './components/EventModal';
+import { TitlePage } from './styles';
+
+export interface dataModal {
+  title?: string;
+  end?: string;
+  start?: string;
+  color?: string;
+  allDay?: boolean;
+}
 
 const Schedule: React.FC = () => {
-
+  const { listEvents, dataEvents } = useCalendar();
+  const [dateSelect] = useState<string>({} as string);
   const [editable, setEditable] = useState(false);
-  const handleDateSelect = (selectInfo: DateSelectArg) => {
-    console.log('selectInfo  =>' , selectInfo);
-    setEditable(true);
-  };
+  const [dataModal, setDataModal] = useState<EventImpl>({} as EventImpl);
 
-  const handleEventClick = (clickInfo: EventClickArg) => {
-    console.log('clickInfo =>' ,clickInfo);
-    setEditable(true);
-  };
+  const handleEventClick = useCallback(
+    (clickInfo: EventClickArg) => {
+      console.log('clickInfo =>', clickInfo.event);
+      setDataModal(clickInfo.event);
+      setEditable(true);
+    },
+    [setDataModal, setEditable]
+  );
 
-      
+  useEffect(() => {
+    if (dataEvents.length === 0) listEvents();
+  }, [dataEvents, listEvents]);
+
+  console.log(dataEvents);
+
   return (
     <Panel header={<TitlePage className="title">Agenda</TitlePage>}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'end'
+        }}
+      >
+        <Button appearance="primary" color="green" onClick={() => setEditable(true)} style={{ width: 155 }}>
+          Novo Evento
+        </Button>
+      </div>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         headerToolbar={{
@@ -34,24 +61,18 @@ const Schedule: React.FC = () => {
         }}
         initialView="dayGridMonth"
         weekends
-        editable
+        //editable
         selectable
         selectMirror
         dayMaxEvents
         nextDayThreshold={'08:00:00'}
-        //initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-        select={handleDateSelect}
+        initialEvents={dataEvents} // alternatively, use the `events` setting to fetch from a feed
+        //select={handleDateSelect}
         eventContent={renderEventContent} // custom render function
         eventClick={handleEventClick}
         locale={ptLocale}
       />
-      <EventModal
-        open={editable}
-        onClose={() => setEditable(false)}
-        onAddEvent={() => {
-          setEditable(false);
-        }}
-      />
+      <EventModal open={editable} onClose={() => setEditable(false)} date={dateSelect} rowData={dataModal} />
     </Panel>
   );
 };

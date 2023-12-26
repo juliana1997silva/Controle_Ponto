@@ -1,6 +1,6 @@
 import AdminIcon from "@rsuite/icons/Admin";
 import ExitIcon from "@rsuite/icons/Exit";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Dropdown, IconButton } from "rsuite";
 import logoTempus from "../../assets/logoTempus.png";
 import { useAuth } from "../../hooks/hooksAuth";

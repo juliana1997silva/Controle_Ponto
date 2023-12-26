@@ -8,7 +8,7 @@ import { dataLogin, useAuth } from '../../hooks/hooksAuth';
 import { Button, ContainerForm, DivImg, Global, ImgPage, TitleForm } from './styles';
 
 const Login: React.FC = () => {
-  const { login, dataForm, setDataForm, showHome, user, setShowHome } = useAuth();
+  const { setDataForm, showHome, setShowHome } = useAuth();
   const [visible, setVisible] = useState(false);
 
   const handleChangePassword = () => {
@@ -25,7 +25,7 @@ const Login: React.FC = () => {
   const handleSubmit = useCallback(() => {
     //login(dataForm);
     setShowHome(true);
-   // console.log('logooou');
+    // console.log('logooou');
   }, [setShowHome]);
 
   if (showHome) {

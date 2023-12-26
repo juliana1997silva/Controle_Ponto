@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, ButtonToolbar, Form, Panel, SelectPicker } from 'rsuite';
+import { Button, ButtonToolbar, Form, Panel } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import GroupsList from '../GroupsList';
 import { GroupsData, useGroups } from '../hooks/hooksGroups';
@@ -12,7 +12,7 @@ const GroupsRegister: React.FC = () => {
 
   const handleChange = useCallback(
     (form: GroupsData) => {
-     // console.log(form);
+      // console.log(form);
       setFormData(form);
     },
     [setFormData]

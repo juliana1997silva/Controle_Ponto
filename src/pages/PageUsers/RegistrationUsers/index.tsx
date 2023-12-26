@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Divider, Form, InputGroup, Panel, SelectPicker } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import { useCoordinator } from '../../PageCoordinator/hooks/hooksCoordinator';
-import { GroupsData } from '../../PageGroups/hooks/hooksGroups';
 import UserList from '../UserList';
 import { UsersData, useUsers } from '../hooks/hooksUsers';
 import { DivButton, DivHour, DivPause, TitlePage } from './styles';
@@ -14,7 +13,7 @@ const RegistrationUsers: React.FC = () => {
   const { listCoordinator, dataCoordinator, list } = useCoordinator();
   const [visible, setVisible] = useState(false);
   const [formData, setFormData] = useState<UsersData>({} as UsersData);
-  const [groups, setGroups] = useState<GroupsData[]>({} as GroupsData[]);
+  //const [groups, setGroups] = useState<GroupsData[]>({} as GroupsData[]);
 
   const handleChangePassword = () => {
     setVisible(!visible);
@@ -22,7 +21,7 @@ const RegistrationUsers: React.FC = () => {
 
   const handleChange = useCallback(
     (form: UsersData) => {
-     // console.log(form);
+      // console.log(form);
       setFormData(form);
     },
     [setFormData]
@@ -42,7 +41,7 @@ const RegistrationUsers: React.FC = () => {
     } else {
       updateUsers(formData);
     }
-  }, [RegisterUsers, formData, setFormData, updateUsers]);
+  }, [RegisterUsers, formData, updateUsers, mode]);
 
   useEffect(() => {
     setFormData(formDataUser);

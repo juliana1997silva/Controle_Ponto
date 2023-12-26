@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../hooks/hooksAuth';
+import React from 'react';
+//import { useAuth } from '../../hooks/hooksAuth';
 import Dashboard from './Dashboard';
 
 const Home: React.FC = () => {

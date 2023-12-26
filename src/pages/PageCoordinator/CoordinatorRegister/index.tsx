@@ -11,7 +11,7 @@ const CoordinatorRegister: React.FC = () => {
   const { listGroups, list, dataGroups } = useGroups();
   const [formData, setFormData] = useState<CoordinatorData>({} as CoordinatorData);
   const [showList, setShowList] = useState(false);
-  const [group, setGroup] = useState('');
+  //const [group, setGroup] = useState('');
 
   const groups = Object.values(dataGroups).map((item) => {
     return {
@@ -23,7 +23,7 @@ const CoordinatorRegister: React.FC = () => {
 
   const handleChange = useCallback(
     (form: CoordinatorData) => {
-     // console.log(form);
+      // console.log(form);
       setFormData(form);
     },
     [setFormData]

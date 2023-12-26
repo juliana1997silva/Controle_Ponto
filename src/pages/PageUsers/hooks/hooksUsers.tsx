@@ -49,7 +49,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
     await api
       .get('/users')
       .then((response) => {
-       // console.log(response.data.data);
+        // console.log(response.data.data);
         setDataListUsers(response.data.data);
       })
       .catch((error) => {
@@ -64,7 +64,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .post('/users', dataUsers, {})
         .then((response) => {
-         // console.log(response.data);
+          // console.log(response.data);
           toast.success('Cadastrado com sucesso');
           setShowUsersList(!showUsersList);
           listUsers();
@@ -94,7 +94,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [setDataListUsers, listUsers, setShowUsersList, showUsersList]
+    [listUsers, setShowUsersList, showUsersList]
   );
 
   //atualizar status
@@ -103,7 +103,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .patch(`/users/release/${id}`)
         .then((response) => {
-         // console.log(response.data.data);
+          // console.log(response.data.data);
           listUsers();
         })
         .catch((error) => {
@@ -111,7 +111,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [ listUsers]
+    [listUsers]
   );
 
   return (
