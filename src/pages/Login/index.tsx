@@ -1,15 +1,20 @@
 import EyeIcon from '@rsuite/icons/legacy/Eye';
 import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
-import React, { useCallback, useState } from 'react';
-import { Navigate } from 'react-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router';
 import { Form, InputGroup, Panel } from 'rsuite';
 import logoTempus from '../../assets/logoTempus.png';
-import { dataLogin, useAuth } from '../../hooks/hooksAuth';
+import { UserData, dataLogin, useAuth } from '../../hooks/hooksAuth';
 import { Button, ContainerForm, DivImg, Global, ImgPage, TitleForm } from './styles';
+import { useCookies } from 'react-cookie';
+import {  decode } from 'js-base64';
 
 const Login: React.FC = () => {
-  const { setDataForm, showHome, setShowHome } = useAuth();
+  const { showHome, signin } = useAuth();
   const [visible, setVisible] = useState(false);
+  const [dataForm, setDataForm] = useState<dataLogin>({} as dataLogin);
+  const [userCookies] = useCookies(['user']);
+  const navigate = useNavigate();
 
   const handleChangePassword = () => {
     setVisible(!visible);
@@ -23,10 +28,21 @@ const Login: React.FC = () => {
   );
 
   const handleSubmit = useCallback(() => {
-    //login(dataForm);
-    setShowHome(true);
-    // console.log('logooou');
-  }, [setShowHome]);
+    signin(dataForm);
+    //console.log(dataForm);
+  }, [signin, dataForm]);
+
+
+  useEffect(() => {
+    if (userCookies.user) {
+      let userDec: UserData = {} as UserData;
+      userDec = JSON.parse(decode(userCookies.user));
+
+      if (userDec.token === undefined) {
+        navigate('/');
+      }
+    }
+  }, [userCookies, navigate]);
 
   if (showHome) {
     return <Navigate to={'/dashboard'} />;
@@ -49,7 +65,7 @@ const Login: React.FC = () => {
             <Form.Group>
               <TitleForm>Login:</TitleForm> <br /> <br />
               <InputGroup>
-                <Form.Control name="login" />
+                <Form.Control name="email" />
                 <span className="animation-bottom"></span>
               </InputGroup>
             </Form.Group>

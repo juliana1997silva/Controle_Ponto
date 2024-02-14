@@ -3,6 +3,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import UserList from '../UserList';
+import RegistrationUsers from '../RegistrationUsers';
 
 export interface UsersData {
   name?: string;
@@ -33,6 +35,8 @@ interface HooksUsersData {
   list: boolean;
   setList(list: boolean): void;
   releaseUsers(id: string): void;
+  showRegister: boolean;
+  setShowRegister(showRegister: boolean):void;
 }
 
 const UsersContext = createContext<HooksUsersData>({} as HooksUsersData);
@@ -41,6 +45,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
   const [dataListUsers, setDataListUsers] = useState<UsersData[]>({} as UsersData[]);
   const [formDataUser, setFormDataUser] = useState<UsersData>({} as UsersData);
   const [showUsersList, setShowUsersList] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
   const [list, setList] = useState(false);
 
@@ -49,7 +54,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
     await api
       .get('/users')
       .then((response) => {
-        // console.log(response.data.data);
+        console.log(response.data.data);
         setDataListUsers(response.data.data);
       })
       .catch((error) => {
@@ -75,7 +80,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [setShowUsersList, showUsersList, listUsers, setList]
+    [setShowUsersList,showUsersList,  listUsers, setList]
   );
 
   //atualizar dados do usuarios
@@ -101,7 +106,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
   const releaseUsers = useCallback(
     async (id: string) => {
       await api
-        .patch(`/users/release/${id}`)
+        .put(`/users/release/${id}`)
         .then((response) => {
           // console.log(response.data.data);
           listUsers();
@@ -114,28 +119,31 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
     [listUsers]
   );
 
-  return (
-    <UsersContext.Provider
-      value={{
-        RegisterUsers,
-        dataListUsers,
-        setDataListUsers,
-        listUsers,
-        formDataUser,
-        setFormDataUser,
-        updateUsers,
-        showUsersList,
-        setShowUsersList,
-        mode,
-        setMode,
-        list,
-        setList,
-        releaseUsers
-      }}
-    >
-      {children}
-    </UsersContext.Provider>
-  );
+
+    return (
+      <UsersContext.Provider
+        value={{
+          RegisterUsers,
+          dataListUsers,
+          setDataListUsers,
+          listUsers,
+          formDataUser,
+          setFormDataUser,
+          updateUsers,
+          showUsersList,
+          setShowUsersList,
+          mode,
+          setMode,
+          list,
+          setList,
+          releaseUsers,
+          showRegister,
+          setShowRegister
+        }}
+      >
+        {children}
+      </UsersContext.Provider>
+    );
 };
 
 function useUsers(): HooksUsersData {

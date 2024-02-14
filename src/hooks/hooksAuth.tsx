@@ -1,55 +1,42 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // css do toast
-import Loading from "../components/Loading";
-import api from "../services/api";
-import { IProps } from "../types";
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+import Loading from '../components/Loading';
+import api from '../services/api';
+import { IProps } from '../types';
+import { useCookies } from 'react-cookie';
+import { encode, decode } from 'js-base64';
+import { toast } from 'react-toastify';
 
 export interface dataLogin {
-  login?: string;
+  email?: string;
   password?: string;
 }
-interface IUserData {
-  logged: boolean;
-  user: UserData;
-}
 
-interface UserData {
-  id: number;
-  is_admin: boolean;
-  login: string;
+export interface UserData {
+  id: string;
   name: string;
-  roles: RolesData;
-  parameter: ParameterData;
-}
-
-interface RolesData {
-  adm: boolean;
-  adm_site: boolean;
-  event: boolean;
-  finance: boolean;
-  knights: boolean;
-  list: boolean;
-  request: boolean;
-  user: boolean;
-}
-interface ParameterData {
+  phone: string;
+  email: string;
+  coordinator_id: string;
   entry_time: string;
   lunch_entry_time: string;
   lunch_out_time: string;
   out_time: string;
+  password: string;
+  status: string;
+  admin: string;
+  token: string;
 }
 
 interface HooksAuthData {
-  login(data: dataLogin): void;
+  signin(data: dataLogin): void;
   showHome: boolean;
   setShowHome(showHome: boolean): void;
-  user: IUserData;
-  setUser(user: IUserData): void;
-  dataForm: dataLogin;
-  setDataForm(dataForm: dataLogin): void;
+  user: UserData;
+  setUser(user: UserData): void;
   errorLogin: boolean;
   setErrorLogin(errorLogin: boolean): void;
+  SignOut(): void;
 }
 
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
@@ -58,32 +45,62 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [showHome, setShowHome] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorLogin, setErrorLogin] = useState(false);
-  const [user, setUser] = useState<IUserData>({} as IUserData);
-  const [dataForm, setDataForm] = useState<dataLogin>({} as dataLogin);
+  const [user, setUser] = useState<UserData>({} as UserData);
+  const [userCookies, setUserCookie, removeUserCookie] = useCookies(['user']);
 
-  const login = useCallback(
+  const signin = useCallback(
     async (data: dataLogin) => {
       setLoading(true);
-      const loginData = await api
-        .post(`/v1/user/auth`, data)
-        .catch(function (error) {
-         // console.log(error);
-        });
-
-      if (loginData) {
-        //console.log(loginData.data);
-        if (loginData.data.logged === true) {
-          setUser(loginData.data);
+      await api
+        .post(`/signin`, data)
+        .then((response) => {
+          //console.log(response.data);
           setShowHome(true);
-        } else {
-          toast.error("Tente Novamente !");
-        }
+          setUser(response.data);
+          let date = new Date(new Date().setMinutes(new Date().getMinutes() + 5));
+          const setCookie = {
+            id: response.data.user.id,
+            name: response.data.user.name,
+            phone: response.data.user.phone,
+            email: response.data.user.email,
+            coordinator_id: response.data.user.coordinator_id,
+            entry_time: response.data.user.entry_time,
+            lunch_entry_time: response.data.user.lunch_entry_time,
+            lunch_out_time: response.data.user.lunch_out_time,
+            out_time: response.data.user.out_time,
+            password: response.data.user.password,
+            status: response.data.user.status,
+            admin: response.data.user.admin,
+            token: response.data.token
+          };
 
-        setLoading(false);
-      }
+          setUserCookie('user', setCookie, {
+            path: '/',
+            encode: encode as (src: string, urlsafe?: boolean | undefined) => string,
+            expires: date
+          } as { path: string; encode: (src: string, urlsafe?: boolean | undefined) => string; expires: Date });
+        })
+        .catch(function (error) {
+          console.log(error.response.data.message);
+          toast.error(error.response.data.message);
+        });
+      setLoading(false);
     },
-    [setUser, setShowHome, setLoading]
+    [setShowHome, setUser, setUserCookie]
   );
+
+  const SignOut = useCallback(() => {
+    removeUserCookie('user');
+    window.location.reload();
+  }, [removeUserCookie]);
+
+  /* useEffect(() => {
+    if (userCookies.user) {
+      let userDec: UserData = {} as UserData;
+      userDec = JSON.parse(decode(userCookies.user));
+      setUser(userDec);
+    }
+  }, [userCookies]); */
 
   if (loading) {
     return <Loading />;
@@ -92,15 +109,14 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        login,
+        signin,
         showHome,
         setShowHome,
         user,
         setUser,
-        dataForm,
-        setDataForm,
         errorLogin,
         setErrorLogin,
+        SignOut
       }}
     >
       {children}
@@ -112,7 +128,7 @@ function useAuth(): HooksAuthData {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error("useAuth must be used within a useAuth");
+    throw new Error('useAuth must be used within a useAuth');
   }
   return context;
 }

@@ -16,12 +16,6 @@ export const ContainerButtonPDF = styled.div`
 
 export const TitlePage = styled.h3``;
 
-export const PulaLinha = styled.br``;
-
-export const TitleRegistry = styled.h4`
-  text-align: center;
-`;
-
 export const ContainerButton = styled.div`
   text-align: end;
   padding-top: 50px;

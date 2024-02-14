@@ -7,8 +7,7 @@ import { useAuth } from "../../hooks/hooksAuth";
 import { Container, ContainerAvatar, NameUser } from "./styles";
 
 const Header: React.FC = () => {
-  const { user } = useAuth();
-  const [logout, setLogout] = useState(false);
+  const { user, SignOut } = useAuth();
   const [showProfile, setShowProfile] = useState(false);
 
   const renderIconButton = (props: any, ref: any) => {
@@ -27,33 +26,21 @@ const Header: React.FC = () => {
     );
   };
 
-  if (logout) {
-    window.location.pathname = "";
-  }
-
   if (showProfile) {
     window.location.pathname = "/profile";
   }
   return (
     <Container>
-      <img
-        src={logoTempus}
-        alt="Logo Tempus"
-        style={{ height: 70, width: 70 }}
-        onClick={() => (window.location.pathname = "/dashboard")}
-      />
-      {user.logged === true && (
+      <img src={logoTempus} alt="Logo Tempus" style={{ height: 70, width: 70 }} onClick={() => (window.location.pathname = '/dashboard')} />
+      {user.token && (
         <ContainerAvatar>
-          <NameUser>{user?.user?.name}</NameUser>
+          <NameUser>{user?.name}</NameUser>
 
           <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
-            <Dropdown.Item
-              onSelect={() => setShowProfile(true)}
-              icon={<AdminIcon />}
-            >
+            <Dropdown.Item onSelect={() => setShowProfile(true)} icon={<AdminIcon />}>
               Meu Perfil
             </Dropdown.Item>
-            <Dropdown.Item onSelect={() => setLogout(true)} icon={<ExitIcon />}>
+            <Dropdown.Item onSelect={SignOut} icon={<ExitIcon />}>
               Sair
             </Dropdown.Item>
           </Dropdown>

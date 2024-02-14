@@ -75,3 +75,7 @@ export const ContainerConsult = styled.div`
 export const ContainerConsultButton = styled.div`
   margin: 10px;
 `;
+
+export const TextEdit = styled.span`
+  color: red;
+`;

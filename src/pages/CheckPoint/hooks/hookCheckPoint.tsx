@@ -1,9 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
-import 'react-toastify/dist/ReactToastify.css'; // css do toast
-import { IProps } from '../../../types';
-import api from '../../../services/api';
-import { toast } from 'react-toastify';
 import moment from 'moment';
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // css do toast
+import { useAuth } from '../../../hooks/hooksAuth';
+import api from '../../../services/api';
+import { IProps } from '../../../types';
 
 export interface timeData {
   id?: string;
@@ -26,6 +27,21 @@ export interface consultsData {
   registry_id?: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface expensesData {
+  id?: string;
+  registry_id?: string;
+  created_at?: string;
+  updated_at?: string;
+  km?: string;
+  coffe?: string;
+  lunch?: string;
+  dinner?: string;
+  parking?: string;
+  toll?: string;
+  others?: string;
+  total?: string;
 }
 
 export interface nonBusinessData {
@@ -68,21 +84,21 @@ interface HooksCheckPointData {
   setMode(mode: 'created' | 'edit'): void;
   updateData: boolean;
   setUpdateData(updateData: boolean): void;
+  updatePoint(dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]): void;
 }
 
 const CheckPointContext = createContext<HooksCheckPointData>({} as HooksCheckPointData);
 
 const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
+  const { user } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [dataModal, setDataModal] = useState<timeData>({} as timeData);
   const [commercialData, setCommercialData] = useState<nonBusinessData>({} as nonBusinessData);
   const [commercial, setCommercial] = useState<nonBusinessData[]>([]);
   const [openCommercial, setOpenCommercial] = useState(false);
-
   const [dataRegister, setDataRegister] = useState<timeData[]>([] as timeData[]);
   const [dataRegisterStore, setDataRegisterStore] = useState<data>({} as data);
   const [mode, setMode] = useState<'created' | 'edit'>('created');
-
   const [updateData, setUpdateData] = useState(false);
 
   const listPoint = useCallback(async () => {
@@ -94,31 +110,34 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
       });
   }, [setDataRegister]);
 
-  const registerPoint = useCallback(async (dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]) => {
-    const data = {
-      user_id: '3D21-AD3ACD33-5FFA-2C87-1618D84C06EC',
-      date: moment(dataTime.date).format('YYYY-MM-DD'),
-      location: dataTime.location,
-      entry_time: dataTime.entry_time,
-      lunch_entry_time: dataTime.lunch_entry_time,
-      lunch_out_time: dataTime.lunch_out_time,
-      out_time: dataTime.out_time,
-      observation: dataTime.observation,
-      nonbusiness: nonBusiness,
-      consults: consultations
-    };
+  const registerPoint = useCallback(
+    async (dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]) => {
+      const data = {
+        user_id: user.id,
+        date: moment(dataTime.date).format('YYYY-MM-DD'),
+        location: dataTime.location,
+        entry_time: dataTime.entry_time,
+        lunch_entry_time: dataTime.lunch_entry_time,
+        lunch_out_time: dataTime.lunch_out_time,
+        out_time: dataTime.out_time,
+        observation: dataTime.observation,
+        nonbusiness: nonBusiness,
+        consults: consultations
+      };
 
-    console.log(data);
+      console.log(data);
 
-    const registerData = await api.post(`/checkpoint`, data).catch(function (error) {
-      console.log(error);
-    });
+      const registerData = await api.post(`/checkpoint`, data).catch(function (error) {
+        console.log(error);
+      });
 
-    if (registerData) {
-      console.log(registerData.data);
-      toast.success('Ponto registrado com sucesso !');
-    }
-  }, []);
+      if (registerData) {
+        console.log(registerData.data);
+        toast.success('Ponto registrado com sucesso !');
+      }
+    },
+    [user]
+  );
 
   const showPoint = useCallback(
     async (id: string) => {
@@ -133,6 +152,36 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
         });
     },
     [setDataRegisterStore]
+  );
+
+  const updatePoint = useCallback(
+    async (dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]) => {
+      const data = {
+        user_id: dataTime.user_id,
+        date: dataTime.date,
+        location: dataTime.location,
+        entry_time: dataTime.entry_time,
+        lunch_entry_time: dataTime.lunch_entry_time,
+        lunch_out_time: dataTime.lunch_out_time,
+        out_time: dataTime.out_time,
+        observation: dataTime.observation,
+        nonbusiness: nonBusiness,
+        consults: consultations
+      };
+
+      await api
+        .put(`/checkpoint/${dataTime.id}`, data)
+        .then((response) => {
+          console.log(response.data);
+          toast.success('Registro atualizado com sucesso !');
+          listPoint();
+          setUpdateData(true);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    [listPoint, setUpdateData]
   );
 
   return (
@@ -158,7 +207,8 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
         mode,
         setMode,
         updateData,
-        setUpdateData
+        setUpdateData,
+        updatePoint
       }}
     >
       {children}

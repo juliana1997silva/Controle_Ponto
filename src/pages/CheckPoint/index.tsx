@@ -1,13 +1,13 @@
 import React from 'react';
-import AppProvider from './hooks';
+import AppProviderCheckpoint from './hooks';
 import ListPoint from './ListPoint';
 
 const PageCheckPoint: React.FC = () => {
   return (
     <>
-      <AppProvider>
+      <AppProviderCheckpoint>
         <ListPoint />
-      </AppProvider>
+      </AppProviderCheckpoint>
     </>
   );
 };

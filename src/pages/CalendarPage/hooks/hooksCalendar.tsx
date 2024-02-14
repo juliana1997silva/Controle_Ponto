@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // css do toast
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import { useAuth } from '../../../hooks/hooksAuth';
 
 export interface EventsData {
   id?: string;
@@ -34,6 +35,7 @@ interface HooksCalendarData {
 const CalendarContext = createContext<HooksCalendarData>({} as HooksCalendarData);
 
 const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
+  const {user} = useAuth();
   const [dataEvents, setDataEvents] = useState<EventInput[]>([] as EventInput[]);
   const [mode, setMode] = useState<"create" | "edit">("create");
   const [list, setList] = useState(false);
@@ -56,7 +58,7 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
     async (data: EventsData) => {
       await api
         .post(`/events`, {
-          user_id: '9C81-513CCD17-57B3-3C6F-FBCED16A59A1',
+          user_id: user.id,
           title: data.title,
           start: data.start,
           end: data.end,
@@ -68,20 +70,20 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
           toast.success('Evento cadastrado com sucesso.');
           listEvents();
           setOpenModal(false);
-          window.location.reload()
+          window.location.reload();
         })
         .catch(function (error) {
           console.log(error);
         });
     },
-    [listEvents, setOpenModal]
+    [listEvents, setOpenModal, user]
   );
 
   const updateEvents = useCallback(
     async (data: EventsData) => {
       await api
         .put(`/events/${data.id}`, {
-          user_id: '9C81-513CCD17-57B3-3C6F-FBCED16A59A1',
+          user_id: user.id,
           title: data.title,
           start: data.start,
           end: data.end,
@@ -99,7 +101,7 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
           console.log(error);
         });
     },
-    [listEvents, setOpenModal]
+    [listEvents, setOpenModal, user]
   );
 
   return (

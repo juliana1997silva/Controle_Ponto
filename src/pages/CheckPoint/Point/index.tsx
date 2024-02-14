@@ -1,23 +1,25 @@
+import 'moment/locale/pt-br';
 import React, { useCallback, useEffect, useState } from 'react';
-//import moment from 'moment';
 import { Button, DatePicker, Form, Input, Panel, SelectPicker, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import ListPoint from '../ListPoint';
-import { consultsData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
-import { TitlePage } from './styles';
+import { consultsData, expensesData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
+import { TextEdit, TitlePage } from './styles';
 
 const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
 const Point: React.FC = () => {
-  const { registerPoint, dataRegisterStore, mode } = useCheckPoint();
+  const { registerPoint, dataRegisterStore, mode, updatePoint, updateData } = useCheckPoint();
   const { Column, HeaderCell, Cell } = Table;
   const [formDataTime, setFormDataTime] = useState<timeData>({} as timeData);
   const [formDataNonBusiness, setFormDataNonBusiness] = useState<nonBusinessData>({} as nonBusinessData);
   const [formDataConsults, setFormDataConsults] = useState<consultsData>({} as consultsData);
   const [businessData, setBusinessData] = useState<nonBusinessData[]>([] as nonBusinessData[]);
   const [dataConsults, setDataConsults] = useState<consultsData[]>([] as consultsData[]);
-  const [showBack, setShowBack] = useState(false);
   const [disabledForm, setDisabledForm] = useState(false);
+  const [consultsMode, setConsultsMode] = useState<'create' | 'edit'>('create');
+  const [hourMode, setHourMode] = useState<'create' | 'edit'>('create');
+  const [showBack, setShowBack] = useState(false);
 
   const handleChangeTime = useCallback(
     (form: timeData) => {
@@ -45,50 +47,98 @@ const Point: React.FC = () => {
 
   const handleAddNonBusiness = useCallback(() => {
     businessData.push({
+      id: formDataNonBusiness.id,
+      registry_id: formDataNonBusiness.registry_id,
       entry_time: formDataNonBusiness.entry_time,
       lunch_entry_time: formDataNonBusiness.lunch_entry_time,
       lunch_out_time: formDataNonBusiness.lunch_out_time,
       out_time: formDataNonBusiness.out_time
     });
     setFormDataNonBusiness({} as nonBusinessData);
-  }, [businessData, formDataNonBusiness, setFormDataNonBusiness]);
+    if (hourMode === 'edit') setHourMode('create');
+  }, [businessData, formDataNonBusiness, setFormDataNonBusiness, hourMode, setHourMode]);
 
   const handleEditHour = useCallback(
     (data: nonBusinessData) => {
-      businessData.filter((result) => result.id !== data.id);
+      const filterData = businessData.filter((result) => result.id !== data.id);
+      setHourMode('edit');
+      setBusinessData(filterData);
       setFormDataNonBusiness(data);
     },
-    [setFormDataNonBusiness, businessData]
+    [setFormDataNonBusiness, businessData, setBusinessData, setHourMode]
+  );
+
+  const handleDeleteHour = useCallback(
+    (data: nonBusinessData) => {
+      const filterData = businessData.filter((result) => result.id !== data.id);
+      setBusinessData(filterData);
+    },
+    [businessData, setBusinessData]
+  );
+
+  const handleEditConsults = useCallback(
+    (data: consultsData) => {
+      const filterData = dataConsults.filter((result) => result.id !== data.id);
+      setConsultsMode('edit');
+      setDataConsults(filterData);
+      setFormDataConsults(data);
+    },
+    [setFormDataConsults, dataConsults, setDataConsults, setConsultsMode]
+  );
+
+  const handleDeleteConsults = useCallback(
+    (data: nonBusinessData) => {
+      const filterData = dataConsults.filter((result) => result.id !== data.id);
+      setDataConsults(filterData);
+    },
+    [dataConsults, setDataConsults]
   );
 
   const handleAddConsults = useCallback(() => {
     dataConsults.push({
+      id: formDataConsults.id,
+      registry_id: formDataConsults.registry_id,
       queries: formDataConsults.queries,
       description: formDataConsults.description
     });
     setFormDataConsults({} as consultsData);
-  }, [formDataConsults, dataConsults, setFormDataConsults]);
+    if (consultsMode === 'edit') setConsultsMode('create');
+  }, [formDataConsults, dataConsults, setFormDataConsults, consultsMode, setConsultsMode]);
+
 
   const handleSubmit = useCallback(() => {
-    registerPoint(formDataTime, businessData, dataConsults);
+    if (mode === 'created') {
+      registerPoint(formDataTime, businessData, dataConsults);
+    } else {
+      updatePoint(formDataTime, businessData, dataConsults);
+    }
     setFormDataTime({} as timeData);
-  }, [registerPoint, formDataTime, businessData, dataConsults, setFormDataTime]);
+  }, [registerPoint, formDataTime, businessData, dataConsults, setFormDataTime, updatePoint]);
 
   useEffect(() => {
     if (mode === 'edit') {
       setDisabledForm(true);
       if (dataRegisterStore) {
-        if (dataRegisterStore.business) setFormDataTime(dataRegisterStore.business);
-        if (dataRegisterStore.consults) setDataConsults(dataRegisterStore.consults);
-        if (dataRegisterStore.nonbusiness) setBusinessData(dataRegisterStore.nonbusiness);
+        if (dataRegisterStore.business) {
+          if (dataRegisterStore.business.date !== undefined) {
+            setFormDataTime(dataRegisterStore.business);
+          }
+        }
+        if (dataRegisterStore.consults) {
+          setDataConsults(dataRegisterStore.consults);
+        }
+        if (dataRegisterStore.nonbusiness) {
+          setBusinessData(dataRegisterStore.nonbusiness);
+        }
       }
+     if(updateData) setShowBack(true);
     }
-  }, [mode, setDataConsults, setBusinessData, setFormDataTime, dataRegisterStore, setDisabledForm]);
-
+  }, [mode, dataRegisterStore, setDataConsults, setBusinessData, setFormDataTime, setDisabledForm, updateData, setShowBack]);
 
   if (showBack) {
     return <ListPoint />;
   }
+
   return (
     <>
       <Panel header={<TitlePage className="title">Registro de Ponto</TitlePage>}>
@@ -100,7 +150,16 @@ const Point: React.FC = () => {
           }}
         >
           <BreadcrumbComponent active="Registro de Ponto" href="/dashboard" label="Dashboard" />
-          <Button appearance="primary" color="red" onClick={() => setShowBack(true)}>
+          <Button
+            appearance="primary"
+            color="red"
+            onClick={() => {
+              setShowBack(true);
+              setFormDataTime({} as timeData);
+              setDataConsults({} as consultsData[]);
+              setBusinessData({} as nonBusinessData[]);
+            }}
+          >
             Voltar
           </Button>
         </div>
@@ -109,7 +168,13 @@ const Point: React.FC = () => {
           <Form.Group>
             <Form.ControlLabel>Data</Form.ControlLabel>
             <br />
-            <Form.Control accepter={DatePicker} placeholder="DD/MM/AAAA" name="date" disabled={disabledForm} format="DD-MM-YYYY" sele />
+            <Form.Control
+              accepter={DatePicker}
+              placeholder="DD/MM/AAAA"
+              name="date"
+              disabled={disabledForm}
+              value={formDataTime.date !== undefined ? new Date(formDataTime.date) : null}
+            />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Local</Form.ControlLabel>
@@ -174,10 +239,10 @@ const Point: React.FC = () => {
               <Form.Group style={{ marginLeft: 10, marginTop: 9 }}>
                 <br />
                 <Button appearance="primary" style={{ width: 120, backgroundColor: '#00a6a6' }} onClick={handleAddNonBusiness}>
-                  Adicionar
+                  {hourMode === 'edit' ? 'Editar' : 'Adicionar'}
                 </Button>
               </Form.Group>
-              {businessData.length !== 0 && (
+              {businessData && businessData.length !== 0 && (
                 <>
                   <Table data={businessData}>
                     <Column width={100} align="center">
@@ -196,7 +261,7 @@ const Point: React.FC = () => {
                       <HeaderCell>Saída</HeaderCell>
                       <Cell dataKey="out_time" />
                     </Column>
-                    <Column width={100}>
+                    <Column width={300}>
                       <HeaderCell>Ações</HeaderCell>
                       <Cell>
                         {(rowData: any) => (
@@ -205,12 +270,22 @@ const Point: React.FC = () => {
                               appearance="primary"
                               color="blue"
                               onClick={() => {
-                                
-                                handleEditHour(rowData)
+                                handleEditHour(rowData);
                               }}
                             >
                               Editar
                             </Button>
+                            {rowData.id && (
+                              <Button
+                                appearance="primary"
+                                color="red"
+                                onClick={() => {
+                                  handleDeleteHour(rowData);
+                                }}
+                              >
+                                Excluir
+                              </Button>
+                            )}
                           </>
                         )}
                       </Cell>
@@ -239,10 +314,10 @@ const Point: React.FC = () => {
                   style={{ width: 120, backgroundColor: '#00a6a6', marginRight: 25 }}
                   onClick={handleAddConsults}
                 >
-                  Adicionar
+                  {consultsMode === 'edit' ? 'Editar' : 'Adicionar'}
                 </Button>
               </Form.Group>
-              {dataConsults.length !== 0 && (
+              {dataConsults && dataConsults.length !== 0 && (
                 <Table data={dataConsults}>
                   <Column width={100} align="center">
                     <HeaderCell>Nº Consulta</HeaderCell>
@@ -252,20 +327,36 @@ const Point: React.FC = () => {
                     <HeaderCell>Descrição</HeaderCell>
                     <Cell dataKey="description" />
                   </Column>
-                  <Column width={100}>
+                  <Column width={300}>
                     <HeaderCell>Ações</HeaderCell>
                     <Cell>
                       {(rowData: any) => (
                         <>
-                          <Button
-                            appearance="primary"
-                            color="blue"
-                            onClick={() => {
-                              setFormDataConsults(rowData);
-                            }}
-                          >
-                            Editar
-                          </Button>
+                          {rowData.id ? (
+                            <>
+                              <Button
+                                appearance="primary"
+                                color="blue"
+                                onClick={() => {
+                                  handleEditConsults(rowData);
+                                }}
+                              >
+                                Editar
+                              </Button>
+
+                              <Button
+                                appearance="primary"
+                                color="red"
+                                onClick={() => {
+                                  handleDeleteConsults(rowData);
+                                }}
+                              >
+                                Excluir
+                              </Button>
+                            </>
+                          ) : (
+                            <TextEdit>Clique em "Salvar" para finalizar a edição</TextEdit>
+                          )}
                         </>
                       )}
                     </Cell>
