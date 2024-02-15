@@ -1,11 +1,11 @@
+import { decode, encode } from 'js-base64';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../components/Loading';
 import api from '../services/api';
 import { IProps } from '../types';
-import { useCookies } from 'react-cookie';
-import { encode, decode } from 'js-base64';
-import { toast } from 'react-toastify';
 
 export interface dataLogin {
   email?: string;
@@ -46,7 +46,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [errorLogin, setErrorLogin] = useState(false);
   const [user, setUser] = useState<UserData>({} as UserData);
-  const [userCookies, setUserCookie, removeUserCookie] = useCookies(['user']);
+  const [userCookies, setUserCookies, removeUserCookies] = useCookies(['user']);
 
   const signin = useCallback(
     async (data: dataLogin) => {
@@ -54,31 +54,34 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .post(`/signin`, data)
         .then((response) => {
-          //console.log(response.data);
-          setShowHome(true);
           setUser(response.data);
           let date = new Date(new Date().setMinutes(new Date().getMinutes() + 5));
           const setCookie = {
-            id: response.data.user.id,
-            name: response.data.user.name,
-            phone: response.data.user.phone,
-            email: response.data.user.email,
-            coordinator_id: response.data.user.coordinator_id,
-            entry_time: response.data.user.entry_time,
-            lunch_entry_time: response.data.user.lunch_entry_time,
-            lunch_out_time: response.data.user.lunch_out_time,
-            out_time: response.data.user.out_time,
-            password: response.data.user.password,
-            status: response.data.user.status,
-            admin: response.data.user.admin,
+            id: response.data.id,
+            name: response.data.name,
+            phone: response.data.phone,
+            email: response.data.email,
+            coordinator_id: response.data.coordinator_id,
+            entry_time: response.data.entry_time,
+            lunch_entry_time: response.data.lunch_entry_time,
+            lunch_out_time: response.data.lunch_out_time,
+            out_time: response.data.out_time,
+            password: response.data.password,
+            status: response.data.status,
+            admin: response.data.admin,
             token: response.data.token
           };
 
-          setUserCookie('user', setCookie, {
+          const encodedData = btoa(JSON.stringify(setCookie));
+
+          setUserCookies('user', encodedData, {
             path: '/',
-            encode: encode as (src: string, urlsafe?: boolean | undefined) => string,
-            expires: date
-          } as { path: string; encode: (src: string, urlsafe?: boolean | undefined) => string; expires: Date });
+            expires: date,
+            sameSite: 'none', // ou 'Lax', dependendo do seu caso
+            secure: true
+          });
+          setShowHome(true);
+          //navigate('/dashboard');
         })
         .catch(function (error) {
           console.log(error.response.data.message);
@@ -86,21 +89,28 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         });
       setLoading(false);
     },
-    [setShowHome, setUser, setUserCookie]
+    [setUser, setUserCookies, setShowHome]
   );
 
   const SignOut = useCallback(() => {
-    removeUserCookie('user');
-    window.location.reload();
-  }, [removeUserCookie]);
+    removeUserCookies('user');
+    setUser({} as UserData);
+    // window.location.reload();
+  }, [removeUserCookies, setUser]);
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (userCookies.user) {
-      let userDec: UserData = {} as UserData;
-      userDec = JSON.parse(decode(userCookies.user));
-      setUser(userDec);
+      try {
+        const decodedUser = decode(userCookies.user);
+        const parsedUser = JSON.parse(decodedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error('Error decoding or parsing user:', error);
+        // Lidar com o erro, por exemplo, remover o cookie inválido
+        removeUserCookies('user');
+      }
     }
-  }, [userCookies]); */
+  }, [userCookies]);
 
   if (loading) {
     return <Loading />;

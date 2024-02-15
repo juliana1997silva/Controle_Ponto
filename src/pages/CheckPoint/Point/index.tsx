@@ -5,10 +5,13 @@ import BreadcrumbComponent from '../../../components/Breadcrumb';
 import ListPoint from '../ListPoint';
 import { consultsData, expensesData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
 import { TextEdit, TitlePage } from './styles';
+import userEvent from '@testing-library/user-event';
+import { useAuth } from '../../../hooks/hooksAuth';
 
 const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
 const Point: React.FC = () => {
+  const {user} = useAuth()
   const { registerPoint, dataRegisterStore, mode, updatePoint, updateData } = useCheckPoint();
   const { Column, HeaderCell, Cell } = Table;
   const [formDataTime, setFormDataTime] = useState<timeData>({} as timeData);
@@ -172,6 +175,7 @@ const Point: React.FC = () => {
               accepter={DatePicker}
               placeholder="DD/MM/AAAA"
               name="date"
+              format="DD/MM/AAAA"
               disabled={disabledForm}
               value={formDataTime.date !== undefined ? new Date(formDataTime.date) : null}
             />
@@ -204,18 +208,30 @@ const Point: React.FC = () => {
           <Form.Group>
             <Form.ControlLabel>Entrada</Form.ControlLabel>
             <br />
-            <Form.Control type="time" name="entry_time" style={{ width: 188 }} disabled={disabledForm} />
+            <Form.Control type="time" name="entry_time" style={{ width: 188 }} disabled={disabledForm} defaultValue={user.entry_time} />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Almoço</Form.ControlLabel>
             <br />
-            <Form.Control type="time" name="lunch_entry_time" style={{ width: 188 }} disabled={disabledForm} />
-            <Form.Control type="time" name="lunch_out_time" style={{ width: 188, marginLeft: 10 }} disabled={disabledForm} />
+            <Form.Control
+              type="time"
+              name="lunch_entry_time"
+              style={{ width: 188 }}
+              disabled={disabledForm}
+              defaultValue={user.lunch_entry_time}
+            />
+            <Form.Control
+              type="time"
+              name="lunch_out_time"
+              style={{ width: 188, marginLeft: 10 }}
+              disabled={disabledForm}
+              defaultValue={user.lunch_out_time}
+            />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Saída</Form.ControlLabel>
             <br />
-            <Form.Control type="time" name="out_time" style={{ width: 188 }} disabled={disabledForm} />
+            <Form.Control type="time" name="out_time" style={{ width: 188 }} disabled={disabledForm} defaultValue={user.out_time} />
           </Form.Group>
 
           <Panel header="Horário Não Comercial " collapsible bordered>

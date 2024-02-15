@@ -1,20 +1,16 @@
 import EyeIcon from '@rsuite/icons/legacy/Eye';
 import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router';
+import React, { useCallback, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { Form, InputGroup, Panel } from 'rsuite';
 import logoTempus from '../../assets/logoTempus.png';
-import { UserData, dataLogin, useAuth } from '../../hooks/hooksAuth';
+import { dataLogin, useAuth } from '../../hooks/hooksAuth';
 import { Button, ContainerForm, DivImg, Global, ImgPage, TitleForm } from './styles';
-import { useCookies } from 'react-cookie';
-import {  decode } from 'js-base64';
 
 const Login: React.FC = () => {
-  const { showHome, signin } = useAuth();
+  const { showHome, signin, setUser } = useAuth();
   const [visible, setVisible] = useState(false);
   const [dataForm, setDataForm] = useState<dataLogin>({} as dataLogin);
-  const [userCookies] = useCookies(['user']);
-  const navigate = useNavigate();
 
   const handleChangePassword = () => {
     setVisible(!visible);
@@ -28,24 +24,12 @@ const Login: React.FC = () => {
   );
 
   const handleSubmit = useCallback(() => {
-    signin(dataForm);
+    if (dataForm) signin(dataForm);
     //console.log(dataForm);
   }, [signin, dataForm]);
 
-
-  useEffect(() => {
-    if (userCookies.user) {
-      let userDec: UserData = {} as UserData;
-      userDec = JSON.parse(decode(userCookies.user));
-
-      if (userDec.token === undefined) {
-        navigate('/');
-      }
-    }
-  }, [userCookies, navigate]);
-
   if (showHome) {
-    return <Navigate to={'/dashboard'} />;
+    return <Navigate to="/dashboard" replace={true} />;
   }
 
   return (

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Table, Tag } from 'rsuite';
-import { useCheckPoint } from '../hooks/hookCheckPoint';
 import moment from 'moment';
 import 'moment/locale/pt-br';
+import React, { useEffect, useState } from 'react';
+import { Button, Table, Tag } from 'rsuite';
 import Point from '../Point';
+import { useCheckPoint } from '../hooks/hookCheckPoint';
 
 const ListPoint: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
