@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Button, Panel, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import RegistrationUsers from '../RegistrationUsers';

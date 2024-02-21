@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
-import { useAuth } from '../../../hooks/hooksAuth';
 
 export interface GroupsData {
   id?: string;
@@ -32,7 +32,7 @@ interface HooksGroupsData {
 const GroupsContext = createContext<HooksGroupsData>({} as HooksGroupsData);
 
 const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [dataGroups, setDataGroups] = useState<GroupsData[]>({} as GroupsData[]);
   const [list, setList] = useState(false);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
@@ -76,7 +76,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [listGroups]
+    [listGroups, user]
   );
 
   //editar
@@ -98,7 +98,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [listGroups]
+    [listGroups, user]
   );
 
   //atualizar status
@@ -123,7 +123,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [listGroups]
+    [listGroups, user]
   );
 
   return (

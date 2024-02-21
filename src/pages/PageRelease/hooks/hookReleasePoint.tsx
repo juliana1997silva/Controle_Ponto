@@ -1,11 +1,10 @@
+import { saveAs } from 'file-saver';
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css'; // css do toast
-import { IProps } from '../../../types';
-import api from '../../../services/api';
-import { UsersData } from '../../PageUsers/hooks/hooksUsers';
 import { useAuth } from '../../../hooks/hooksAuth';
-import { toast } from 'react-toastify';
-import { saveAs } from 'file-saver';
+import api from '../../../services/api';
+import { IProps } from '../../../types';
+import { UsersData } from '../../PageUsers/hooks/hooksUsers';
 
 interface HooksReleasePointData {
   listUsers(): void;
@@ -19,7 +18,7 @@ interface HooksReleasePointData {
   openView: boolean;
   setOpenView(openView: boolean): void;
   releaseHours(id: string, status: string): void;
-  generationPDF(id:string):void;
+  generationPDF(id: string): void;
 }
 
 const ReleasePointContext = createContext<HooksReleasePointData>({} as HooksReleasePointData);
@@ -93,26 +92,21 @@ const ReleasePointContextProvider: React.FC<IProps> = ({ children }) => {
     [listHoursUsers, user]
   );
 
-  const generationPDF = useCallback(
-    async (id: string) => {
-      console.log(id);
-      const pdf = await api
-        .get(
-          `/pdf/${id}`, {
-            responseType: 'blob'
-          }
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
+  const generationPDF = useCallback(async (id: string) => {
+    console.log(id);
+    const pdf = await api
+      .get(`/pdf/${id}`, {
+        responseType: 'blob'
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-        if(pdf){
-          console.log('pdf.data', pdf.data)
-          saveAs(pdf.data, 'Ficha_Semanal.pdf');
-        }
-    },
-    []
-  );
+    if (pdf) {
+      console.log('pdf.data', pdf.data);
+      saveAs(pdf.data, 'Ficha_Semanal.pdf');
+    }
+  }, []);
 
   return (
     <ReleasePointContext.Provider

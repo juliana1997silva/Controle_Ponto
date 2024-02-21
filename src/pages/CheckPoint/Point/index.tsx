@@ -1,12 +1,11 @@
 import 'moment/locale/pt-br';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, DatePicker, Form, Input, MaskedInput, Panel, SelectPicker, Table } from 'rsuite';
+import { Button, Form, Input, MaskedInput, Panel, SelectPicker, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import { useAuth } from '../../../hooks/hooksAuth';
 import ListPoint from '../ListPoint';
 import { consultsData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
 import { TextEdit, TitlePage } from './styles';
-import { FaCalendar, FaClock } from 'react-icons/fa';
 
 const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
@@ -22,14 +21,6 @@ const Point: React.FC = () => {
   const [consultsMode, setConsultsMode] = useState<'create' | 'edit'>('create');
   const [hourMode, setHourMode] = useState<'create' | 'edit'>('create');
   const [showBack, setShowBack] = useState(false);
-
-  const options = [
-  {
-    name: 'Date',
-    mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
-    placeholder: 'Data'
-  }
-]
 
   const handleChangeTime = useCallback(
     (form: timeData) => {
@@ -124,7 +115,7 @@ const Point: React.FC = () => {
     setFormDataTime({} as timeData);
     setDataConsults({} as consultsData[]);
     setBusinessData({} as nonBusinessData[]);
-  }, [registerPoint, formDataTime, businessData, dataConsults, setFormDataTime, updatePoint, setDataConsults, setBusinessData]);
+  }, [registerPoint, formDataTime, businessData, dataConsults, setFormDataTime, updatePoint, setDataConsults, setBusinessData, mode]);
 
   useEffect(() => {
     if (mode === 'edit') {
@@ -133,13 +124,12 @@ const Point: React.FC = () => {
 
         if (dataRegisterStore.consults) {
           setDataConsults(dataRegisterStore.consults);
-        }
-        if (dataRegisterStore.nonbusiness) {
+        } else if (dataRegisterStore.nonbusiness) {
           setBusinessData(dataRegisterStore.nonbusiness);
         }
       }
     }
-  }, [mode, dataRegisterStore, setDataConsults, setBusinessData, setFormDataTime, updateData, setShowBack]);
+  }, [mode, dataRegisterStore, setDataConsults, setBusinessData, setFormDataTime]);
 
   useEffect(() => {
     if (updateData) setShowBack(true);

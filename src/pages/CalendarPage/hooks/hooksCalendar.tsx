@@ -2,9 +2,9 @@ import { EventInput } from '@fullcalendar/core';
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // css do toast
+import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
-import { useAuth } from '../../../hooks/hooksAuth';
 
 export interface EventsData {
   id?: string;
@@ -56,7 +56,7 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
         console.log(error);
       });
     setList(true);
-  }, [setDataEvents, setList]);
+  }, [setDataEvents, setList, user]);
 
   const createEvents = useCallback(
     async (data: EventsData) => {

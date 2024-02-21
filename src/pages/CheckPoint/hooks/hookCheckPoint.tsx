@@ -182,7 +182,7 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
           console.log(error);
         });
     },
-    [listPoint, setUpdateData]
+    [listPoint, setUpdateData, user]
   );
 
   return (

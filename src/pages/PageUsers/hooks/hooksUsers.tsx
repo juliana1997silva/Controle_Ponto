@@ -73,7 +73,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
     setListCoordinatorData(true);
-  }, [setCoordinatorData, setListCoordinatorData]);
+  }, [setCoordinatorData, setListCoordinatorData, user]);
 
   //lista os usuarios
   const listUsers = useCallback(async () => {
@@ -92,7 +92,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
     setList(true);
-  }, [setDataListUsers, setList]);
+  }, [setDataListUsers, setList, user]);
 
   //registra o usuario
   const RegisterUsers = useCallback(
@@ -129,7 +129,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [listUsers, setShowUsersList]
+    [listUsers, setShowUsersList, user]
   );
 
   //atualizar dados do usuarios
@@ -166,18 +166,22 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [listUsers, setShowUsersList]
+    [listUsers, setShowUsersList, user]
   );
 
   //atualizar status
   const releaseUsers = useCallback(
     async (id: string) => {
       await api
-        .patch(`/users/release/${id}`,{}, {
-          headers: {
-            Authorization: `Bearer ${user.token}`
+        .patch(
+          `/users/release/${id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
           }
-        })
+        )
         .then((response) => {
           // console.log(response.data.data);
           listUsers();
@@ -187,7 +191,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [listUsers]
+    [listUsers, user]
   );
 
   return (

@@ -11,11 +11,9 @@ const RegistrationUsers: React.FC = () => {
   const {
     RegisterUsers,
     formDataUser,
-    setShowUsersList,
     mode,
     updateUsers,
     setFormDataUser,
-    showUsersList,
     showRegister,
     setShowRegister,
     listCoordinatorData,

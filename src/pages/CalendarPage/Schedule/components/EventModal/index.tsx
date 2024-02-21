@@ -33,7 +33,7 @@ const EventModal = (props: EventModalProps) => {
     } else {
       updateEvents(dataForm);
     }
-  }, [createEvents, dataForm, updateEvents]);
+  }, [createEvents, dataForm, updateEvents, mode]);
 
   useEffect(() => {
     setDataForm({
