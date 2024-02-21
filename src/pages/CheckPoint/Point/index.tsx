@@ -6,6 +6,7 @@ import { useAuth } from '../../../hooks/hooksAuth';
 import ListPoint from '../ListPoint';
 import { consultsData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
 import { TextEdit, TitlePage } from './styles';
+import { toast } from 'react-toastify';
 
 const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
@@ -108,7 +109,11 @@ const Point: React.FC = () => {
 
   const handleSubmit = useCallback(() => {
     if (mode === 'created') {
-      registerPoint(formDataTime, businessData, dataConsults);
+      if (formDataTime.location !== undefined && formDataTime.date !== undefined) {
+        registerPoint(formDataTime, businessData, dataConsults);
+      } else {
+        toast.error('Por favor, preencha todos os campos');
+      }
     } else {
       updatePoint(formDataTime, businessData, dataConsults);
     }
@@ -136,6 +141,7 @@ const Point: React.FC = () => {
   }, [updateData, setShowBack]);
 
   //console.log('dataRegisterStore:: ', dataRegisterStore);
+  //console.log('formDataTime:: ', formDataTime.date);
 
   if (showBack) {
     return <ListPoint />;
