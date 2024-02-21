@@ -41,6 +41,8 @@ const GroupsRegister: React.FC = () => {
         <Form onChange={handleChange} formValue={formData}>
           <Form.ControlLabel>Nome:</Form.ControlLabel>
           <Form.Control name="name" />
+          <Form.ControlLabel>Responsável:</Form.ControlLabel>
+          <Form.Control name="manager" />
           <DivButton>
             <ButtonToolbar>
               <Button appearance="primary" type="submit" style={{ backgroundColor: '#00a6a6' }} onClick={handleSubmit}>

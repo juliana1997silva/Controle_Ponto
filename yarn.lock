@@ -2302,10 +2302,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/cookie@^0.6.0":
-  "integrity" "sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA=="
-  "resolved" "https://registry.npmjs.org/@types/cookie/-/cookie-0.6.0.tgz"
-  "version" "0.6.0"
+"@types/cookie@^0.3.3":
+  "integrity" "sha512-LKVP3cgXBT9RYj+t+9FDKwS5tdI+rPBXaNSkma7hvqy35lc7mAokC2zsqWJH0LaqIt3B962nuYI77hsJoT1gow=="
+  "resolved" "https://registry.npmjs.org/@types/cookie/-/cookie-0.3.3.tgz"
+  "version" "0.3.3"
 
 "@types/eslint-scope@^3.7.3":
   "integrity" "sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg=="
@@ -2353,6 +2353,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/file-saver@^2.0.7":
+  "integrity" "sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A=="
+  "resolved" "https://registry.npmjs.org/@types/file-saver/-/file-saver-2.0.7.tgz"
+  "version" "2.0.7"
+
 "@types/graceful-fs@^4.1.2":
   "integrity" "sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ=="
   "resolved" "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.9.tgz"
@@ -2365,7 +2370,7 @@
   "resolved" "https://registry.npmjs.org/@types/history/-/history-4.7.11.tgz"
   "version" "4.7.11"
 
-"@types/hoist-non-react-statics@*", "@types/hoist-non-react-statics@^3.3.5":
+"@types/hoist-non-react-statics@*", "@types/hoist-non-react-statics@^3.0.1":
   "integrity" "sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg=="
   "resolved" "https://registry.npmjs.org/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.5.tgz"
   "version" "3.3.5"
@@ -3871,10 +3876,10 @@
   "resolved" "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz"
   "version" "1.0.6"
 
-"cookie@^0.6.0":
-  "integrity" "sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw=="
-  "resolved" "https://registry.npmjs.org/cookie/-/cookie-0.6.0.tgz"
-  "version" "0.6.0"
+"cookie@^0.4.0":
+  "integrity" "sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA=="
+  "resolved" "https://registry.npmjs.org/cookie/-/cookie-0.4.2.tgz"
+  "version" "0.4.2"
 
 "cookie@0.5.0":
   "integrity" "sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw=="
@@ -5172,6 +5177,11 @@
     "loader-utils" "^2.0.0"
     "schema-utils" "^3.0.0"
 
+"file-saver@^2.0.5":
+  "integrity" "sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA=="
+  "resolved" "https://registry.npmjs.org/file-saver/-/file-saver-2.0.5.tgz"
+  "version" "2.0.5"
+
 "filelist@^1.0.4":
   "integrity" "sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q=="
   "resolved" "https://registry.npmjs.org/filelist/-/filelist-1.0.4.tgz"
@@ -5609,7 +5619,7 @@
   "resolved" "https://registry.npmjs.org/he/-/he-1.2.0.tgz"
   "version" "1.2.0"
 
-"hoist-non-react-statics@^3.3.0", "hoist-non-react-statics@^3.3.2":
+"hoist-non-react-statics@^3.0.0", "hoist-non-react-statics@^3.3.0":
   "integrity" "sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw=="
   "resolved" "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz"
   "version" "3.3.2"
@@ -8478,14 +8488,14 @@
     "reactcss" "^1.2.0"
     "tinycolor2" "^1.4.1"
 
-"react-cookie@^7.0.2":
-  "integrity" "sha512-UnW1rZw1VibRdTvV8Ksr0BKKZoajeUxYLE89sIygDeyQgtz6ik89RHOM+3kib36G9M7HxheORggPoLk5DxAK7Q=="
-  "resolved" "https://registry.npmjs.org/react-cookie/-/react-cookie-7.0.2.tgz"
-  "version" "7.0.2"
+"react-cookie@^4.1.1":
+  "integrity" "sha512-ffn7Y7G4bXiFbnE+dKhHhbP+b8I34mH9jqnm8Llhj89zF4nPxPutxHT1suUqMeCEhLDBI7InYwf1tpaSoK5w8A=="
+  "resolved" "https://registry.npmjs.org/react-cookie/-/react-cookie-4.1.1.tgz"
+  "version" "4.1.1"
   dependencies:
-    "@types/hoist-non-react-statics" "^3.3.5"
-    "hoist-non-react-statics" "^3.3.2"
-    "universal-cookie" "^7.0.0"
+    "@types/hoist-non-react-statics" "^3.0.1"
+    "hoist-non-react-statics" "^3.0.0"
+    "universal-cookie" "^4.0.0"
 
 "react-dev-utils@^12.0.1":
   "integrity" "sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ=="
@@ -8534,6 +8544,11 @@
   "integrity" "sha512-V/hcMcNuBgD5w49BYTUDye+bUKaPmsU5vy/9W/Nj2xEeGn+6/AuH9IvBkbDcNBsY00cV9OeexdmgfI5RFHgsXQ=="
   "resolved" "https://registry.npmjs.org/react-google-charts/-/react-google-charts-4.0.1.tgz"
   "version" "4.0.1"
+
+"react-icons@^5.0.1":
+  "integrity" "sha512-WqLZJ4bLzlhmsvme6iFdgO8gfZP17rfjYEJ2m9RsZjZ+cc4k1hTzknEz63YS1MeT50kVzoa1Nz36f4BEx+Wigw=="
+  "resolved" "https://registry.npmjs.org/react-icons/-/react-icons-5.0.1.tgz"
+  "version" "5.0.1"
 
 "react-id-generator@^3.0.2":
   "integrity" "sha512-d0rqWzZ6g0P9agHtA7wX/ErQ4iV/657/0Oz+SX3kid7nR4d0YwaWjjOTIrgYHv2lICZKrxIH4BaKppKrM8fRfw=="
@@ -8648,6 +8663,11 @@
   "version" "9.1.3"
   dependencies:
     "clsx" "^1.1.1"
+
+"react-use-set@^1.0.0":
+  "integrity" "sha512-6BBbOcWc/tOKuwd9gDtdunvOr/g40S0SkCBYvrSJvpI0upzNlHmLoeDvylnoP8PrjQXItClAFxseVGGhEkk7kw=="
+  "resolved" "https://registry.npmjs.org/react-use-set/-/react-use-set-1.0.0.tgz"
+  "version" "1.0.0"
 
 "react-window@^1.8.8":
   "integrity" "sha512-Y0Cx+dnU6NLa5/EvoHukUD0BklJ8qITCtVEPY1C/nL8wwoZ0b5aEw8Ff1dOVHw7fCzMt55XfJDd8S8W8LCaUCg=="
@@ -8928,7 +8948,7 @@
   dependencies:
     "react-color" "^2.19.3"
 
-"rsuite-table@^5.8.1":
+"rsuite-table@^5.18.2":
   "integrity" "sha512-IelmlHraExYgrkT13WWVENhCywWjBxPkpF2zpsqvMcwzaNAg9lHaVVyajcOKczqGB24NGRE6WgBF5n1RC6XAww=="
   "resolved" "https://registry.npmjs.org/rsuite-table/-/rsuite-table-5.18.2.tgz"
   "version" "5.18.2"
@@ -8941,10 +8961,10 @@
     "lodash" "^4.17.21"
     "react-is" "^17.0.2"
 
-"rsuite@>=4.0.0", "rsuite@5.23.0":
-  "integrity" "sha512-7m8f1I7e+a9YZbx8IVuMSksgNA6Oa5Qsfo5UnNiM2hhtzJcva1WKbkuCMQjTEdMJDRBStTsq037dqh+ZdWmAxA=="
-  "resolved" "https://registry.npmjs.org/rsuite/-/rsuite-5.23.0.tgz"
-  "version" "5.23.0"
+"rsuite@^5.53.2", "rsuite@>=4.0.0":
+  "integrity" "sha512-A0/pQw3URMslsyUt+kRNPtje6yMp8YrS4pl4xqam0+5Z31F1roqhM4p0a7XBH0WWqevf3mFZviZ6QtpE/9MzJA=="
+  "resolved" "https://registry.npmjs.org/rsuite/-/rsuite-5.53.2.tgz"
+  "version" "5.53.2"
   dependencies:
     "@babel/runtime" "^7.20.1"
     "@juggle/resize-observer" "^3.4.0"
@@ -8958,9 +8978,10 @@
     "dom-lib" "^3.1.3"
     "lodash" "^4.17.11"
     "prop-types" "^15.8.1"
+    "react-use-set" "^1.0.0"
     "react-window" "^1.8.8"
-    "rsuite-table" "^5.8.1"
-    "schema-typed" "^2.0.3"
+    "rsuite-table" "^5.18.2"
+    "schema-typed" "^2.1.3"
 
 "run-parallel@^1.1.9":
   "integrity" "sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA=="
@@ -9040,7 +9061,7 @@
   dependencies:
     "loose-envify" "^1.1.0"
 
-"schema-typed@^2.0.3":
+"schema-typed@^2.1.3":
   "integrity" "sha512-Nk0LLOq0L64HaQsXQGAZ8Z176tDE4jewsxyWe+6QvidNiC33DMaWFg+LaLWJ85uPPBtqBBJlCq9W4c1KEA88WA=="
   "resolved" "https://registry.npmjs.org/schema-typed/-/schema-typed-2.1.3.tgz"
   "version" "2.1.3"
@@ -10144,13 +10165,13 @@
   dependencies:
     "crypto-random-string" "^2.0.0"
 
-"universal-cookie@^7.0.0":
-  "integrity" "sha512-EC9PA+1nojhJtVnKW2Z7WYah01jgYJApqhX+Y8XU97TnFd7KaoxWTHiTZFtfpfV50jEF1L8V5p64ZxIx3Q67dg=="
-  "resolved" "https://registry.npmjs.org/universal-cookie/-/universal-cookie-7.0.2.tgz"
-  "version" "7.0.2"
+"universal-cookie@^4.0.0":
+  "integrity" "sha512-lbRVHoOMtItjWbM7TwDLdl8wug7izB0tq3/YVKhT/ahB4VDvWMyvnADfnJI8y6fSvsjh51Ix7lTGC6Tn4rMPhw=="
+  "resolved" "https://registry.npmjs.org/universal-cookie/-/universal-cookie-4.0.4.tgz"
+  "version" "4.0.4"
   dependencies:
-    "@types/cookie" "^0.6.0"
-    "cookie" "^0.6.0"
+    "@types/cookie" "^0.3.3"
+    "cookie" "^0.4.0"
 
 "universalify@^0.2.0":
   "integrity" "sha512-CJ1QgKmNg3CwvAv/kOFmtnEN05f0D/cn9QntgNOQlQF9dgvVTHj3t+8JPdjqawCHk7V/KA+fbUqzZ9XWhcqPUg=="

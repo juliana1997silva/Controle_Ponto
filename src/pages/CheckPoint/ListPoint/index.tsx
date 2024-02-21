@@ -7,13 +7,13 @@ import { useCheckPoint } from '../hooks/hookCheckPoint';
 
 const ListPoint: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
-  const { listPoint, dataRegister, showPoint, setMode, setUpdateData } = useCheckPoint();
+  const { listPoint, dataRegister, setMode, setUpdateData, setDataRegisterStore, list } = useCheckPoint();
   const [showCreated, setShowCreated] = useState(false);
 
   useEffect(() => {
-    if (dataRegister.length === 0) listPoint();
+    if (!list) listPoint();
     setUpdateData(false);
-  }, [dataRegister, listPoint, setUpdateData]);
+  }, [list, listPoint, setUpdateData]);
 
   if (showCreated) {
     return <Point />;
@@ -64,11 +64,11 @@ const ListPoint: React.FC = () => {
             {(rowData: any) => {
               switch (rowData.status) {
                 case 'approved':
-                  return <Tag color="green">Aprovado</Tag>;
+                  return <Tag color="green">Aprovado</Tag>
                 case 'disapproved':
-                  return <Tag color="red">Reprovado</Tag>;
+                  return <Tag color="red">Reprovado</Tag>
                 case 'pending':
-                  return <Tag color="orange">Pendente</Tag>;
+                  return <Tag color="orange">Pendente</Tag>
               }
             }}
           </Cell>
@@ -82,7 +82,7 @@ const ListPoint: React.FC = () => {
                   appearance="primary"
                   color="blue"
                   onClick={() => {
-                    showPoint(rowData.id);
+                    setDataRegisterStore(rowData);
                     setShowCreated(true);
                     setMode('edit');
                   }}

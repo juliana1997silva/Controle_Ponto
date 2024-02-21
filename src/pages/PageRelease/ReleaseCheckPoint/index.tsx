@@ -12,11 +12,12 @@ import DrawerView from '../components/DrawerView';
 
 const ReleaseCheckPoint: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
-  const { dataListUsers, listUsers, users, dataHourUsers, listHoursUsers, setOpenView, openView, releaseHours } = useReleasePoint();
-  const { showPoint, dataRegisterStore } = useCheckPoint();
+  const { dataListUsers, listUsers, users, dataHourUsers, listHoursUsers, setOpenView, openView, releaseHours, generationPDF } =
+    useReleasePoint();
+  const { setDataRegisterStore } = useCheckPoint();
 
   const [select, setSelect] = useState('');
-  const [buttonPDF, setButtonPDF] = useState(false);
+  const [buttonPDF, setButtonPDF] = useState(true);
   const [nameText, setNameText] = useState<string>({} as string);
 
   const dataSelect = Object.values(dataListUsers).map((item) => {
@@ -27,9 +28,12 @@ const ReleaseCheckPoint: React.FC = () => {
     };
   });
 
-  const handlePDF = useCallback(() => {
-    console.log('gerar pdf')
-  },[])
+  const handlePDF = useCallback(
+    (id: string) => {
+      if(id) generationPDF(id);
+    },
+    [generationPDF]
+  );
 
   useEffect(() => {
     if (users === false) listUsers();
@@ -50,7 +54,7 @@ const ReleaseCheckPoint: React.FC = () => {
           }}
           onClean={() => {
             setSelect('');
-            setButtonPDF(false);
+            setButtonPDF(true);
           }}
           block
         />
@@ -85,11 +89,11 @@ const ReleaseCheckPoint: React.FC = () => {
                   {(rowData: any) => {
                     switch (rowData.status) {
                       case 'approved':
-                        return <Tag color='green'>Aprovado</Tag>;
+                        return <Tag color="green">Aprovado</Tag>;
                       case 'disapproved':
-                        return <Tag color='red'>Reprovado</Tag>;
+                        return <Tag color="red">Reprovado</Tag>;
                       case 'pending':
-                        return <Tag color='orange'>Pendente</Tag>;
+                        return <Tag color="orange">Pendente</Tag>;
                     }
                   }}
                 </Cell>
@@ -98,51 +102,11 @@ const ReleaseCheckPoint: React.FC = () => {
                 <HeaderCell>Ações</HeaderCell>
                 <Cell>
                   {(rowData: any) => {
-                    switch (rowData.status) {
-                      case 'approved':
-                        return (
-                          <ButtonGroup>
-                            <Whisper
-                              placement="top"
-                              controlId="control-id-focus"
-                              trigger="hover"
-                              speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
-                            >
-                              <IconButton
-                                icon={<VisibleIcon />}
-                                onClick={() => {
-                                  setOpenView(true);
-                                  showPoint(rowData.id);
-                                }}
-                                style={{ color: '#000' }}
-                              />
-                            </Whisper>
-                          </ButtonGroup>
-                        );
-                      case 'disapproved':
-                        return (
-                          <ButtonGroup>
-                            <Whisper
-                              placement="top"
-                              controlId="control-id-focus"
-                              trigger="hover"
-                              speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
-                            >
-                              <IconButton
-                                icon={<VisibleIcon />}
-                                onClick={() => {
-                                  setOpenView(true);
-                                  showPoint(rowData.id);
-                                }}
-                                style={{ color: '#000' }}
-                              />
-                            </Whisper>
-                          </ButtonGroup>
-                        );
-                      case 'pending':
-                        return (
-                          <ButtonGroup>
-                            <>
+                    if (rowData.status === 'approved') setButtonPDF(false);
+                      switch (rowData.status) {
+                        case 'approved':
+                          return (
+                            <ButtonGroup>
                               <Whisper
                                 placement="top"
                                 controlId="control-id-focus"
@@ -153,48 +117,92 @@ const ReleaseCheckPoint: React.FC = () => {
                                   icon={<VisibleIcon />}
                                   onClick={() => {
                                     setOpenView(true);
-                                    showPoint(rowData.id);
+                                    setDataRegisterStore(rowData);
                                   }}
                                   style={{ color: '#000' }}
                                 />
                               </Whisper>
-                              <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Aprovar</Tooltip>}>
+                            </ButtonGroup>
+                          );
+                        case 'disapproved':
+                          return (
+                            <ButtonGroup>
+                              <Whisper
+                                placement="top"
+                                controlId="control-id-focus"
+                                trigger="hover"
+                                speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
+                              >
                                 <IconButton
-                                  icon={<CheckIcon />}
+                                  icon={<VisibleIcon />}
                                   onClick={() => {
-                                    console.log(rowData.id);
-                                    releaseHours(rowData.id, 'approved');
-                                    setButtonPDF(true);
+                                    setOpenView(true);
+                                    setDataRegisterStore(rowData);
                                   }}
                                   style={{ color: '#000' }}
                                 />
                               </Whisper>
-                              <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Reprovar</Tooltip>}>
-                                <IconButton
-                                  icon={<BlockIcon />}
-                                  onClick={() => {
-                                    releaseHours(rowData.id, 'disapproved');
-                                  }}
-                                  style={{ color: '#000' }}
-                                />
-                              </Whisper>
-                            </>
-                          </ButtonGroup>
-                        );
-                    }
+                            </ButtonGroup>
+                          );
+                        case 'pending':
+                          return (
+                            <ButtonGroup>
+                              <>
+                                <Whisper
+                                  placement="top"
+                                  controlId="control-id-focus"
+                                  trigger="hover"
+                                  speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
+                                >
+                                  <IconButton
+                                    icon={<VisibleIcon />}
+                                    onClick={() => {
+                                      setOpenView(true);
+                                      setDataRegisterStore(rowData);
+                                    }}
+                                    style={{ color: '#000' }}
+                                  />
+                                </Whisper>
+                                <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Aprovar</Tooltip>}>
+                                  <IconButton
+                                    icon={<CheckIcon />}
+                                    onClick={() => {
+                                      console.log(rowData.id);
+                                      releaseHours(rowData.id, 'approved');
+                                      setButtonPDF(false);
+                                    }}
+                                    style={{ color: '#000' }}
+                                  />
+                                </Whisper>
+                                <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Reprovar</Tooltip>}>
+                                  <IconButton
+                                    icon={<BlockIcon />}
+                                    onClick={() => {
+                                      releaseHours(rowData.id, 'disapproved');
+                                    }}
+                                    style={{ color: '#000' }}
+                                  />
+                                </Whisper>
+                              </>
+                            </ButtonGroup>
+                          );
+                      }
                   }}
                 </Cell>
               </Column>
             </Table>
           </>
         )}
-        {buttonPDF && (
-          <ContainerButtonPDF>
-            <Button appearance="primary" style={{ backgroundColor: '#00a6a6', width: 150 }} onClick={handlePDF}>
-              Gerar PDF
-            </Button>
-          </ContainerButtonPDF>
-        )}
+        <ContainerButtonPDF>
+          <Button
+            appearance="primary"
+            style={{ backgroundColor: '#00a6a6', width: 150 }}
+            onClick={() => handlePDF(select)}
+            disabled={buttonPDF}
+          >
+            Gerar PDF
+          </Button>
+        </ContainerButtonPDF>
       </Panel>
       {openView && <DrawerView name={nameText} />}
     </>

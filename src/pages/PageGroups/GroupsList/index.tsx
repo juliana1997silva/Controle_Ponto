@@ -14,6 +14,8 @@ const GroupsList: React.FC = () => {
     if (!list) listGroups();
   }, [list, listGroups]);
 
+  console.log('dataGroups ::', dataGroups);
+
   if (showRegister) {
     return <GroupsRegister />;
   }
@@ -36,6 +38,10 @@ const GroupsList: React.FC = () => {
           <Column width={300}>
             <HeaderCell>Nome</HeaderCell>
             <Cell dataKey="name" />
+          </Column>
+          <Column width={300}>
+            <HeaderCell>Responsável</HeaderCell>
+            <Cell dataKey="manager" />
           </Column>
           <Column width={300}>
             <HeaderCell>Status</HeaderCell>

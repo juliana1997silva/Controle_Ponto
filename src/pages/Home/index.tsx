@@ -3,11 +3,7 @@ import React from 'react';
 import Dashboard from './Dashboard';
 import { useAuth } from '../../hooks/hooksAuth';
 
-const Home: React.FC = () => {
-   const { user } = useAuth();
-
-   console.log(user);
-  
+const Home: React.FC = () => {  
 
   return (
     <>

@@ -1,16 +1,17 @@
 import EyeIcon from '@rsuite/icons/legacy/Eye';
 import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
-import React, { useCallback, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Form, InputGroup, Panel } from 'rsuite';
 import logoTempus from '../../assets/logoTempus.png';
 import { dataLogin, useAuth } from '../../hooks/hooksAuth';
 import { Button, ContainerForm, DivImg, Global, ImgPage, TitleForm } from './styles';
 
 const Login: React.FC = () => {
-  const { showHome, signin, setUser } = useAuth();
+  const { signin, user } = useAuth();
   const [visible, setVisible] = useState(false);
   const [dataForm, setDataForm] = useState<dataLogin>({} as dataLogin);
+  const navigate = useNavigate();
 
   const handleChangePassword = () => {
     setVisible(!visible);
@@ -28,9 +29,14 @@ const Login: React.FC = () => {
     //console.log(dataForm);
   }, [signin, dataForm]);
 
-  if (showHome) {
-    return <Navigate to="/dashboard" replace={true} />;
-  }
+  useEffect(() => {
+    if (user) {
+      if (user.token) {
+        navigate('/dashboard');
+      }
+    }
+  }, [user, navigate]);
+
 
   return (
     <Global>

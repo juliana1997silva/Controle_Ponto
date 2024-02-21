@@ -3,11 +3,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import { useAuth } from '../../../hooks/hooksAuth';
 
 export interface GroupsData {
   id?: string;
   name?: string;
-  level?: string;
+  manager?: string;
   status?: number;
   created_at?: string;
   updated_at?: string;
@@ -31,6 +32,7 @@ interface HooksGroupsData {
 const GroupsContext = createContext<HooksGroupsData>({} as HooksGroupsData);
 
 const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
+  const {user} = useAuth();
   const [dataGroups, setDataGroups] = useState<GroupsData[]>({} as GroupsData[]);
   const [list, setList] = useState(false);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
@@ -39,25 +41,33 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
   //lista
   const listGroups = useCallback(async () => {
     await api
-      .get('/group')
+      .get('/group', {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      })
       .then((response) => {
-       // console.log(response.data);
-        setDataGroups(response.data.data);
+        // console.log(response.data);
+        setDataGroups(response.data);
         setList(true);
       })
       .catch((error) => {
         //console.log(error);
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
-  }, [setDataGroups, setList]);
+  }, [setDataGroups, setList, user]);
 
   //criar
   const createdGroup = useCallback(
     async (dataGroup: GroupsData) => {
       await api
-        .post('/group', dataGroup)
+        .post('/group', dataGroup, {
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          }
+        })
         .then((response) => {
-         // console.log(response.data);
+          // console.log(response.data);
           toast.success('Grupo cadastrado com sucesso !');
           listGroups();
         })
@@ -73,10 +83,14 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
   const updateGroup = useCallback(
     async (dataGroup: GroupsData) => {
       await api
-        .put(`/group/${dataGroup.id}`, dataGroup)
+        .put(`/group/${dataGroup.id}`, dataGroup, {
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          }
+        })
         .then((response) => {
-         // console.log(response.data);
-          toast.success('Grupo atualizado com sucesso !');
+          // console.log(response.data);
+          toast.success(response.data);
           listGroups();
         })
         .catch((error) => {
@@ -91,9 +105,17 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
   const releaseGroup = useCallback(
     async (id: string) => {
       await api
-        .patch(`/group/release/${id}`)
+        .patch(
+          `/group/release/${id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }
+        )
         .then((response) => {
-         // console.log(response.data);
+          // console.log(response.data);
           listGroups();
         })
         .catch((error) => {

@@ -1,17 +1,17 @@
 import 'moment/locale/pt-br';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, DatePicker, Form, Input, Panel, SelectPicker, Table } from 'rsuite';
+import { Button, DatePicker, Form, Input, MaskedInput, Panel, SelectPicker, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
-import ListPoint from '../ListPoint';
-import { consultsData, expensesData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
-import { TextEdit, TitlePage } from './styles';
-import userEvent from '@testing-library/user-event';
 import { useAuth } from '../../../hooks/hooksAuth';
+import ListPoint from '../ListPoint';
+import { consultsData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
+import { TextEdit, TitlePage } from './styles';
+import { FaCalendar, FaClock } from 'react-icons/fa';
 
 const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
 const Point: React.FC = () => {
-  const {user} = useAuth()
+  const { user } = useAuth();
   const { registerPoint, dataRegisterStore, mode, updatePoint, updateData } = useCheckPoint();
   const { Column, HeaderCell, Cell } = Table;
   const [formDataTime, setFormDataTime] = useState<timeData>({} as timeData);
@@ -19,10 +19,17 @@ const Point: React.FC = () => {
   const [formDataConsults, setFormDataConsults] = useState<consultsData>({} as consultsData);
   const [businessData, setBusinessData] = useState<nonBusinessData[]>([] as nonBusinessData[]);
   const [dataConsults, setDataConsults] = useState<consultsData[]>([] as consultsData[]);
-  const [disabledForm, setDisabledForm] = useState(false);
   const [consultsMode, setConsultsMode] = useState<'create' | 'edit'>('create');
   const [hourMode, setHourMode] = useState<'create' | 'edit'>('create');
   const [showBack, setShowBack] = useState(false);
+
+  const options = [
+  {
+    name: 'Date',
+    mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/],
+    placeholder: 'Data'
+  }
+]
 
   const handleChangeTime = useCallback(
     (form: timeData) => {
@@ -53,8 +60,8 @@ const Point: React.FC = () => {
       id: formDataNonBusiness.id,
       registry_id: formDataNonBusiness.registry_id,
       entry_time: formDataNonBusiness.entry_time,
-      lunch_entry_time: formDataNonBusiness.lunch_entry_time,
-      lunch_out_time: formDataNonBusiness.lunch_out_time,
+      lunch_entry_time: formDataNonBusiness.lunch_entry_time ? formDataNonBusiness.lunch_entry_time : null,
+      lunch_out_time: formDataNonBusiness.lunch_out_time ? formDataNonBusiness.lunch_out_time : null,
       out_time: formDataNonBusiness.out_time
     });
     setFormDataNonBusiness({} as nonBusinessData);
@@ -108,7 +115,6 @@ const Point: React.FC = () => {
     if (consultsMode === 'edit') setConsultsMode('create');
   }, [formDataConsults, dataConsults, setFormDataConsults, consultsMode, setConsultsMode]);
 
-
   const handleSubmit = useCallback(() => {
     if (mode === 'created') {
       registerPoint(formDataTime, businessData, dataConsults);
@@ -116,17 +122,15 @@ const Point: React.FC = () => {
       updatePoint(formDataTime, businessData, dataConsults);
     }
     setFormDataTime({} as timeData);
-  }, [registerPoint, formDataTime, businessData, dataConsults, setFormDataTime, updatePoint]);
+    setDataConsults({} as consultsData[]);
+    setBusinessData({} as nonBusinessData[]);
+  }, [registerPoint, formDataTime, businessData, dataConsults, setFormDataTime, updatePoint, setDataConsults, setBusinessData]);
 
   useEffect(() => {
     if (mode === 'edit') {
-      setDisabledForm(true);
       if (dataRegisterStore) {
-        if (dataRegisterStore.business) {
-          if (dataRegisterStore.business.date !== undefined) {
-            setFormDataTime(dataRegisterStore.business);
-          }
-        }
+        setFormDataTime(dataRegisterStore);
+
         if (dataRegisterStore.consults) {
           setDataConsults(dataRegisterStore.consults);
         }
@@ -134,9 +138,14 @@ const Point: React.FC = () => {
           setBusinessData(dataRegisterStore.nonbusiness);
         }
       }
-     if(updateData) setShowBack(true);
     }
-  }, [mode, dataRegisterStore, setDataConsults, setBusinessData, setFormDataTime, setDisabledForm, updateData, setShowBack]);
+  }, [mode, dataRegisterStore, setDataConsults, setBusinessData, setFormDataTime, updateData, setShowBack]);
+
+  useEffect(() => {
+    if (updateData) setShowBack(true);
+  }, [updateData, setShowBack]);
+
+  console.log('dataRegisterStore:: ', dataRegisterStore);
 
   if (showBack) {
     return <ListPoint />;
@@ -172,66 +181,42 @@ const Point: React.FC = () => {
             <Form.ControlLabel>Data</Form.ControlLabel>
             <br />
             <Form.Control
-              accepter={DatePicker}
-              placeholder="DD/MM/AAAA"
               name="date"
-              format="DD/MM/AAAA"
-              disabled={disabledForm}
-              value={formDataTime.date !== undefined ? new Date(formDataTime.date) : null}
+              accepter={MaskedInput}
+              placeholder="Data"
+              showMask={true}
+              mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
             />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Local</Form.ControlLabel>
             <br />
             <Form.Control
-              accepter={SelectPicker}
               name="location"
               placeholder="Selecione"
-              searchable={false}
-              style={{ width: 215 }}
+              accepter={SelectPicker}
               data={[
-                {
-                  value: 'Home-Office',
-                  label: 'Home-Office'
-                },
-                {
-                  value: 'Em Cliente',
-                  label: 'Em Cliente'
-                },
-                {
-                  value: 'Presencial',
-                  label: 'Presencial'
-                }
+                { label: 'Home-Office', value: 'Home-Office' },
+                { label: 'Em Cliente', value: 'Em Cliente' },
+                { label: 'Presencial', value: 'Presencial' }
               ]}
             />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Entrada</Form.ControlLabel>
             <br />
-            <Form.Control type="time" name="entry_time" style={{ width: 188 }} disabled={disabledForm} defaultValue={user.entry_time} />
+            <Form.Control type="time" name="entry_time" style={{ width: 188 }} disabled value={user.entry_time} />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Almoço</Form.ControlLabel>
             <br />
-            <Form.Control
-              type="time"
-              name="lunch_entry_time"
-              style={{ width: 188 }}
-              disabled={disabledForm}
-              defaultValue={user.lunch_entry_time}
-            />
-            <Form.Control
-              type="time"
-              name="lunch_out_time"
-              style={{ width: 188, marginLeft: 10 }}
-              disabled={disabledForm}
-              defaultValue={user.lunch_out_time}
-            />
+            <Form.Control type="time" name="lunch_entry_time" style={{ width: 188 }} disabled value={user.lunch_entry_time} />
+            <Form.Control type="time" name="lunch_out_time" style={{ width: 188, marginLeft: 10 }} disabled value={user.lunch_out_time} />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Saída</Form.ControlLabel>
             <br />
-            <Form.Control type="time" name="out_time" style={{ width: 188 }} disabled={disabledForm} defaultValue={user.out_time} />
+            <Form.Control type="time" name="out_time" style={{ width: 188 }} disabled value={user.out_time} />
           </Form.Group>
 
           <Panel header="Horário Não Comercial " collapsible bordered>
@@ -381,11 +366,6 @@ const Point: React.FC = () => {
               )}
             </Form>
           </Panel>
-          <Form.Group>
-            <Form.ControlLabel>Observação</Form.ControlLabel>
-            <br />
-            <Form.Control rows={6} accepter={Textarea} name="observation" />
-          </Form.Group>
           <br />
           <Form.Group style={{ width: '100%', textAlign: 'end' }}>
             <Button appearance="primary" style={{ width: 120, marginRight: 20, backgroundColor: '#00a6a6' }} onClick={handleSubmit}>

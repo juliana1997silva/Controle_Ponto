@@ -7,13 +7,13 @@ import { Router } from './routes';
 const App: React.FC = () => {
   return (
     <>
-      <CookiesProvider>
-        <AppProvider>
-          <BrowserRouter>
+      <BrowserRouter>
+        <CookiesProvider>
+          <AppProvider>
             <Router />
-          </BrowserRouter>
-        </AppProvider>
-      </CookiesProvider>
+          </AppProvider>
+        </CookiesProvider>
+      </BrowserRouter>
     </>
   );
 };

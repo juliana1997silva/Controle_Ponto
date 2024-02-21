@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../components/Loading';
 import api from '../services/api';
 import { IProps } from '../types';
+import { useNavigate } from 'react-router-dom';
 
 export interface dataLogin {
   email?: string;
@@ -17,14 +18,14 @@ export interface UserData {
   name: string;
   phone: string;
   email: string;
-  coordinator_id: string;
+  group_id: string;
   entry_time: string;
   lunch_entry_time: string;
   lunch_out_time: string;
   out_time: string;
   password: string;
   status: string;
-  admin: string;
+  admin: number;
   token: string;
 }
 
@@ -37,6 +38,8 @@ interface HooksAuthData {
   errorLogin: boolean;
   setErrorLogin(errorLogin: boolean): void;
   SignOut(): void;
+  namePath: string;
+  setNamePath(namePath: string):void;
 }
 
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
@@ -47,6 +50,8 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [errorLogin, setErrorLogin] = useState(false);
   const [user, setUser] = useState<UserData>({} as UserData);
   const [userCookies, setUserCookies, removeUserCookies] = useCookies(['user']);
+  const [namePath, setNamePath] = useState('');
+  const navigate = useNavigate();
 
   const signin = useCallback(
     async (data: dataLogin) => {
@@ -55,13 +60,13 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         .post(`/signin`, data)
         .then((response) => {
           setUser(response.data);
-          let date = new Date(new Date().setMinutes(new Date().getMinutes() + 5));
+          let date = new Date(new Date().setHours(new Date().getHours() + 1));
           const setCookie = {
             id: response.data.id,
             name: response.data.name,
             phone: response.data.phone,
             email: response.data.email,
-            coordinator_id: response.data.coordinator_id,
+            group_id: response.data.group_id,
             entry_time: response.data.entry_time,
             lunch_entry_time: response.data.lunch_entry_time,
             lunch_out_time: response.data.lunch_out_time,
@@ -72,16 +77,11 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
             token: response.data.token
           };
 
-          const encodedData = btoa(JSON.stringify(setCookie));
-
-          setUserCookies('user', encodedData, {
+          setUserCookies('user', setCookie, {
             path: '/',
-            expires: date,
-            sameSite: 'none', // ou 'Lax', dependendo do seu caso
-            secure: true
+            encode,
+            expires: date
           });
-          setShowHome(true);
-          //navigate('/dashboard');
         })
         .catch(function (error) {
           console.log(error.response.data.message);
@@ -89,28 +89,51 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         });
       setLoading(false);
     },
-    [setUser, setUserCookies, setShowHome]
+    [setUser, setUserCookies]
   );
 
   const SignOut = useCallback(() => {
     removeUserCookies('user');
     setUser({} as UserData);
+    setShowHome(false);
     // window.location.reload();
-  }, [removeUserCookies, setUser]);
+  }, [removeUserCookies, setUser, setShowHome]);
 
   useEffect(() => {
     if (userCookies.user) {
-      try {
-        const decodedUser = decode(userCookies.user);
-        const parsedUser = JSON.parse(decodedUser);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error('Error decoding or parsing user:', error);
-        // Lidar com o erro, por exemplo, remover o cookie inválido
-        removeUserCookies('user');
-      }
+      let userDec: UserData = {} as UserData;
+      userDec = JSON.parse(decode(userCookies.user));
+
+      setUser(userDec);
     }
   }, [userCookies]);
+
+  useEffect(() => {
+    // Antes de recarregar a página
+    window.addEventListener('beforeunload', function (event) {
+      // Obtém o pathname atual
+      var pathname = window.location.pathname;
+
+      // Armazena o pathname no localStorage
+      localStorage.setItem('lastPathname', pathname);
+    });
+
+    // Após a página ser carregada
+    window.addEventListener('load', function () {
+      // Recupera o pathname do localStorage
+      var lastPathname = localStorage.getItem('lastPathname');
+
+      if (lastPathname) {
+        // Faça o que for necessário com o lastPathname
+        navigate(lastPathname);
+      }
+
+      // Limpa o lastPathname do localStorage
+      localStorage.removeItem('lastPathname');
+    });
+  }, [navigate])
+
+
 
   if (loading) {
     return <Loading />;
@@ -126,7 +149,9 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         setUser,
         errorLogin,
         setErrorLogin,
-        SignOut
+        SignOut,
+        namePath,
+        setNamePath
       }}
     >
       {children}

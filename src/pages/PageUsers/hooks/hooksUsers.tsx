@@ -1,10 +1,9 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
-import UserList from '../UserList';
-import RegistrationUsers from '../RegistrationUsers';
 
 export interface UsersData {
   name?: string;
@@ -16,8 +15,8 @@ export interface UsersData {
   lunch_out_time?: string;
   out_time?: string;
   password?: string;
+  admin?: boolean;
   group_id?: string;
-  coordinator_id?: string;
 }
 
 interface HooksUsersData {
@@ -36,62 +35,130 @@ interface HooksUsersData {
   setList(list: boolean): void;
   releaseUsers(id: string): void;
   showRegister: boolean;
-  setShowRegister(showRegister: boolean):void;
+  setShowRegister(showRegister: boolean): void;
+  coordinatorData: UsersData[];
+  setCoordinatorData(coordinatorData: UsersData[]): void;
+  listCoordinator(): void;
+  listCoordinatorData: boolean;
+  setListCoordinatorData(listCoordinatorData: boolean): void;
 }
 
 const UsersContext = createContext<HooksUsersData>({} as HooksUsersData);
 
 const UsersContextProvider: React.FC<IProps> = ({ children }) => {
+  const { user } = useAuth();
   const [dataListUsers, setDataListUsers] = useState<UsersData[]>({} as UsersData[]);
   const [formDataUser, setFormDataUser] = useState<UsersData>({} as UsersData);
   const [showUsersList, setShowUsersList] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
   const [list, setList] = useState(false);
+  const [listCoordinatorData, setListCoordinatorData] = useState(false);
+  const [coordinatorData, setCoordinatorData] = useState<UsersData[]>({} as UsersData[]);
 
-  //lista os usuarios
-  const listUsers = useCallback(async () => {
+  //lista os grupos
+  const listCoordinator = useCallback(async () => {
     await api
-      .get('/users')
+      .get('/group', {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      })
       .then((response) => {
-        console.log(response.data.data);
-        setDataListUsers(response.data.data);
+        console.log('group::', response.data);
+        setCoordinatorData(response.data);
       })
       .catch((error) => {
         //console.log(error);
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
-  }, [setDataListUsers]);
+    setListCoordinatorData(true);
+  }, [setCoordinatorData, setListCoordinatorData]);
+
+  //lista os usuarios
+  const listUsers = useCallback(async () => {
+    await api
+      .get('/users', {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      })
+      .then((response) => {
+        console.log(response.data);
+        setDataListUsers(response.data);
+      })
+      .catch((error) => {
+        //console.log(error);
+        toast.error('Ocorreu um erro. Tente Novamente!');
+      });
+    setList(true);
+  }, [setDataListUsers, setList]);
 
   //registra o usuario
   const RegisterUsers = useCallback(
     async (dataUsers: UsersData) => {
       await api
-        .post('/users', dataUsers, {})
+        .post(
+          '/users',
+          {
+            name: dataUsers.name,
+            phone: dataUsers.phone,
+            email: dataUsers.email,
+            entry_time: dataUsers.entry_time,
+            lunch_entry_time: dataUsers.lunch_entry_time,
+            lunch_out_time: dataUsers.lunch_out_time,
+            out_time: dataUsers.out_time,
+            password: dataUsers.password,
+            admin: dataUsers.admin === true ? 1 : 0,
+            group_id: dataUsers.group_id
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }
+        )
         .then((response) => {
           // console.log(response.data);
-          toast.success('Cadastrado com sucesso');
-          setShowUsersList(!showUsersList);
+          toast.success(response.data);
+          setShowUsersList(true);
           listUsers();
-          setList(true);
         })
         .catch((error) => {
           //console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [setShowUsersList,showUsersList,  listUsers, setList]
+    [listUsers, setShowUsersList]
   );
 
   //atualizar dados do usuarios
   const updateUsers = useCallback(
     async (dataUser: UsersData) => {
       await api
-        .put(`/users/${dataUser.id}`, dataUser)
+        .put(
+          `/users/${dataUser.id}`,
+          {
+            name: dataUser.name,
+            phone: dataUser.phone,
+            email: dataUser.email,
+            entry_time: dataUser.entry_time,
+            lunch_entry_time: dataUser.lunch_entry_time,
+            lunch_out_time: dataUser.lunch_out_time,
+            out_time: dataUser.out_time,
+            admin: dataUser.admin === true ? 1 : 0,
+            group_id: dataUser.group_id
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }
+        )
         .then((response) => {
           //console.log(response.data.data);
           toast.success('Atualizado com sucesso!');
-          setShowUsersList(!showUsersList);
+          setShowUsersList(true);
           listUsers();
         })
         .catch((error) => {
@@ -99,14 +166,18 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
-    [listUsers, setShowUsersList, showUsersList]
+    [listUsers, setShowUsersList]
   );
 
   //atualizar status
   const releaseUsers = useCallback(
     async (id: string) => {
       await api
-        .put(`/users/release/${id}`)
+        .patch(`/users/release/${id}`,{}, {
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          }
+        })
         .then((response) => {
           // console.log(response.data.data);
           listUsers();
@@ -119,31 +190,35 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
     [listUsers]
   );
 
-
-    return (
-      <UsersContext.Provider
-        value={{
-          RegisterUsers,
-          dataListUsers,
-          setDataListUsers,
-          listUsers,
-          formDataUser,
-          setFormDataUser,
-          updateUsers,
-          showUsersList,
-          setShowUsersList,
-          mode,
-          setMode,
-          list,
-          setList,
-          releaseUsers,
-          showRegister,
-          setShowRegister
-        }}
-      >
-        {children}
-      </UsersContext.Provider>
-    );
+  return (
+    <UsersContext.Provider
+      value={{
+        RegisterUsers,
+        dataListUsers,
+        setDataListUsers,
+        listUsers,
+        formDataUser,
+        setFormDataUser,
+        updateUsers,
+        showUsersList,
+        setShowUsersList,
+        mode,
+        setMode,
+        list,
+        setList,
+        releaseUsers,
+        showRegister,
+        setShowRegister,
+        coordinatorData,
+        setCoordinatorData,
+        listCoordinator,
+        listCoordinatorData,
+        setListCoordinatorData
+      }}
+    >
+      {children}
+    </UsersContext.Provider>
+  );
 };
 
 function useUsers(): HooksUsersData {

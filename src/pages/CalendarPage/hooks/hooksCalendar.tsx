@@ -35,39 +35,50 @@ interface HooksCalendarData {
 const CalendarContext = createContext<HooksCalendarData>({} as HooksCalendarData);
 
 const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [dataEvents, setDataEvents] = useState<EventInput[]>([] as EventInput[]);
-  const [mode, setMode] = useState<"create" | "edit">("create");
+  const [mode, setMode] = useState<'create' | 'edit'>('create');
   const [list, setList] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const listEvents = useCallback(async () => {
     await api
-      .get(`/events`)
+      .get(`/events`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      })
       .then((response) => {
-        //console.log(response.data);
+        console.log(response.data);
         setDataEvents(response.data);
-        setList(true);
       })
       .catch(function (error) {
         console.log(error);
       });
+    setList(true);
   }, [setDataEvents, setList]);
 
   const createEvents = useCallback(
     async (data: EventsData) => {
       await api
-        .post(`/events`, {
-          user_id: user.id,
-          title: data.title,
-          start: data.start,
-          end: data.end,
-          backgroundColor: data.backgroundColor,
-          allDay: data.allDay === undefined ? false : true
-        })
+        .post(
+          `/events`,
+          {
+            title: data.title,
+            start: data.start,
+            end: data.end,
+            backgroundColor: data.backgroundColor,
+            allDay: data.allDay === undefined ? false : true
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }
+        )
         .then((response) => {
           console.log(response.data);
-          toast.success('Evento cadastrado com sucesso.');
+          toast.success(response.data);
           listEvents();
           setOpenModal(false);
           window.location.reload();
@@ -82,17 +93,24 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
   const updateEvents = useCallback(
     async (data: EventsData) => {
       await api
-        .put(`/events/${data.id}`, {
-          user_id: user.id,
-          title: data.title,
-          start: data.start,
-          end: data.end,
-          backgroundColor: data.backgroundColor,
-          allDay: data.allDay
-        })
+        .put(
+          `/events/${data.id}`,
+          {
+            title: data.title,
+            start: data.start,
+            end: data.end,
+            backgroundColor: data.backgroundColor,
+            allDay: data.allDay
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }
+        )
         .then((response) => {
           console.log(response.data);
-          toast.success('Evento atualizado com sucesso.');
+          toast.success(response.data);
           listEvents();
           setOpenModal(false);
           //window.location.reload();
