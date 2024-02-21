@@ -38,11 +38,11 @@ const ReleasePointContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-        console.log('user/show ::', response.data);
+        //console.log('user/show ::', response.data);
         setDataListUsers(response.data);
       })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error);
       });
     setUsers(true);
   }, [setDataListUsers, setUsers, user]);
@@ -56,11 +56,11 @@ const ReleasePointContextProvider: React.FC<IProps> = ({ children }) => {
           }
         })
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           setDataHourUsers(response.data);
         })
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
       setUsers(true);
     },
@@ -82,28 +82,28 @@ const ReleasePointContextProvider: React.FC<IProps> = ({ children }) => {
           }
         )
         .then((response) => {
-          console.log(response.data.data.user_id);
+          //console.log(response.data.data.user_id);
           listHoursUsers(response.data.data.user_id);
         })
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
     },
     [listHoursUsers, user]
   );
 
   const generationPDF = useCallback(async (id: string) => {
-    console.log(id);
+    //console.log(id);
     const pdf = await api
       .get(`/pdf/${id}`, {
         responseType: 'blob'
       })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error);
       });
 
     if (pdf) {
-      console.log('pdf.data', pdf.data);
+      //console.log('pdf.data', pdf.data);
       saveAs(pdf.data, 'Ficha_Semanal.pdf');
     }
   }, []);

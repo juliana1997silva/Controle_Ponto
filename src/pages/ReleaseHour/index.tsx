@@ -1,144 +1,120 @@
-import React, { useEffect, useState } from "react";
-import {
-  Breadcrumb,
-  Button,
-  Drawer,
-  Form,
-  Panel,
-  SelectPicker,
-  Table,
-} from "rsuite";
-import { FormData } from "../../types";
-import {
-  Collaborator,
-  ContainerButton,
-  Divider30,
-  NoData,
-  PulaLinha,
-  TitlePage,
-  TitleRegistry,
-} from "./styles";
+import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Button, Drawer, Form, Panel, SelectPicker, Table } from 'rsuite';
+import { FormData } from '../../types';
+import { Collaborator, ContainerButton, Divider30, NoData, PulaLinha, TitlePage, TitleRegistry } from './styles';
 
 const ReleaseHour: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
   const [openModal, setOpenModal] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [select, setSelect] = useState("");
+  const [select, setSelect] = useState('');
   const [formData, setFormData] = useState<FormData>({} as FormData);
   const data = [
     {
-      role: "Juliana Silva de Jesus",
-      value: "Juliana Silva de Jesus",
-      label: "Juliana Silva de Jesus",
+      role: 'Juliana Silva de Jesus',
+      value: 'Juliana Silva de Jesus',
+      label: 'Juliana Silva de Jesus'
     },
     {
-      role: "Guilherme Silva de Jesus",
-      value: "Guilherme Silva de Jesus",
-      label: "Guilherme Silva de Jesus",
+      role: 'Guilherme Silva de Jesus',
+      value: 'Guilherme Silva de Jesus',
+      label: 'Guilherme Silva de Jesus'
     },
     {
-      role: "Maria Silva de Jesus",
-      value: "Maria Silva de Jesus",
-      label: "Maria Silva de Jesus",
+      role: 'Maria Silva de Jesus',
+      value: 'Maria Silva de Jesus',
+      label: 'Maria Silva de Jesus'
     },
     {
-      role: "Jose Silva de Jesus",
-      value: "Jose Silva de Jesus",
-      label: "Jose Silva de Jesus",
-    },
+      role: 'Jose Silva de Jesus',
+      value: 'Jose Silva de Jesus',
+      label: 'Jose Silva de Jesus'
+    }
   ];
 
   const dateFuncionario = [
     {
-      date: "30/01/2023",
-      checkin: "08:00",
-      pause_checkin: "12:00",
-      pause_checkout: "13:00",
-      checkout: "17:00",
-      bank_hours: "00:00",
+      date: '30/01/2023',
+      checkin: '08:00',
+      pause_checkin: '12:00',
+      pause_checkout: '13:00',
+      checkout: '17:00',
+      bank_hours: '00:00',
       activities: [
         {
-          consult: "25368",
-          description: "Teste 0001",
+          consult: '25368',
+          description: 'Teste 0001'
         },
         {
-          consult: "58693",
-          description: "Teste 0002",
-        },
-      ],
+          consult: '58693',
+          description: 'Teste 0002'
+        }
+      ]
     },
     {
-      date: "31/01/2023",
-      checkin: "08:00",
-      pause_checkin: "12:00",
-      pause_checkout: "13:00",
-      checkout: "17:00",
-      bank_hours: "00:00",
+      date: '31/01/2023',
+      checkin: '08:00',
+      pause_checkin: '12:00',
+      pause_checkout: '13:00',
+      checkout: '17:00',
+      bank_hours: '00:00',
       activities: [
         {
-          consult: "25368",
-          description: "Teste 0001",
+          consult: '25368',
+          description: 'Teste 0001'
         },
         {
-          consult: "58693",
-          description: "Teste 0002",
-        },
-      ],
+          consult: '58693',
+          description: 'Teste 0002'
+        }
+      ]
     },
     {
-      date: "01/02/2023",
-      checkin: "08:00",
-      pause_checkin: "12:00",
-      pause_checkout: "13:00",
-      checkout: "17:00",
-      bank_hours: "00:00",
+      date: '01/02/2023',
+      checkin: '08:00',
+      pause_checkin: '12:00',
+      pause_checkout: '13:00',
+      checkout: '17:00',
+      bank_hours: '00:00',
       activities: [
         {
-          consult: "25368",
-          description: "Teste 0001",
+          consult: '25368',
+          description: 'Teste 0001'
         },
         {
-          consult: "58693",
-          description: "Teste 0002",
-        },
-      ],
+          consult: '58693',
+          description: 'Teste 0002'
+        }
+      ]
     },
     {
-      date: "02/02/2023",
-      checkin: "08:00",
-      pause_checkin: "12:00",
-      pause_checkout: "13:00",
-      checkout: "17:00",
-      bank_hours: "00:00",
+      date: '02/02/2023',
+      checkin: '08:00',
+      pause_checkin: '12:00',
+      pause_checkout: '13:00',
+      checkout: '17:00',
+      bank_hours: '00:00'
     },
     {
-      date: "03/02/2023",
-      checkin: "08:00",
-      pause_checkin: "12:00",
-      pause_checkout: "13:00",
-      checkout: "17:00",
-      bank_hours: "00:00",
-    },
+      date: '03/02/2023',
+      checkin: '08:00',
+      pause_checkin: '12:00',
+      pause_checkout: '13:00',
+      checkout: '17:00',
+      bank_hours: '00:00'
+    }
   ];
 
   useEffect(() => {
-   // console.log(select);
+    // //console.log(select);
   });
 
   return (
     <>
-      <Panel
-        header={
-          <TitlePage className="title">
-            Liberação de Ficha Home-Office
-          </TitlePage>
-        }
-      >
+      <Panel header={<TitlePage className="title">Liberação de Ficha Home-Office</TitlePage>}>
         <Breadcrumb>
           <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-          <Breadcrumb.Item active>
-            Liberação de Ficha Home-Office
-          </Breadcrumb.Item>
+          <Breadcrumb.Item active>Liberação de Ficha Home-Office</Breadcrumb.Item>
         </Breadcrumb>
         <SelectPicker
           data={data}
@@ -148,10 +124,10 @@ const ReleaseHour: React.FC = () => {
           onSelect={(v) => {
             setSelect(v);
           }}
-          onClean={() => setSelect("")}
+          onClean={() => setSelect('')}
         />
         <Divider30 />
-        {select !== "" && (
+        {select !== '' && (
           <>
             <Collaborator>Colaborador(a): {select}</Collaborator>
             <PulaLinha />
@@ -190,7 +166,7 @@ const ReleaseHour: React.FC = () => {
                           color="green"
                           appearance="primary"
                           onClick={() => {
-                           // console.log(rowData);
+                            // //console.log(rowData);
                             setOpenModal(true);
                             setFormData(rowData);
                             setDisabled(true);
@@ -205,11 +181,7 @@ const ReleaseHour: React.FC = () => {
               </Column>
             </Table>
             <ContainerButton>
-              <Button
-                color="green"
-                appearance="primary"
-                style={{ width: 130, margin: 10 }}
-              >
+              <Button color="green" appearance="primary" style={{ width: 130, margin: 10 }}>
                 Aprovar
               </Button>
               <Button color="red" appearance="primary" style={{ width: 130 }}>
@@ -244,7 +216,6 @@ const ReleaseHour: React.FC = () => {
             <Form.Control name="bank_hours" disabled={disabled} />
             {formData.activities !== undefined ? (
               <>
-               
                 <Table data={formData.activities}>
                   <Column>
                     <HeaderCell>Consulta:</HeaderCell>

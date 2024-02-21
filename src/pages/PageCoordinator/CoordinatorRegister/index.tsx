@@ -23,7 +23,7 @@ const CoordinatorRegister: React.FC = () => {
 
   const handleChange = useCallback(
     (form: CoordinatorData) => {
-      // console.log(form);
+      // //console.log(form);
       setFormData(form);
     },
     [setFormData]

@@ -1,12 +1,12 @@
 import { decode, encode } from 'js-base64';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../components/Loading';
 import api from '../services/api';
 import { IProps } from '../types';
-import { useNavigate } from 'react-router-dom';
 
 export interface dataLogin {
   email?: string;
@@ -39,7 +39,7 @@ interface HooksAuthData {
   setErrorLogin(errorLogin: boolean): void;
   SignOut(): void;
   namePath: string;
-  setNamePath(namePath: string):void;
+  setNamePath(namePath: string): void;
 }
 
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
@@ -84,7 +84,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
           });
         })
         .catch(function (error) {
-          console.log(error.response.data.message);
+          //console.log(error.response.data.message);
           toast.error(error.response.data.message);
         });
       setLoading(false);
@@ -131,9 +131,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
       // Limpa o lastPathname do localStorage
       localStorage.removeItem('lastPathname');
     });
-  }, [navigate])
-
-
+  }, [navigate]);
 
   if (loading) {
     return <Loading />;

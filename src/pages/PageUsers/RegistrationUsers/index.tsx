@@ -30,7 +30,7 @@ const RegistrationUsers: React.FC = () => {
 
   const handleChange = useCallback(
     (form: UsersData) => {
-      console.log(form);
+      //console.log(form);
       setFormData(form);
     },
     [setFormData]
@@ -127,7 +127,7 @@ const RegistrationUsers: React.FC = () => {
                 color="red"
                 appearance="primary"
                 onClick={() => {
-                  console.log('cancelar');
+                  //console.log('cancelar');
                   setListUser(true);
                   setShowRegister(!showRegister);
                   setFormDataUser({} as UsersData);

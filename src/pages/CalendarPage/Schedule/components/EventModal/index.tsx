@@ -21,7 +21,7 @@ const EventModal = (props: EventModalProps) => {
 
   const handleChange = useCallback(
     (form: EventsData) => {
-      console.log(form);
+      //console.log(form);
       setDataForm(form);
     },
     [setDataForm]

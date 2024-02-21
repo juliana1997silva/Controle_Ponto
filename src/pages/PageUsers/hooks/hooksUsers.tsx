@@ -65,11 +65,11 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-        console.log('group::', response.data);
+        //console.log('group::', response.data);
         setCoordinatorData(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ////console.log(error);
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
     setListCoordinatorData(true);
@@ -84,11 +84,11 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         setDataListUsers(response.data);
       })
       .catch((error) => {
-        //console.log(error);
+        ////console.log(error);
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
     setList(true);
@@ -119,13 +119,13 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           }
         )
         .then((response) => {
-          // console.log(response.data);
+          // //console.log(response.data);
           toast.success(response.data);
           setShowUsersList(true);
           listUsers();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
@@ -156,13 +156,13 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           }
         )
         .then((response) => {
-          //console.log(response.data.data);
+          ////console.log(response.data.data);
           toast.success('Atualizado com sucesso!');
           setShowUsersList(true);
           listUsers();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
@@ -183,11 +183,11 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
           }
         )
         .then((response) => {
-          // console.log(response.data.data);
+          // //console.log(response.data.data);
           listUsers();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },

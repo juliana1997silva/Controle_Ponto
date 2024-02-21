@@ -26,7 +26,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = useCallback(() => {
     if (dataForm) signin(dataForm);
-    //console.log(dataForm);
+    ////console.log(dataForm);
   }, [signin, dataForm]);
 
   useEffect(() => {
@@ -36,7 +36,6 @@ const Login: React.FC = () => {
       }
     }
   }, [user, navigate]);
-
 
   return (
     <Global>

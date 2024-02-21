@@ -47,12 +47,12 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-        // console.log(response.data);
+        // //console.log(response.data);
         setDataGroups(response.data);
         setList(true);
       })
       .catch((error) => {
-        //console.log(error);
+        ////console.log(error);
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
   }, [setDataGroups, setList, user]);
@@ -67,12 +67,12 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
           }
         })
         .then((response) => {
-          // console.log(response.data);
+          // //console.log(response.data);
           toast.success('Grupo cadastrado com sucesso !');
           listGroups();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
@@ -89,12 +89,12 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
           }
         })
         .then((response) => {
-          // console.log(response.data);
+          // //console.log(response.data);
           toast.success(response.data);
           listGroups();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
@@ -115,11 +115,11 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
           }
         )
         .then((response) => {
-          // console.log(response.data);
+          // //console.log(response.data);
           listGroups();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },

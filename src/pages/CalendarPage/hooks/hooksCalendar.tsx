@@ -49,11 +49,11 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         setDataEvents(response.data);
       })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error);
       });
     setList(true);
   }, [setDataEvents, setList, user]);
@@ -77,14 +77,14 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
           }
         )
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           toast.success(response.data);
           listEvents();
           setOpenModal(false);
           window.location.reload();
         })
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
     },
     [listEvents, setOpenModal, user]
@@ -109,14 +109,14 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
           }
         )
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           toast.success(response.data);
           listEvents();
           setOpenModal(false);
           //window.location.reload();
         })
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
     },
     [listEvents, setOpenModal, user]

@@ -1,19 +1,11 @@
-import React, { useCallback, useState } from "react";
-import {
-  Button,
-  Form,
-  Loader,
-  Message,
-  Panel,
-  Uploader,
-  useToaster,
-} from "rsuite";
-import BreadcrumbComponent from "../../../components/Breadcrumb";
-import ResetPassword from "../components/ResetPassword";
-import { useProfile } from "../hooks/hookProfile";
-import { ContainerHeader, PulaLinha, TitlePage } from "./styles";
+import React, { useCallback, useState } from 'react';
+import { Button, Form, Loader, Message, Panel, Uploader, useToaster } from 'rsuite';
+import BreadcrumbComponent from '../../../components/Breadcrumb';
+import ResetPassword from '../components/ResetPassword';
+import { useProfile } from '../hooks/hookProfile';
+import { ContainerHeader, PulaLinha, TitlePage } from './styles';
 
-import AvatarIcon from "@rsuite/icons/legacy/Avatar";
+import AvatarIcon from '@rsuite/icons/legacy/Avatar';
 
 function previewFile(file: any, callback: any) {
   const reader = new FileReader();
@@ -29,47 +21,37 @@ const Profile: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [fileInfo, setFileInfo] = useState(null);
   const [buttonPhone, setButtonPhone] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [mode, setMode] = useState<"create" | "edit">("create");
+  const [phone, setPhone] = useState('');
+  const [mode, setMode] = useState<'create' | 'edit'>('create');
 
   const dataProfile = {
-    name: "Juliana Silva de Jesus",
-    departamento: "Desenvolvimento",
-    coordenador: "Wilson Felix",
-    hour_expediente: "08:00 - 17:00",
-    mail: "jjesus@conecto.com.br",
-    phone: "(11) 92106-3113",
+    name: 'Juliana Silva de Jesus',
+    departamento: 'Desenvolvimento',
+    coordenador: 'Wilson Felix',
+    hour_expediente: '08:00 - 17:00',
+    mail: 'jjesus@conecto.com.br',
+    phone: '(11) 92106-3113'
   };
 
   const handleChange = useCallback((value: any) => {
     const phoneFormat = value
-      .replace(/\D/g, "")
-      .replace(/(\d{2})(\d)/, "($1) $2")
-      .replace(/(\d{5})(\d)/, "$1-$2")
-      .replace(/(-\d{4})(\d+?)$/, "$1");
-   // console.log(phoneFormat);
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(-\d{4})(\d+?)$/, '$1');
+    // //console.log(phoneFormat);
     setPhone(phoneFormat);
     setButtonPhone(true);
-    setMode("edit");
+    setMode('edit');
   }, []);
 
   return (
     <>
       <Panel header={<TitlePage className="title">Perfil</TitlePage>}>
-        <ContainerHeader
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
-          <BreadcrumbComponent
-            active="Perfil"
-            href="/dashboard"
-            label="Dashboard"
-          />
+        <ContainerHeader style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <BreadcrumbComponent active="Perfil" href="/dashboard" label="Dashboard" />
 
-          <Button
-            appearance="primary"
-            color="blue"
-            onClick={() => setShowModalPassword(true)}
-          >
+          <Button appearance="primary" color="blue" onClick={() => setShowModalPassword(true)}>
             Alterar Senha
           </Button>
         </ContainerHeader>
@@ -86,10 +68,8 @@ const Profile: React.FC = () => {
           }}
           onSuccess={(response, file) => {
             setUploading(false);
-            toaster.push(
-              <Message type="success">Uploaded successfully</Message>
-            );
-           // console.log(response);
+            toaster.push(<Message type="success">Uploaded successfully</Message>);
+            // //console.log(response);
           }}
           onError={() => {
             setFileInfo(null);
@@ -99,16 +79,7 @@ const Profile: React.FC = () => {
         >
           <button style={{ width: 150, height: 150 }}>
             {uploading && <Loader backdrop center />}
-            {fileInfo ? (
-              <img
-                src={fileInfo}
-                width="100%"
-                height="100%"
-                alt="Foto Perfil"
-              />
-            ) : (
-              <AvatarIcon style={{ fontSize: 80 }} />
-            )}
+            {fileInfo ? <img src={fileInfo} width="100%" height="100%" alt="Foto Perfil" /> : <AvatarIcon style={{ fontSize: 80 }} />}
           </button>
         </Uploader>
 
@@ -139,7 +110,7 @@ const Profile: React.FC = () => {
             <Form.Control
               name="phone"
               type="phone"
-              value={mode === "edit" ? phone : dataProfile.phone}
+              value={mode === 'edit' ? phone : dataProfile.phone}
               onChange={(e) => handleChange(e)}
               maxLength={15}
             />
@@ -150,7 +121,7 @@ const Profile: React.FC = () => {
                 style={{
                   marginInline: 10,
                   width: 120,
-                  backgroundColor: "#00a6a6",
+                  backgroundColor: '#00a6a6'
                 }}
               >
                 Salvar

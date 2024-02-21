@@ -12,7 +12,7 @@ const GroupsRegister: React.FC = () => {
 
   const handleChange = useCallback(
     (form: GroupsData) => {
-      // console.log(form);
+      // //console.log(form);
       setFormData(form);
     },
     [setFormData]

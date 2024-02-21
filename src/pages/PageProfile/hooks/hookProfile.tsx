@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
-import "react-toastify/dist/ReactToastify.css"; // css do toast
-import { IProps } from "../../../types";
+import React, { createContext, useContext, useState } from 'react';
+import 'react-toastify/dist/ReactToastify.css'; // css do toast
+import { IProps } from '../../../types';
 
 interface HooksProfileData {
   showModalPassword: boolean;
@@ -16,11 +16,11 @@ const ProfileContextProvider: React.FC<IProps> = ({ children }) => {
       const loginData = await api
         .post(`/v1/user/auth`, data)
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
 
       if (loginData) {
-        console.log(loginData.data);
+        //console.log(loginData.data);
         if (loginData.data.logged === true) {
           setUser(loginData.data);
           setShowHome(true);
@@ -36,7 +36,7 @@ const ProfileContextProvider: React.FC<IProps> = ({ children }) => {
     <ProfileContext.Provider
       value={{
         showModalPassword,
-        setShowModalPassword,
+        setShowModalPassword
       }}
     >
       {children}
@@ -48,7 +48,7 @@ function useProfile(): HooksProfileData {
   const context = useContext(ProfileContext);
 
   if (!context) {
-    throw new Error("useProfile must be used within a useAuth");
+    throw new Error('useProfile must be used within a useAuth');
   }
   return context;
 }

@@ -108,10 +108,10 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
           Authorization: `Bearer ${user.token}`
         }
       })
-      .catch((error) => console.log(error.response));
+      .catch((error) => //console.log(error.response));
 
     if (response) {
-      console.log(response.data);
+      //console.log(response.data);
       setDataRegister(response.data);
       setList(true);
     }
@@ -138,11 +138,11 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
           }
         })
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
 
       if (registerData) {
-        console.log('registerData.data::', registerData.data);
+        //console.log('registerData.data::', registerData.data);
         toast.success('Ponto registrado com sucesso !');
         listPoint();
         setUpdateData(true);
@@ -173,13 +173,13 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
           }
         })
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           toast.success('Atualização realizada com sucesso !');
           listPoint();
           setUpdateData(true);
         })
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
     },
     [listPoint, setUpdateData, user]

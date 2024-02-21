@@ -46,7 +46,7 @@ const CoordinatorContextProvider: React.FC<IProps> = ({ children }) => {
         setList(true);
       })
       .catch((error) => {
-        //console.log(error);
+        ////console.log(error);
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
   }, [setDataCoordinator, setList]);
@@ -57,12 +57,12 @@ const CoordinatorContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .post('/manager', dataCoordinator)
         .then((response) => {
-          //console.log(response.data);
+          ////console.log(response.data);
           toast.success('Grupo cadastrado com sucesso !');
           listCoordinator();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
@@ -75,12 +75,12 @@ const CoordinatorContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .put(`/manager/${dataCoordinator.id}`, dataCoordinator)
         .then((response) => {
-         // console.log(response.data);
+          // //console.log(response.data);
           toast.success('Grupo atualizado com sucesso !');
           listCoordinator();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },
@@ -93,11 +93,11 @@ const CoordinatorContextProvider: React.FC<IProps> = ({ children }) => {
       await api
         .patch(`/manager/release/${id}`)
         .then((response) => {
-          //console.log(response.data);
+          ////console.log(response.data);
           listCoordinator();
         })
         .catch((error) => {
-          //console.log(error);
+          ////console.log(error);
           toast.error('Ocorreu um erro. Tente Novamente!');
         });
     },

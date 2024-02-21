@@ -1,14 +1,14 @@
 import BlockIcon from '@rsuite/icons/Block';
 import CheckIcon from '@rsuite/icons/Check';
 import VisibleIcon from '@rsuite/icons/Visible';
+import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonGroup, IconButton, Panel, SelectPicker, Table, Tag, Tooltip, Whisper } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
-import { ContainerButtonPDF, Divider30, TitlePage } from './styles';
-import { useReleasePoint } from '../hooks/hookReleasePoint';
-import moment from 'moment';
 import { useCheckPoint } from '../../CheckPoint/hooks/hookCheckPoint';
 import DrawerView from '../components/DrawerView';
+import { useReleasePoint } from '../hooks/hookReleasePoint';
+import { ContainerButtonPDF, Divider30, TitlePage } from './styles';
 
 const ReleaseCheckPoint: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
@@ -30,7 +30,7 @@ const ReleaseCheckPoint: React.FC = () => {
 
   const handlePDF = useCallback(
     (id: string) => {
-      if(id) generationPDF(id);
+      if (id) generationPDF(id);
     },
     [generationPDF]
   );
@@ -103,10 +103,51 @@ const ReleaseCheckPoint: React.FC = () => {
                 <Cell>
                   {(rowData: any) => {
                     if (rowData.status === 'approved') setButtonPDF(false);
-                      switch (rowData.status) {
-                        case 'approved':
-                          return (
-                            <ButtonGroup>
+                    switch (rowData.status) {
+                      case 'approved':
+                        return (
+                          <ButtonGroup>
+                            <Whisper
+                              placement="top"
+                              controlId="control-id-focus"
+                              trigger="hover"
+                              speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
+                            >
+                              <IconButton
+                                icon={<VisibleIcon />}
+                                onClick={() => {
+                                  setOpenView(true);
+                                  setDataRegisterStore(rowData);
+                                }}
+                                style={{ color: '#000' }}
+                              />
+                            </Whisper>
+                          </ButtonGroup>
+                        );
+                      case 'disapproved':
+                        return (
+                          <ButtonGroup>
+                            <Whisper
+                              placement="top"
+                              controlId="control-id-focus"
+                              trigger="hover"
+                              speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
+                            >
+                              <IconButton
+                                icon={<VisibleIcon />}
+                                onClick={() => {
+                                  setOpenView(true);
+                                  setDataRegisterStore(rowData);
+                                }}
+                                style={{ color: '#000' }}
+                              />
+                            </Whisper>
+                          </ButtonGroup>
+                        );
+                      case 'pending':
+                        return (
+                          <ButtonGroup>
+                            <>
                               <Whisper
                                 placement="top"
                                 controlId="control-id-focus"
@@ -122,71 +163,30 @@ const ReleaseCheckPoint: React.FC = () => {
                                   style={{ color: '#000' }}
                                 />
                               </Whisper>
-                            </ButtonGroup>
-                          );
-                        case 'disapproved':
-                          return (
-                            <ButtonGroup>
-                              <Whisper
-                                placement="top"
-                                controlId="control-id-focus"
-                                trigger="hover"
-                                speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
-                              >
+                              <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Aprovar</Tooltip>}>
                                 <IconButton
-                                  icon={<VisibleIcon />}
+                                  icon={<CheckIcon />}
                                   onClick={() => {
-                                    setOpenView(true);
-                                    setDataRegisterStore(rowData);
+                                    //console.log(rowData.id);
+                                    releaseHours(rowData.id, 'approved');
+                                    setButtonPDF(false);
                                   }}
                                   style={{ color: '#000' }}
                                 />
                               </Whisper>
-                            </ButtonGroup>
-                          );
-                        case 'pending':
-                          return (
-                            <ButtonGroup>
-                              <>
-                                <Whisper
-                                  placement="top"
-                                  controlId="control-id-focus"
-                                  trigger="hover"
-                                  speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
-                                >
-                                  <IconButton
-                                    icon={<VisibleIcon />}
-                                    onClick={() => {
-                                      setOpenView(true);
-                                      setDataRegisterStore(rowData);
-                                    }}
-                                    style={{ color: '#000' }}
-                                  />
-                                </Whisper>
-                                <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Aprovar</Tooltip>}>
-                                  <IconButton
-                                    icon={<CheckIcon />}
-                                    onClick={() => {
-                                      console.log(rowData.id);
-                                      releaseHours(rowData.id, 'approved');
-                                      setButtonPDF(false);
-                                    }}
-                                    style={{ color: '#000' }}
-                                  />
-                                </Whisper>
-                                <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Reprovar</Tooltip>}>
-                                  <IconButton
-                                    icon={<BlockIcon />}
-                                    onClick={() => {
-                                      releaseHours(rowData.id, 'disapproved');
-                                    }}
-                                    style={{ color: '#000' }}
-                                  />
-                                </Whisper>
-                              </>
-                            </ButtonGroup>
-                          );
-                      }
+                              <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Reprovar</Tooltip>}>
+                                <IconButton
+                                  icon={<BlockIcon />}
+                                  onClick={() => {
+                                    releaseHours(rowData.id, 'disapproved');
+                                  }}
+                                  style={{ color: '#000' }}
+                                />
+                              </Whisper>
+                            </>
+                          </ButtonGroup>
+                        );
+                    }
                   }}
                 </Cell>
               </Column>

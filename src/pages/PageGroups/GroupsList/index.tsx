@@ -14,7 +14,7 @@ const GroupsList: React.FC = () => {
     if (!list) listGroups();
   }, [list, listGroups]);
 
-  console.log('dataGroups ::', dataGroups);
+  //console.log('dataGroups ::', dataGroups);
 
   if (showRegister) {
     return <GroupsRegister />;

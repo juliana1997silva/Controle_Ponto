@@ -24,7 +24,7 @@ const Point: React.FC = () => {
 
   const handleChangeTime = useCallback(
     (form: timeData) => {
-      console.log('form time => ', form);
+      //console.log('form time => ', form);
       setFormDataTime(form);
     },
     [setFormDataTime]
@@ -32,7 +32,7 @@ const Point: React.FC = () => {
 
   const handleChangeNonBusiness = useCallback(
     (form: nonBusinessData) => {
-      console.log('form nonbusiness => ', form);
+      //console.log('form nonbusiness => ', form);
       setFormDataNonBusiness(form);
     },
     [setFormDataNonBusiness]
@@ -40,7 +40,7 @@ const Point: React.FC = () => {
 
   const handleChangeConsultation = useCallback(
     (form: consultsData) => {
-      console.log('form consults => ', form);
+      //console.log('form consults => ', form);
       setFormDataConsults(form);
     },
     [setFormDataConsults]
@@ -135,7 +135,7 @@ const Point: React.FC = () => {
     if (updateData) setShowBack(true);
   }, [updateData, setShowBack]);
 
-  console.log('dataRegisterStore:: ', dataRegisterStore);
+  //console.log('dataRegisterStore:: ', dataRegisterStore);
 
   if (showBack) {
     return <ListPoint />;

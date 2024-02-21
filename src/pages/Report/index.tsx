@@ -1,34 +1,34 @@
-import React from "react";
-import { Breadcrumb, Panel, Table } from "rsuite";
-import { TitlePage } from "./styles";
+import React from 'react';
+import { Breadcrumb, Panel, Table } from 'rsuite';
+import { TitlePage } from './styles';
 
 const Report: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
   const data = [
     {
-      name: "Juliana Silva",
-      coordenador: "Wilson Felix",
+      name: 'Juliana Silva',
+      coordenador: 'Wilson Felix',
       activities: [
         {
-          consulta: "58642",
-          description: "Teste 0001",
+          consulta: '58642',
+          description: 'Teste 0001'
         },
         {
-          consulta: "58642",
-          description: "Teste 0001",
+          consulta: '58642',
+          description: 'Teste 0001'
         },
         ,
         {
-          consulta: "58642",
-          description: "Teste 0001",
+          consulta: '58642',
+          description: 'Teste 0001'
         },
         ,
         {
-          consulta: "58642",
-          description: "Teste 0001",
-        },
-      ],
-    },
+          consulta: '58642',
+          description: 'Teste 0001'
+        }
+      ]
+    }
   ];
   return (
     <>
@@ -50,7 +50,7 @@ const Report: React.FC = () => {
             <HeaderCell>Qtda. Consulta Atendida:</HeaderCell>
             <Cell>
               {(rowData: any) => {
-               // console.log(rowData.activities);
+                // //console.log(rowData.activities);
                 return <span>{[rowData.activities].length}</span>;
               }}
             </Cell>
