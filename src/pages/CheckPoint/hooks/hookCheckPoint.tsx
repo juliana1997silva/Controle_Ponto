@@ -108,7 +108,9 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
           Authorization: `Bearer ${user.token}`
         }
       })
-      .catch((error) => //console.log(error.response));
+      .catch((error) => {
+        //console.log(error.response)
+      });
 
     if (response) {
       //console.log(response.data);
