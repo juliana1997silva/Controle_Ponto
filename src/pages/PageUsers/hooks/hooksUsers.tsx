@@ -17,6 +17,7 @@ export interface UsersData {
   password?: string;
   admin?: boolean;
   group_id?: string;
+  manager?: boolean;
 }
 
 interface HooksUsersData {
@@ -84,7 +85,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-        //console.log(response.data);
+        //console.log('user:: ', response.data);
         setDataListUsers(response.data);
       })
       .catch((error) => {
@@ -110,7 +111,8 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
             out_time: dataUsers.out_time,
             password: dataUsers.password,
             admin: dataUsers.admin === true ? 1 : 0,
-            group_id: dataUsers.group_id
+            group_id: dataUsers.group_id,
+            manager: dataUsers.manager
           },
           {
             headers: {
@@ -147,7 +149,8 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
             lunch_out_time: dataUser.lunch_out_time,
             out_time: dataUser.out_time,
             admin: dataUser.admin === true ? 1 : 0,
-            group_id: dataUser.group_id
+            group_id: dataUser.group_id,
+            manager: dataUser.manager
           },
           {
             headers: {

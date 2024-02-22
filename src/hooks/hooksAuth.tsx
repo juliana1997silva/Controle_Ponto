@@ -27,6 +27,7 @@ export interface UserData {
   status: string;
   admin: number;
   token: string;
+  manager: number;
 }
 
 interface HooksAuthData {
@@ -74,7 +75,8 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
             password: response.data.password,
             status: response.data.status,
             admin: response.data.admin,
-            token: response.data.token
+            token: response.data.token,
+            manager: response.data.manager
           };
 
           setUserCookies('user', setCookie, {

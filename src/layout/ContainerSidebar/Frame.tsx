@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/hooksAuth';
 
 const Frame: React.FC = () => {
   const navigate = useNavigate();
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   return (
     <div>
@@ -20,7 +20,7 @@ const Frame: React.FC = () => {
             <Nav.Item eventKey="1" icon={<DashboardIcon />} onSelect={() => navigate('/dashboard')}>
               Dashboard
             </Nav.Item>
-            {user.admin === 1 && (
+            {user.admin === 1 || user.manager === 1 ? (
               <>
                 <Nav.Item eventKey="2" icon={<DocPassIcon />} onSelect={() => navigate('/release-checkpoint')}>
                   Liberar Ficha
@@ -31,10 +31,9 @@ const Frame: React.FC = () => {
                 <Nav.Item eventKey="6" icon={<DocPassIcon />} onSelect={() => navigate('/groups')}>
                   Grupos
                 </Nav.Item>
-                {/* <Nav.Item eventKey="6" icon={<DocPassIcon />} onSelect={() => navigate('/coordinator')}>
-                  Coordenadores
-                </Nav.Item> */}
               </>
+            ) : (
+              <></>
             )}
             <Nav.Item eventKey="4" icon={<TaskIcon />} onSelect={() => navigate('/checkpoint')}>
               Registro Ponto
