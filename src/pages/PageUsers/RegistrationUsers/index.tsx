@@ -54,6 +54,21 @@ const RegistrationUsers: React.FC = () => {
     setShowRegister(!showRegister);
   }, [RegisterUsers, formData, updateUsers, mode, setListUser, setShowRegister, showRegister]);
 
+  function getPassword() {
+    var chars = '0123456789abcdefghijklmnopqrstuvwxyz!@#*';
+    var passwordLength = 8;
+    var password = '';
+
+    for (var i = 0; i < passwordLength; i++) {
+      var randomNumber = Math.floor(Math.random() * chars.length);
+      password += chars.substring(randomNumber, randomNumber + 1);
+    }
+    setFormData((prevState: UsersData) => ({
+      ...prevState,
+      password: password
+    }));
+  }
+
   useEffect(() => {
     setFormData(formDataUser);
     if (!listCoordinatorData) listCoordinator();
@@ -118,6 +133,9 @@ const RegistrationUsers: React.FC = () => {
                 <Form.Control name="password" type={visible ? 'text' : 'password'} />
                 <InputGroup.Button onClick={handleChangePassword}>{visible ? <EyeIcon /> : <EyeSlashIcon />}</InputGroup.Button>
               </InputGroup>
+              <Button appearance="link" style={{textDecoration: "none", padding: 0 }} onClick={getPassword}>
+                Gerar Senha
+              </Button>
             </Form.Group>
           </Form.Group>
           <Divider />
