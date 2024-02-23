@@ -25,7 +25,6 @@ const Point: React.FC = () => {
 
   const handleChangeTime = useCallback(
     (form: timeData) => {
-      //console.log('form time => ', form);
       setFormDataTime(form);
     },
     [setFormDataTime]
@@ -111,6 +110,7 @@ const Point: React.FC = () => {
     if (mode === 'created') {
       if (formDataTime.location !== undefined && formDataTime.date !== undefined) {
         registerPoint(formDataTime, businessData, dataConsults);
+       //console.log(formDataTime);
       } else {
         toast.error('Por favor, preencha todos os campos');
       }
@@ -140,8 +140,18 @@ const Point: React.FC = () => {
     if (updateData) setShowBack(true);
   }, [updateData, setShowBack]);
 
+  useEffect(() => {
+    setFormDataTime((prevTime: timeData) => ({
+      ...prevTime,
+      entry_time: user.entry_time,
+      lunch_entry_time: user.lunch_entry_time,
+      lunch_out_time: user.lunch_out_time,
+      out_time: user.out_time
+    }));
+  }, [setFormDataTime, user]);
+
   //console.log('dataRegisterStore:: ', dataRegisterStore);
-  //console.log('formDataTime:: ', formDataTime.date);
+  console.log('formDataTime:: ', formDataTime);
 
   if (showBack) {
     return <ListPoint />;
@@ -178,6 +188,7 @@ const Point: React.FC = () => {
             <br />
             <Form.Control
               name="date"
+              style={{width: 200}}
               accepter={MaskedInput}
               placeholder="Data"
               showMask={true}
@@ -201,18 +212,18 @@ const Point: React.FC = () => {
           <Form.Group>
             <Form.ControlLabel>Entrada</Form.ControlLabel>
             <br />
-            <Form.Control type="time" name="entry_time" style={{ width: 188 }} disabled value={user.entry_time} />
+            <Form.Control type="time" name="entry_time" style={{ width: 188 }} />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Almoço</Form.ControlLabel>
             <br />
-            <Form.Control type="time" name="lunch_entry_time" style={{ width: 188 }} disabled value={user.lunch_entry_time} />
-            <Form.Control type="time" name="lunch_out_time" style={{ width: 188, marginLeft: 10 }} disabled value={user.lunch_out_time} />
+            <Form.Control type="time" name="lunch_entry_time" style={{ width: 188 }} />
+            <Form.Control type="time" name="lunch_out_time" style={{ width: 188, marginLeft: 10 }} />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Saída</Form.ControlLabel>
             <br />
-            <Form.Control type="time" name="out_time" style={{ width: 188 }} disabled value={user.out_time} />
+            <Form.Control type="time" name="out_time" style={{ width: 188 }} />
           </Form.Group>
 
           <Panel header="Horário Não Comercial " collapsible bordered>

@@ -125,10 +125,10 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
         user_id: user.id,
         date: moment(dataTime.date, 'DD/MM/YYYY').format('YYYY-MM-DD'),
         location: dataTime.location,
-        entry_time: user.entry_time,
-        lunch_entry_time: user.lunch_entry_time,
-        lunch_out_time: user.lunch_out_time,
-        out_time: user.out_time,
+        entry_time: dataTime.entry_time,
+        lunch_entry_time: dataTime.lunch_entry_time,
+        lunch_out_time: dataTime.lunch_out_time,
+        out_time: dataTime.out_time,
         nonbusiness: nonBusiness.length > 0 ? nonBusiness : null,
         consults: consultations.length > 0 ? consultations : null,
         status: 'pending'
@@ -155,14 +155,15 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
 
   const updatePoint = useCallback(
     async (dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]) => {
+      console.log('dataTime update:: ', dataTime);
       const data = {
         user_id: dataTime.user_id,
         date: dataTime.date,
         location: dataTime.location,
-        entry_time: user.entry_time,
-        lunch_entry_time: user.lunch_entry_time,
-        lunch_out_time: user.lunch_out_time,
-        out_time: user.out_time,
+        entry_time: dataTime.entry_time,
+        lunch_entry_time: dataTime.lunch_entry_time,
+        lunch_out_time: dataTime.lunch_out_time,
+        out_time: dataTime.out_time,
         nonbusiness: nonBusiness.length > 0 ? nonBusiness : null,
         consults: consultations.length > 0 ? consultations : null,
         status: dataTime.status

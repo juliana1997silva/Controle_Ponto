@@ -69,6 +69,8 @@ const ListPoint: React.FC = () => {
                   return <Tag color="red">Reprovado</Tag>;
                 case 'pending':
                   return <Tag color="orange">Pendente</Tag>;
+                case 'generation':
+                  return <Tag color="violet">RH</Tag>;
               }
             }}
           </Cell>
