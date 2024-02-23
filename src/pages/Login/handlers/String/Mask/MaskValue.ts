@@ -1,4 +1,4 @@
-import { UnmaskValue } from "./UnmaskValue";
+import { UnmaskValue } from './UnmaskValue';
 
 export type MaskValueProps = {
   mask: string;
@@ -24,27 +24,24 @@ type Pattern = {
 };
 
 let patterns: Pattern = {
-  "9": { regex: /[0-9]/ },
+  '9': { regex: /[0-9]/ },
   a: { regex: /[a-zA-Z]/, transform: (char: string) => char.toLowerCase() },
   A: { regex: /[a-zA-Z]/, transform: (char: string) => char.toUpperCase() },
-  z: { regex: /[a-zA-Z]/ },
+  z: { regex: /[a-zA-Z]/ }
 };
 
-export const MaskValue = (
-  value: string,
-  { mask, charCodes, maskReverse, valuePlaceholder }: MaskValueProps
-) => {
+export const MaskValue = (value: string, { mask, charCodes, maskReverse, valuePlaceholder }: MaskValueProps) => {
   const regExps: (Pattern | string)[] = [];
 
   // Patterns
   if (charCodes)
     patterns = {
       ...patterns,
-      ...charCodes,
+      ...charCodes
     };
 
   const keys = Object.keys(patterns);
-  const maskArray = mask.split("");
+  const maskArray = mask.split('');
 
   maskArray.forEach((char) => {
     if (keys.includes(char)) {
@@ -60,29 +57,26 @@ export const MaskValue = (
   value = UnmaskValue(value, {
     mask,
     charCodes,
-    maskReverse,
+    maskReverse
   });
 
-  let valueArray = value.split("");
+  let valueArray = value.split('');
 
   if (valuePlaceholder) {
     const placeholderArray = UnmaskValue(valuePlaceholder, {
       mask,
       charCodes,
-      maskReverse,
-    }).split("");
+      maskReverse
+    }).split('');
 
     if (valueArray.length > placeholderArray.length) {
       let fails = 0;
       const placeholderRamains = () => {
-        const placeholder = placeholderArray.join("");
+        const placeholder = placeholderArray.join('');
 
         for (const i in placeholderArray) {
-          const placeholderRamains = placeholder.substring(
-            0,
-            placeholder.length - fails
-          );
-
+          const placeholderRamains = placeholder.substring(0, placeholder.length - fails);
+          console.log(i);
           if (placeholderRamains) {
             if (value.indexOf(placeholderRamains, 0) === 0) return true;
             else fails++;
@@ -103,12 +97,9 @@ export const MaskValue = (
 
   if (maskReverse) valueArray.reverse();
 
-  const constainsRepeat = regExps.filter(
-    (regex) => typeof regex === "object" && regex.repeat
-  );
+  const constainsRepeat = regExps.filter((regex) => typeof regex === 'object' && regex.repeat);
 
-  if (valueArray.length > regExps.length && !constainsRepeat)
-    return valueArray.join("").substring(0, valueArray.length - 1);
+  if (valueArray.length > regExps.length && !constainsRepeat) return valueArray.join('').substring(0, valueArray.length - 1);
 
   let previuosRegexs = 0;
   for (let i = 0; i < valueArray.length; i++) {
@@ -117,22 +108,19 @@ export const MaskValue = (
     let char = valueArray[i];
     if (i + previuosRegexs > regExps.length - 1) break;
 
-    if (typeof regExps[i + previuosRegexs] === "string") {
+    if (typeof regExps[i + previuosRegexs] === 'string') {
       let next = 1;
       let strings = [regExps[i + previuosRegexs] as string];
 
-      while (typeof regExps[i + previuosRegexs + next] === "string") {
+      while (typeof regExps[i + previuosRegexs + next] === 'string') {
         strings.push(regExps[i + previuosRegexs + next] as string);
         next++;
       }
 
-      for (let index = 0; index < strings.length; index++)
-        if (newValue[i + index] !== strings[index])
-          newValue.push(strings[index]);
+      for (let index = 0; index < strings.length; index++) if (newValue[i + index] !== strings[index]) newValue.push(strings[index]);
 
       const pattern = regExps[
-        i + previuosRegexs + (next + 1) <= regExps.length - 1 &&
-        strings.length > 1
+        i + previuosRegexs + (next + 1) <= regExps.length - 1 && strings.length > 1
           ? i + previuosRegexs + (next + 1)
           : i + previuosRegexs + next
       ] as Pattern;
@@ -183,5 +171,5 @@ export const MaskValue = (
 
   if (maskReverse) newValue.reverse();
 
-  return newValue.join("");
+  return newValue.join('');
 };

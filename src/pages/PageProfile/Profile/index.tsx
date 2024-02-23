@@ -1,31 +1,29 @@
-import React, { useCallback, useState } from 'react';
-import { Button, Form, Loader, Message, Panel, Uploader, useToaster } from 'rsuite';
+import React from 'react';
+import { Button, Form, Panel } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import ResetPassword from '../components/ResetPassword';
 import { useProfile } from '../hooks/hookProfile';
 import { Collaborator, ContainerHeader, PulaLinha, TitlePage } from './styles';
 
-import AvatarIcon from '@rsuite/icons/legacy/Avatar';
 import { useAuth } from '../../../hooks/hooksAuth';
 
-function previewFile(file: any, callback: any) {
-  const reader = new FileReader();
-  reader.onloadend = () => {
-    callback(reader.result);
-  };
-  reader.readAsDataURL(file);
-}
+//function previewFile(file: any, callback: any) {
+// const reader = new FileReader();
+// reader.onloadend = () => {
+//   callback(reader.result);
+// };
+// reader.readAsDataURL(file);
+//}
 
 const Profile: React.FC = () => {
   const { user } = useAuth();
   const { showModalPassword, setShowModalPassword } = useProfile();
-  const toaster = useToaster();
-  const [uploading, setUploading] = useState(false);
-  const [fileInfo, setFileInfo] = useState(null);
+  //const toaster = useToaster();
+  //const [uploading, setUploading] = useState(false);
+  //const [fileInfo, setFileInfo] = useState(null);
   //const [buttonPhone, setButtonPhone] = useState(false);
   //const [phone, setPhone] = useState('');
   //const [mode, setMode] = useState<'create' | 'edit'>('create');
-
 
   // const handleChange = useCallback((value: any) => {
   //  const phoneFormat = value
@@ -33,11 +31,11 @@ const Profile: React.FC = () => {
   //    .replace(/(\d{2})(\d)/, '($1) $2')
   //    .replace(/(\d{5})(\d)/, '$1-$2')
   //    .replace(/(-\d{4})(\d+?)$/, '$1');
-    // //console.log(phoneFormat);
+  // //console.log(phoneFormat);
   //  setPhone(phoneFormat);
-   // setButtonPhone(true);
+  // setButtonPhone(true);
   //  setMode('edit');
- // }, []); 
+  // }, []);
 
   return (
     <>

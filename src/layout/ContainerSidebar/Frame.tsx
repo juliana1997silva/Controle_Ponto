@@ -1,12 +1,11 @@
 import DocPassIcon from '@rsuite/icons/DocPass';
+import PageNextIcon from '@rsuite/icons/PageNext';
+import PagePreviousIcon from '@rsuite/icons/PagePrevious';
 import TaskIcon from '@rsuite/icons/Task';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
-import PagePreviousIcon from '@rsuite/icons/PagePrevious';
-import PageNextIcon from '@rsuite/icons/PageNext';
-import GearIcon from '@rsuite/icons/Gear';
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Nav, Navbar, Sidebar, Sidenav } from 'rsuite';
+import { Nav, Navbar, Sidenav } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import { useAuth } from '../../hooks/hooksAuth';
 
@@ -25,42 +24,41 @@ const NavToggle = ({ expand, onChange }: any) => {
 const Frame: React.FC = () => {
   const navigate = useNavigate();
   const { user, expanded, setExpanded } = useAuth();
-  
+
   return (
     <div>
-          <Sidenav expanded={expanded} style={{ color: '#1976d2' }}>
-            <Sidenav.Body>
-              <Nav>
-                <Nav.Item eventKey="1" icon={<DashboardIcon />} onSelect={() => navigate('/dashboard')}>
-                  Dashboard
+      <Sidenav expanded={expanded} style={{ color: '#1976d2' }}>
+        <Sidenav.Body>
+          <Nav>
+            <Nav.Item eventKey="1" icon={<DashboardIcon />} onSelect={() => navigate('/dashboard')}>
+              Dashboard
+            </Nav.Item>
+            {user.admin === 1 || user.manager === 1 ? (
+              <>
+                <Nav.Item eventKey="2" icon={<DocPassIcon />} onSelect={() => navigate('/release-checkpoint')}>
+                  Liberar Ficha
                 </Nav.Item>
-                {user.admin === 1 || user.manager === 1 ? (
-                  <>
-                    <Nav.Item eventKey="2" icon={<DocPassIcon />} onSelect={() => navigate('/release-checkpoint')}>
-                      Liberar Ficha
-                    </Nav.Item>
-                    <Nav.Item eventKey="3" icon={<DocPassIcon />} onSelect={() => navigate('/users')}>
-                      Usuarios
-                    </Nav.Item>
-                    <Nav.Item eventKey="6" icon={<DocPassIcon />} onSelect={() => navigate('/groups')}>
-                      Grupos
-                    </Nav.Item>
-                  </>
-                ) : (
-                  <></>
-                )}
-                <Nav.Item eventKey="4" icon={<TaskIcon />} onSelect={() => navigate('/checkpoint')}>
-                  Registro Ponto
+                <Nav.Item eventKey="3" icon={<DocPassIcon />} onSelect={() => navigate('/users')}>
+                  Usuarios
                 </Nav.Item>
+                <Nav.Item eventKey="6" icon={<DocPassIcon />} onSelect={() => navigate('/groups')}>
+                  Grupos
+                </Nav.Item>
+              </>
+            ) : (
+              <></>
+            )}
+            <Nav.Item eventKey="4" icon={<TaskIcon />} onSelect={() => navigate('/checkpoint')}>
+              Registro Ponto
+            </Nav.Item>
 
-                <Nav.Item eventKey="5" icon={<DocPassIcon />} onSelect={() => navigate('/teste')}>
-                  Agenda
-                </Nav.Item>
-              </Nav>
-            </Sidenav.Body>
-          </Sidenav>
-          <NavToggle expand={expanded} onChange={() => setExpanded(!expanded)} />
-        
+            <Nav.Item eventKey="5" icon={<DocPassIcon />} onSelect={() => navigate('/teste')}>
+              Agenda
+            </Nav.Item>
+          </Nav>
+        </Sidenav.Body>
+      </Sidenav>
+      <NavToggle expand={expanded} onChange={() => setExpanded(!expanded)} />
     </div>
   );
 };

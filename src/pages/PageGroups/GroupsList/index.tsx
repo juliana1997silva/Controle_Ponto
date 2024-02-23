@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Panel, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
+import { useAuth } from '../../../hooks/hooksAuth';
 import GroupsRegister from '../GroupsRegister';
 import { useGroups } from '../hooks/hooksGroups';
 import { ContainerButton, TitlePage } from './styles';
-import { useAuth } from '../../../hooks/hooksAuth';
 
 const GroupsList: React.FC = () => {
   const { user } = useAuth();
   const { Column, HeaderCell, Cell } = Table;
-  const { listGroups, dataGroups, list, setMode, setGroupStore, releaseGroup, setDataGroups } = useGroups();
+  const { listGroups, dataGroups, list, setMode, setGroupStore, releaseGroup } = useGroups();
   const [showRegister, setShowRegister] = useState(false);
 
   useEffect(() => {
