@@ -196,7 +196,7 @@ const ReleaseCheckPoint: React.FC = () => {
         <ContainerButtonPDF>
           <Button
             appearance="primary"
-            style={{ backgroundColor: '#00a6a6', width: 150 }}
+            style={{ backgroundColor: '#1976D2', width: 150 }}
             onClick={() => handlePDF(select)}
             disabled={buttonPDF}
           >

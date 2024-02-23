@@ -1,61 +1,89 @@
 import styled from "styled-components";
 
-export const Global = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  background-image: linear-gradient(to right, #c9ecec, #00a6a6);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
+export const Container = styled.div`
+  width: 100%;
+  min-height: 100vh;
 
-export const ContainerForm = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  text-align: center;
-  position: relative;
-  .rs-input {
-    height: 40px;
+  justify-content: center;
+
+  background: linear-gradient(
+    to right,
+    var(--primary1),
+    var(--white),
+    var(--primary1)
+  );
+
+  @media (max-width: 1023px) {
+    background: linear-gradient(
+      to bottom,
+      var(--primary1),
+      var(--white) 50%,
+      var(--primary1)
+    );
   }
 `;
 
-export const SpanInput = styled.span``;
-
-export const Header = styled.div`
-  text-align: center;
-  margin-bottom: 10%;
+export const LoginContainer = styled.div`
+  width: 100%;
+  display: flex;
 `;
 
-export const TitleForm = styled.span`
-  font-size: 18px;
+export const ImageContainer = styled.div<{ image: string }>`
+  flex: 6;
+  height: 100%;
+
+  padding: 20px;
+  background-color: var(--white);
+  background-image: url(${({ image }) => image});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  @media (max-width: 1023px) {
+    display: none;
+  }
 `;
 
-export const InputForm = styled.input`
-  width: 250px;
-  height: 45px;
-  border-radius: 10px;
-  background-color: #dcdcdc;
-  border: 0px;
+export const FormContainer = styled.div`
+  flex: 5;
+  height: 100%;
+
+  padding: 40px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 520px) {
+    padding: 20px;
+  }
+
+  @media (max-width: 400px) {
+    padding: 10px;
+  }
 `;
 
-export const Button = styled.button`
-  width: 200px;
-  height: 40px;
-  border-radius: 10px;
-  background-color: #00a6a6;
-  border: 0px;
-  margin-top: 10%;
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
+export const Title = styled.h1`
+  margin: 0px 0px;
+
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary1);
 `;
 
-export const ImgPage = styled.img``;
-
-export const DivImg = styled.div`
+export const WelcomeMessage = styled.p`
+  margin: 26px 0px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray);
   text-align: center;
 `;

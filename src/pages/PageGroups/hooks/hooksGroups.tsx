@@ -47,18 +47,14 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-       // console.log(response.data);
-        if (response.data.lenght === undefined) {
-          setDataGroups([response.data]);
-        }else {
-          setDataGroups(response.data);
-        }
-        setList(true);
+        console.log(response.data);
+        setDataGroups(response.data);
       })
       .catch((error) => {
         ////console.log(error);
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
+    setList(true);
   }, [setDataGroups, setList, user]);
 
   //criar

@@ -3,6 +3,7 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter } from 'react-router-dom';
 import AppProvider from './hooks';
 import { Router } from './routes';
+import 'rsuite/dist/rsuite.min.css'; 
 
 const App: React.FC = () => {
   return (

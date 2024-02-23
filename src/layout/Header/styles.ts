@@ -1,10 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-image: linear-gradient(to right, #fff, #00a6a6);
+  //background-image: linear-gradient(to right, #fff, #1976D2);  1976D2
+  background-image: linear-gradient(to right, #fff, #1976d2);
   height: 5%;
 `;
 

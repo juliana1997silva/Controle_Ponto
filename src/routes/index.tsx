@@ -7,7 +7,7 @@ import Master from '../layout/Master';
 import NoMatch from '../layout/NoMatch';
 import PrivateRoute from './PrivateRoute';
 
-const Login = React.lazy(() => import('../pages/Login'));
+const Signin = React.lazy(() => import('../pages/Login'));
 const Home = React.lazy(() => import('../pages/Home'));
 const PageCheckPoint = React.lazy(() => import('../pages/CheckPoint'));
 const PageProfile = React.lazy(() => import('../pages/PageProfile'));
@@ -24,7 +24,7 @@ export function Router() {
         index
         element={
           <React.Suspense fallback={<Fallback />}>
-            <Login />
+            <Signin />
           </React.Suspense>
         }
       />

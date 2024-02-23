@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Button, Panel, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import CoordinatorRegister from '../CoordinatorRegister';
-import { ContainerButton, TitlePage } from './styles';
 import { useCoordinator } from '../hooks/hooksCoordinator';
+import { ContainerButton, TitlePage } from './styles';
 
 const CoordinatorList: React.FC = () => {
   const { listCoordinator, list, dataCoordinator, setCoordinatorStore, setMode, releaseCoordinator } = useCoordinator();
   const { Column, HeaderCell, Cell } = Table;
   const [showRegister, setShowRegister] = useState(false);
 
-useEffect(() => {
-  if (!list) listCoordinator();
-}, [list, listCoordinator]);
+  useEffect(() => {
+    if (!list) listCoordinator();
+  }, [list, listCoordinator]);
 
   if (showRegister) {
     return <CoordinatorRegister />;
@@ -26,7 +26,7 @@ useEffect(() => {
           <Button
             appearance="primary"
             type="submit"
-            style={{ backgroundColor: '#00a6a6', width: 120 }}
+            style={{ backgroundColor: '#1976D2', width: 120 }}
             onClick={() => setShowRegister(true)}
           >
             Novo

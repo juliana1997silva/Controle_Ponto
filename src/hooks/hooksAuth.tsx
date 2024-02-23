@@ -41,6 +41,10 @@ interface HooksAuthData {
   SignOut(): void;
   namePath: string;
   setNamePath(namePath: string): void;
+  loading: boolean;
+  setLoading(loading: boolean): void;
+  expanded: boolean;
+  setExpanded(expanded: boolean):void;
 }
 
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
@@ -52,6 +56,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [user, setUser] = useState<UserData>({} as UserData);
   const [userCookies, setUserCookies, removeUserCookies] = useCookies(['user']);
   const [namePath, setNamePath] = useState('');
+  const [expanded, setExpanded] = useState(true);
   const navigate = useNavigate();
 
   const signin = useCallback(
@@ -151,7 +156,11 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         setErrorLogin,
         SignOut,
         namePath,
-        setNamePath
+        setNamePath,
+        loading,
+        setLoading,
+        expanded,
+        setExpanded
       }}
     >
       {children}

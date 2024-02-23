@@ -1,43 +1,27 @@
-import AdminIcon from "@rsuite/icons/Admin";
-import ExitIcon from "@rsuite/icons/Exit";
-import React, { useState } from "react";
-import { Dropdown, IconButton } from "rsuite";
-import logoTempus from "../../assets/logoTempus.png";
-import { useAuth } from "../../hooks/hooksAuth";
-import { Container, ContainerAvatar, NameUser } from "./styles";
+import AdminIcon from '@rsuite/icons/Admin';
+import ExitIcon from '@rsuite/icons/Exit';
+import React, { useState } from 'react';
+import { Dropdown, IconButton } from 'rsuite';
+import logoTempus from '../../assets/logoTempus.png';
+import { useAuth } from '../../hooks/hooksAuth';
+import { Container, ContainerAvatar, NameUser } from './styles';
+import { useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const { user, SignOut } = useAuth();
-  const [showProfile, setShowProfile] = useState(false);
+  const navigate = useNavigate();
 
   const renderIconButton = (props: any, ref: any) => {
-    return (
-      <IconButton
-        {...props}
-        ref={ref}
-        icon={<AdminIcon style={{ width: "100%", height: "100%" }} />}
-        circle
-        color="blue"
-        style={{
-          width: 50,
-          height: 50,
-        }}
-      />
-    );
+    return <IconButton {...props} ref={ref} icon={<NameUser>{user?.name}</NameUser>} style={{backgroundColor: "transparent"}} />;
   };
 
-  if (showProfile) {
-    window.location.pathname = "/profile";
-  }
   return (
     <Container>
-      <img src={logoTempus} alt="Logo Tempus" style={{ height: 70, width: 70 }} onClick={() => (window.location.pathname = '/dashboard')} />
+      <img src={logoTempus} alt="Logo Tempus" style={{ height: 50, marginTop: 10, marginLeft: 15 }} onClick={() => navigate('/dashboard')} />
       {user.token && (
         <ContainerAvatar>
-          <NameUser>{user?.name}</NameUser>
-
           <Dropdown placement="bottomEnd" renderToggle={renderIconButton}>
-            <Dropdown.Item onSelect={() => setShowProfile(true)} icon={<AdminIcon />}>
+            <Dropdown.Item onSelect={() => navigate('/profile')} icon={<AdminIcon />}>
               Meu Perfil
             </Dropdown.Item>
             <Dropdown.Item onSelect={SignOut} icon={<ExitIcon />}>

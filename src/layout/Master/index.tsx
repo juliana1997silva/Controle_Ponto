@@ -15,7 +15,7 @@ interface useMasterProviderProps {
 
 const Master: React.FC<useMasterProviderProps> = ({ children }) => {
 
-  const {SignOut} = useAuth()
+  const {SignOut, expanded} = useAuth()
 
   const cookies = useMemo(() => new Cookies(), []);
   useEffect(() => {
@@ -31,7 +31,7 @@ const Master: React.FC<useMasterProviderProps> = ({ children }) => {
           <HeaderTempus />
         </Header>
         <Container>
-          <Sidebar>
+          <Sidebar style={{ display: 'flex', flexDirection: 'column' }} width={expanded ? 260 : 56} collapsible>
             <ContainerSidebar />
           </Sidebar>
           <Content>

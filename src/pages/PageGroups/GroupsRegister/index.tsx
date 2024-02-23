@@ -45,7 +45,7 @@ const GroupsRegister: React.FC = () => {
           <Form.Control name="manager" />
           <DivButton>
             <ButtonToolbar>
-              <Button appearance="primary" type="submit" style={{ backgroundColor: '#00a6a6' }} onClick={handleSubmit}>
+              <Button appearance="primary" type="submit" style={{ backgroundColor: '#1976D2' }} onClick={handleSubmit}>
                 Salvar
               </Button>
               <Button color="red" appearance="primary" onClick={() => setShowList(true)}>

@@ -123,7 +123,7 @@ const RegistrationUsers: React.FC = () => {
           <Divider />
           <DivButton>
             <ButtonToolbar>
-              <Button appearance="primary" type="submit" style={{ backgroundColor: '#00a6a6' }} onClick={handleSubmit}>
+              <Button appearance="primary" type="submit" style={{ backgroundColor: '#1976D2' }} onClick={handleSubmit}>
                 Salvar
               </Button>
               <Button

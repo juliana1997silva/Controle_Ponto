@@ -1,12 +1,12 @@
 import 'moment/locale/pt-br';
 import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Button, Form, Input, MaskedInput, Panel, SelectPicker, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import { useAuth } from '../../../hooks/hooksAuth';
 import ListPoint from '../ListPoint';
 import { consultsData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
 import { TextEdit, TitlePage } from './styles';
-import { toast } from 'react-toastify';
 
 const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
@@ -235,7 +235,7 @@ const Point: React.FC = () => {
               </Form.Group>
               <Form.Group style={{ marginLeft: 10, marginTop: 9 }}>
                 <br />
-                <Button appearance="primary" style={{ width: 120, backgroundColor: '#00a6a6' }} onClick={handleAddNonBusiness}>
+                <Button appearance="primary" style={{ width: 120, backgroundColor: '#1976D2' }} onClick={handleAddNonBusiness}>
                   {hourMode === 'edit' ? 'Editar' : 'Adicionar'}
                 </Button>
               </Form.Group>
@@ -308,7 +308,7 @@ const Point: React.FC = () => {
               <Form.Group style={{ marginLeft: 10, marginTop: 9, textAlign: 'end', width: '100%' }}>
                 <Button
                   appearance="primary"
-                  style={{ width: 120, backgroundColor: '#00a6a6', marginRight: 25 }}
+                  style={{ width: 120, backgroundColor: '#1976D2', marginRight: 25 }}
                   onClick={handleAddConsults}
                 >
                   {consultsMode === 'edit' ? 'Editar' : 'Adicionar'}
@@ -364,7 +364,7 @@ const Point: React.FC = () => {
           </Panel>
           <br />
           <Form.Group style={{ width: '100%', textAlign: 'end' }}>
-            <Button appearance="primary" style={{ width: 120, marginRight: 20, backgroundColor: '#00a6a6' }} onClick={handleSubmit}>
+            <Button appearance="primary" style={{ width: 120, marginRight: 20, backgroundColor: '#1976D2' }} onClick={handleSubmit}>
               Salvar
             </Button>
           </Form.Group>

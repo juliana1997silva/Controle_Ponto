@@ -29,8 +29,8 @@ const ListPoint: React.FC = () => {
           padding: 10
         }}
       >
-        <Button appearance="primary" color="green" style={{ width: 120 }} onClick={() => setShowCreated(true)}>
-          Novo
+        <Button appearance="primary" style={{ backgroundColor: '#1976D2', width: 120 }} onClick={() => setShowCreated(true)}>
+          Registrar
         </Button>
       </div>
       <Table data={dataRegister} autoHeight>
@@ -64,11 +64,11 @@ const ListPoint: React.FC = () => {
             {(rowData: any) => {
               switch (rowData.status) {
                 case 'approved':
-                  return <Tag color="green">Aprovado</Tag>
+                  return <Tag color="green">Aprovado</Tag>;
                 case 'disapproved':
-                  return <Tag color="red">Reprovado</Tag>
+                  return <Tag color="red">Reprovado</Tag>;
                 case 'pending':
-                  return <Tag color="orange">Pendente</Tag>
+                  return <Tag color="orange">Pendente</Tag>;
               }
             }}
           </Cell>

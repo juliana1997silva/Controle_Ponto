@@ -45,7 +45,7 @@ const Schedule: React.FC = () => {
           justifyContent: 'end'
         }}
       >
-        <Button appearance="primary" color="green" onClick={() => setOpenModal(true)} style={{ width: 155 }}>
+        <Button appearance="primary" onClick={() => setOpenModal(true)} style={{ backgroundColor: '#1976D2', width: 120 }}>
           Novo Evento
         </Button>
       </div>

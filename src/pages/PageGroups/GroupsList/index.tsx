@@ -4,17 +4,17 @@ import BreadcrumbComponent from '../../../components/Breadcrumb';
 import GroupsRegister from '../GroupsRegister';
 import { useGroups } from '../hooks/hooksGroups';
 import { ContainerButton, TitlePage } from './styles';
+import { useAuth } from '../../../hooks/hooksAuth';
 
 const GroupsList: React.FC = () => {
+  const { user } = useAuth();
   const { Column, HeaderCell, Cell } = Table;
-  const { listGroups, dataGroups, list, setMode, setGroupStore, releaseGroup } = useGroups();
+  const { listGroups, dataGroups, list, setMode, setGroupStore, releaseGroup, setDataGroups } = useGroups();
   const [showRegister, setShowRegister] = useState(false);
 
   useEffect(() => {
     if (!list) listGroups();
   }, [list, listGroups]);
-
-  //console.log('dataGroups ::', dataGroups);
 
   if (showRegister) {
     return <GroupsRegister />;
@@ -24,16 +24,18 @@ const GroupsList: React.FC = () => {
     <>
       <Panel header={<TitlePage className="title">Grupos</TitlePage>}>
         <BreadcrumbComponent active="Grupos" href="/dashboard" label="Dashboard" />
-        <ContainerButton>
-          <Button
-            appearance="primary"
-            type="submit"
-            style={{ backgroundColor: '#00a6a6', width: 120 }}
-            onClick={() => setShowRegister(true)}
-          >
-            Novo
-          </Button>
-        </ContainerButton>
+        {user.admin === 1 && (
+          <ContainerButton>
+            <Button
+              appearance="primary"
+              type="submit"
+              style={{ backgroundColor: '#1976D2', width: 120 }}
+              onClick={() => setShowRegister(true)}
+            >
+              Novo
+            </Button>
+          </ContainerButton>
+        )}
         <Table data={dataGroups}>
           <Column width={300}>
             <HeaderCell>Nome</HeaderCell>

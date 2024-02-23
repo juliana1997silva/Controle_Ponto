@@ -1,11 +1,11 @@
-import { mdiAlarm, mdiFileDocumentOutline } from "@mdi/js";
-import React, { useEffect, useState } from "react";
-import { Animation } from "rsuite";
-import Card from "../components/Card";
-import CardCheckPoint from "../components/CardCheckPoint";
-import CardConsults from "../components/CardConsults";
-import "./animation.css";
-import { Container, ContainerGlobal, ContainerGrafic } from "./styles";
+import { mdiAlarm, mdiFileDocumentOutline } from '@mdi/js';
+import React, { useEffect, useState } from 'react';
+import { Animation } from 'rsuite';
+import Card from '../components/Card';
+import CardCheckPoint from '../components/CardCheckPoint';
+import CardConsults from '../components/CardConsults';
+import './animation.css';
+import { Container, ContainerGlobal, ContainerGrafic } from './styles';
 
 const Dashboard: React.FC = () => {
   const [show, setShow] = useState(false);
@@ -15,27 +15,13 @@ const Dashboard: React.FC = () => {
       {...props}
       ref={ref}
       style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
       }}
     >
-      <Card
-        color={"#00a6a6"}
-        key="1"
-        icon={mdiAlarm}
-        graphic={false}
-        title="02:58"
-        subtitle="BANCO DE HORAS"
-      />
-      <Card
-        color={"#2386d6"}
-        key="2"
-        icon={mdiFileDocumentOutline}
-        graphic={false}
-        title="57"
-        subtitle="CONSULTAS ATENDIDAS"
-      />
+      <Card color={'#1976D2'} key="1" icon={mdiAlarm} graphic={false} title="02:58" subtitle="BANCO DE HORAS" />
+      <Card color={'#2386d6'} key="2" icon={mdiFileDocumentOutline} graphic={false} title="57" subtitle="CONSULTAS ATENDIDAS" />
     </div>
   ));
 

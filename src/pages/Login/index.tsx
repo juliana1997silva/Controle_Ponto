@@ -1,33 +1,24 @@
-import EyeIcon from '@rsuite/icons/legacy/Eye';
-import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Email, Lock, Login } from '@mui/icons-material';
+import { Paper } from '@mui/material';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, InputGroup, Panel } from 'rsuite';
-import logoTempus from '../../assets/logoTempus.png';
 import { dataLogin, useAuth } from '../../hooks/hooksAuth';
-import { Button, ContainerForm, DivImg, Global, ImgPage, TitleForm } from './styles';
+import Button from './components/Partials/Button';
+import Form from './components/Partials/Form';
+import loginImage from './images/login-image-2.jpg';
+import { Container, FormContainer, ImageContainer, LoginContainer, Title, WelcomeMessage } from './styles';
 
-const Login: React.FC = () => {
-  const { signin, user } = useAuth();
-  const [visible, setVisible] = useState(false);
-  const [dataForm, setDataForm] = useState<dataLogin>({} as dataLogin);
+const Signin: React.FC = () => {
+  const { signin, user, loading } = useAuth();
   const navigate = useNavigate();
 
-  const handleChangePassword = () => {
-    setVisible(!visible);
-  };
-
-  const handleChange = useCallback(
-    (form: dataLogin) => {
-      setDataForm(form);
+  // Methods
+  const handleSubmit = useCallback(
+    async (data: dataLogin) => {
+      signin(data);
     },
-    [setDataForm]
+    [signin]
   );
-
-  const handleSubmit = useCallback(() => {
-    if (dataForm) signin(dataForm);
-    ////console.log(dataForm);
-  }, [signin, dataForm]);
 
   useEffect(() => {
     if (user) {
@@ -38,41 +29,88 @@ const Login: React.FC = () => {
   }, [user, navigate]);
 
   return (
-    <Global>
-      <Panel
-        style={{
-          backgroundColor: '#fff',
-          width: '30%'
+    <Container>
+      <Paper
+        elevation={16}
+        sx={{
+          maxHeight: 'calc(100vh - 40px)',
+          maxWidth: 1020,
+          width: '92%',
+          height: 620,
+          display: 'flex',
+          overflow: 'hidden'
         }}
       >
-        <DivImg>
-          <ImgPage src={logoTempus} style={{ width: '40%', height: '50%' }} />
-        </DivImg>
-        <div style={{ padding: 20 }} />
-        <ContainerForm>
-          <Form onChange={handleChange}>
-            <Form.Group>
-              <TitleForm>Login:</TitleForm> <br /> <br />
-              <InputGroup>
-                <Form.Control name="email" />
-                <span className="animation-bottom"></span>
-              </InputGroup>
-            </Form.Group>
-            <br />
-            <Form.Group>
-              <TitleForm>Senha:</TitleForm> <br /> <br />
-              <InputGroup>
-                <Form.Control name="password" type={visible ? 'text' : 'password'} />
+        <LoginContainer>
+          <ImageContainer image={loginImage}></ImageContainer>
 
-                <InputGroup.Button onClick={handleChangePassword}>{visible ? <EyeIcon /> : <EyeSlashIcon />}</InputGroup.Button>
-              </InputGroup>
-            </Form.Group>
-            <Button onClick={handleSubmit}>Entrar</Button>
-          </Form>
-        </ContainerForm>
-      </Panel>
-    </Global>
+          <FormContainer>
+            <Title>Conecto - Tempus</Title>
+
+            <WelcomeMessage>Seja bem vindo!</WelcomeMessage>
+
+            <Form
+              onSubmit={handleSubmit}
+              styles={{
+                background: 'transparent',
+                padding: '0px',
+                gap: '14px'
+              }}
+              template="MUI"
+              formGrid={{
+                type: 'column',
+                gap: 12,
+                children: [
+                  {
+                    type: 'field',
+                    content: {
+                      name: 'email',
+                      label: 'E-mail',
+                      placeholder: 'Endereço de e-mail',
+                      startAdornment: <Email color="primary" />,
+                      validate: [{ required: 'É necessario endereço de e-mail.' }, { email: 'Endereço de e-mail inválido.' }]
+                    }
+                  },
+                  {
+                    type: 'field',
+                    content: {
+                      type: 'password',
+                      name: 'password',
+                      label: 'Senha',
+                      placeholder: 'Digite sua senha',
+                      startAdornment: <Lock color="primary" />,
+                      validate: [
+                        { required: 'É necessario a senha.' },
+                        {
+                          min: {
+                            value: 8,
+                            message: 'Senha precisa ter no mínimo 8 caracteres'
+                          }
+                        }
+                      ]
+                    }
+                  }
+                  /* {
+                    type: 'checkbox',
+                    content: {
+                      name: 'remember',
+                      label: 'Lembrar-me',
+                      value: false
+                    }
+                  } */
+                ]
+              }}
+              buttons={
+                <>
+                  <Button color="primary" type="submit" label="Entrar" endIcon={<Login />} loading={loading} />
+                </>
+              }
+            />
+          </FormContainer>
+        </LoginContainer>
+      </Paper>
+    </Container>
   );
 };
 
-export default Login;
+export default Signin;

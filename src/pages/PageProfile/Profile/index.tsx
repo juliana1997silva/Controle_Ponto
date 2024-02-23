@@ -3,9 +3,10 @@ import { Button, Form, Loader, Message, Panel, Uploader, useToaster } from 'rsui
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import ResetPassword from '../components/ResetPassword';
 import { useProfile } from '../hooks/hookProfile';
-import { ContainerHeader, PulaLinha, TitlePage } from './styles';
+import { Collaborator, ContainerHeader, PulaLinha, TitlePage } from './styles';
 
 import AvatarIcon from '@rsuite/icons/legacy/Avatar';
+import { useAuth } from '../../../hooks/hooksAuth';
 
 function previewFile(file: any, callback: any) {
   const reader = new FileReader();
@@ -16,34 +17,27 @@ function previewFile(file: any, callback: any) {
 }
 
 const Profile: React.FC = () => {
+  const { user } = useAuth();
   const { showModalPassword, setShowModalPassword } = useProfile();
   const toaster = useToaster();
   const [uploading, setUploading] = useState(false);
   const [fileInfo, setFileInfo] = useState(null);
-  const [buttonPhone, setButtonPhone] = useState(false);
-  const [phone, setPhone] = useState('');
-  const [mode, setMode] = useState<'create' | 'edit'>('create');
+  //const [buttonPhone, setButtonPhone] = useState(false);
+  //const [phone, setPhone] = useState('');
+  //const [mode, setMode] = useState<'create' | 'edit'>('create');
 
-  const dataProfile = {
-    name: 'Juliana Silva de Jesus',
-    departamento: 'Desenvolvimento',
-    coordenador: 'Wilson Felix',
-    hour_expediente: '08:00 - 17:00',
-    mail: 'jjesus@conecto.com.br',
-    phone: '(11) 92106-3113'
-  };
 
-  const handleChange = useCallback((value: any) => {
-    const phoneFormat = value
-      .replace(/\D/g, '')
-      .replace(/(\d{2})(\d)/, '($1) $2')
-      .replace(/(\d{5})(\d)/, '$1-$2')
-      .replace(/(-\d{4})(\d+?)$/, '$1');
+  // const handleChange = useCallback((value: any) => {
+  //  const phoneFormat = value
+  //    .replace(/\D/g, '')
+  //    .replace(/(\d{2})(\d)/, '($1) $2')
+  //    .replace(/(\d{5})(\d)/, '$1-$2')
+  //    .replace(/(-\d{4})(\d+?)$/, '$1');
     // //console.log(phoneFormat);
-    setPhone(phoneFormat);
-    setButtonPhone(true);
-    setMode('edit');
-  }, []);
+  //  setPhone(phoneFormat);
+   // setButtonPhone(true);
+  //  setMode('edit');
+ // }, []); 
 
   return (
     <>
@@ -56,7 +50,7 @@ const Profile: React.FC = () => {
           </Button>
         </ContainerHeader>
 
-        <Uploader
+        {/* <Uploader
           fileListVisible={false}
           listType="picture"
           action="//jsonplaceholder.typicode.com/posts/"
@@ -81,52 +75,30 @@ const Profile: React.FC = () => {
             {uploading && <Loader backdrop center />}
             {fileInfo ? <img src={fileInfo} width="100%" height="100%" alt="Foto Perfil" /> : <AvatarIcon style={{ fontSize: 80 }} />}
           </button>
-        </Uploader>
+        </Uploader> */}
 
-        <Form formDefaultValue={dataProfile}>
+        <Form formDefaultValue={[user]}>
+          <Collaborator>Dados do Colaborador</Collaborator>
           <PulaLinha />
-          <Form.Group controlId="name">
+          <Form.Group>
             <Form.ControlLabel>Nome Completo</Form.ControlLabel>
-            <Form.Control name="name" disabled />
+            <Form.Control name="name" disabled value={user.name} />
           </Form.Group>
-          <Form.Group controlId="departamento" inlist={true}>
-            <Form.ControlLabel>Departamento</Form.ControlLabel>
-            <Form.Control name="departamento" disabled />
-          </Form.Group>
-          <Form.Group controlId="coordenador">
-            <Form.ControlLabel>Coordenador</Form.ControlLabel>
-            <Form.Control name="coordenador" disabled />
-          </Form.Group>
-          <Form.Group controlId="hour_expediente">
+          <Form.Group>
             <Form.ControlLabel>Horário Expediente</Form.ControlLabel>
-            <Form.Control name="hour_expediente" disabled />
-          </Form.Group>
-          <Form.Group controlId="mail">
-            <Form.ControlLabel>E-mail</Form.ControlLabel>
-            <Form.Control name="mail" type="mail" disabled />
-          </Form.Group>
-          <Form.Group controlId="phone">
-            <Form.ControlLabel>Telefone para Contato:</Form.ControlLabel>
             <Form.Control
-              name="phone"
-              type="phone"
-              value={mode === 'edit' ? phone : dataProfile.phone}
-              onChange={(e) => handleChange(e)}
-              maxLength={15}
+              name="hour_expediente"
+              disabled
+              value={`${user.entry_time} - ${user.lunch_entry_time} - ${user.lunch_out_time} - ${user.out_time}`}
             />
-
-            {buttonPhone && (
-              <Button
-                appearance="primary"
-                style={{
-                  marginInline: 10,
-                  width: 120,
-                  backgroundColor: '#00a6a6'
-                }}
-              >
-                Salvar
-              </Button>
-            )}
+          </Form.Group>
+          <Form.Group>
+            <Form.ControlLabel>E-mail</Form.ControlLabel>
+            <Form.Control name="email" type="email" disabled value={user.email} />
+          </Form.Group>
+          <Form.Group>
+            <Form.ControlLabel>Telefone para Contato:</Form.ControlLabel>
+            <Form.Control name="phone" type="phone" disabled value={user.phone} />
           </Form.Group>
         </Form>
       </Panel>

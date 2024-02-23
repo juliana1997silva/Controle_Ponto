@@ -27,7 +27,7 @@ const UserList: React.FC = () => {
           <Button
             appearance="primary"
             type="submit"
-            style={{ backgroundColor: '#00a6a6', width: 120 }}
+            style={{ backgroundColor: '#1976D2', width: 120 }}
             onClick={() => setShowRegister(!showRegister)}
           >
             Novo
