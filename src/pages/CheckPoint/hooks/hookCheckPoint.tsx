@@ -9,7 +9,8 @@ import { IProps } from '../../../types';
 export interface consultsData {
   queries?: string;
   description?: string;
-  id?: string;
+  id?: string | undefined | null;
+  link?: string;
   registry_id?: string;
   created_at?: string;
   updated_at?: string;
@@ -31,7 +32,7 @@ export interface expensesData {
 }
 
 export interface nonBusinessData {
-  id?: string;
+  id?: string | undefined | null;
   registry_id?: string;
   entry_time?: string;
   lunch_entry_time?: string | null;
@@ -83,6 +84,7 @@ interface HooksCheckPointData {
   setList(list: boolean): void;
   showBack: boolean;
   setShowBack(showBack: boolean): void;
+  deleteConsult(id: string): void;
 }
 
 const CheckPointContext = createContext<HooksCheckPointData>({} as HooksCheckPointData);
@@ -155,7 +157,7 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
 
   const updatePoint = useCallback(
     async (dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]) => {
-      console.log('dataTime update:: ', dataTime);
+      console.log('consultations update:: ', consultations);
       const data = {
         user_id: dataTime.user_id,
         date: dataTime.date,
@@ -188,6 +190,25 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
     [listPoint, setUpdateData, user]
   );
 
+  const deleteConsult = useCallback(
+    async (id: string) => {
+      const data = await api
+        .delete(`/consult/${id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          }
+        })
+        .catch((error) => {
+          //console.log(error)
+        });
+
+      if (data) {
+        toast.success('Consulta deletada com sucesso');
+      }
+    },
+    [user]
+  );
+
   return (
     <CheckPointContext.Provider
       value={{
@@ -215,7 +236,8 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
         list,
         setList,
         showBack,
-        setShowBack
+        setShowBack,
+        deleteConsult
       }}
     >
       {children}

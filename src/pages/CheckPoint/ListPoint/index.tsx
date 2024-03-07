@@ -80,17 +80,19 @@ const ListPoint: React.FC = () => {
           <Cell>
             {(rowData: any) => (
               <>
-                <Button
-                  appearance="primary"
-                  color="blue"
-                  onClick={() => {
-                    setDataRegisterStore(rowData);
-                    setShowCreated(true);
-                    setMode('edit');
-                  }}
-                >
-                  Editar
-                </Button>
+                {rowData.status !== 'generation' && (
+                  <Button
+                    appearance="primary"
+                    color="blue"
+                    onClick={() => {
+                      setDataRegisterStore(rowData);
+                      setShowCreated(true);
+                      setMode('edit');
+                    }}
+                  >
+                    Editar
+                  </Button>
+                )}
               </>
             )}
           </Cell>

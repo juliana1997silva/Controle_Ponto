@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCheckPoint } from '../../../CheckPoint/hooks/hookCheckPoint';
-import { Divider, Drawer, Table } from 'rsuite';
+import { Button, Divider, Drawer, Table } from 'rsuite';
 import { PulaLinha, TitleRegistry } from './styles';
 import { useReleasePoint } from '../../hooks/hookReleasePoint';
 import moment from 'moment';
@@ -84,9 +84,19 @@ const DrawerView: React.FC<dataView> = ({ name }) => {
                     <HeaderCell>Nº Consulta:</HeaderCell>
                     <Cell dataKey="queries" />
                   </Column>
-                  <Column resizable>
+                  <Column resizable width={200}>
                     <HeaderCell>Descrição:</HeaderCell>
                     <Cell dataKey="description" />
+                  </Column>
+                  <Column resizable width={300}>
+                    <HeaderCell>Link Interpress:</HeaderCell>
+                    <Cell>
+                      {(rowData: any) => (
+                        <Button appearance="link" onClick={() => window.open(rowData.link, '_blank')}>
+                          {rowData.link}
+                        </Button>
+                      )}
+                    </Cell>
                   </Column>
                 </Table>
               </>

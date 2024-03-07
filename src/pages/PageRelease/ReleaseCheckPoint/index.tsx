@@ -94,6 +94,8 @@ const ReleaseCheckPoint: React.FC = () => {
                         return <Tag color="red">Reprovado</Tag>;
                       case 'pending':
                         return <Tag color="orange">Pendente</Tag>;
+                      case 'generation':
+                        return <Tag color="violet">RH</Tag>;
                     }
                   }}
                 </Cell>
@@ -184,6 +186,27 @@ const ReleaseCheckPoint: React.FC = () => {
                                 />
                               </Whisper>
                             </>
+                          </ButtonGroup>
+                        );
+
+                      case 'generation':
+                        return (
+                          <ButtonGroup>
+                            <Whisper
+                              placement="top"
+                              controlId="control-id-focus"
+                              trigger="hover"
+                              speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
+                            >
+                              <IconButton
+                                icon={<VisibleIcon />}
+                                onClick={() => {
+                                  setOpenView(true);
+                                  setDataRegisterStore(rowData);
+                                }}
+                                style={{ color: '#000' }}
+                              />
+                            </Whisper>
                           </ButtonGroup>
                         );
                     }

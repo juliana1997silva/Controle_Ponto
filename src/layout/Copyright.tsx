@@ -10,7 +10,7 @@ const Copyright: React.FC = () => {
     >
       <div className="container">
         <p>
-          © 2023 -{" "}
+          © 2024 -{" "}
           {/*  <a
             href="https://github.com/rsuite/rsuite"
             target="_blank"

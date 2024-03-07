@@ -7,12 +7,13 @@ import { useAuth } from '../../../hooks/hooksAuth';
 import ListPoint from '../ListPoint';
 import { consultsData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
 import { TextEdit, TitlePage } from './styles';
+import moment from 'moment';
 
 const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
 const Point: React.FC = () => {
   const { user } = useAuth();
-  const { registerPoint, dataRegisterStore, mode, updatePoint, updateData } = useCheckPoint();
+  const { registerPoint, dataRegisterStore, mode, updatePoint, updateData, deleteConsult } = useCheckPoint();
   const { Column, HeaderCell, Cell } = Table;
   const [formDataTime, setFormDataTime] = useState<timeData>({} as timeData);
   const [formDataNonBusiness, setFormDataNonBusiness] = useState<nonBusinessData>({} as nonBusinessData);
@@ -48,7 +49,7 @@ const Point: React.FC = () => {
 
   const handleAddNonBusiness = useCallback(() => {
     businessData.push({
-      id: formDataNonBusiness.id,
+      id: formDataNonBusiness.id ? formDataNonBusiness.id : null,
       registry_id: formDataNonBusiness.registry_id,
       entry_time: formDataNonBusiness.entry_time,
       lunch_entry_time: formDataNonBusiness.lunch_entry_time ? formDataNonBusiness.lunch_entry_time : null,
@@ -91,13 +92,14 @@ const Point: React.FC = () => {
     (data: nonBusinessData) => {
       const filterData = dataConsults.filter((result) => result.id !== data.id);
       setDataConsults(filterData);
+     if(data.id) deleteConsult(data.id);
     },
-    [dataConsults, setDataConsults]
+    [dataConsults, setDataConsults, deleteConsult]
   );
 
   const handleAddConsults = useCallback(() => {
     dataConsults.push({
-      id: formDataConsults.id,
+      id: formDataConsults.id ? formDataConsults.id : null,
       registry_id: formDataConsults.registry_id,
       queries: formDataConsults.queries,
       description: formDataConsults.description
@@ -125,7 +127,14 @@ const Point: React.FC = () => {
   useEffect(() => {
     if (mode === 'edit') {
       if (dataRegisterStore) {
-        setFormDataTime(dataRegisterStore);
+        setFormDataTime({
+          date: moment(dataRegisterStore.date).format('DD/MM/YYYY'),
+          entry_time: dataRegisterStore.entry_time,
+          lunch_entry_time: dataRegisterStore.lunch_entry_time,
+          lunch_out_time: dataRegisterStore.lunch_out_time,
+          out_time: dataRegisterStore.out_time,
+          location: dataRegisterStore.location
+        });
 
         if (dataRegisterStore.consults) {
           setDataConsults(dataRegisterStore.consults);
@@ -146,7 +155,7 @@ const Point: React.FC = () => {
       entry_time: user.entry_time,
       lunch_entry_time: user.lunch_entry_time,
       lunch_out_time: user.lunch_out_time,
-      out_time: user.out_time
+      out_time: user.out_time,
     }));
   }, [setFormDataTime, user]);
 
