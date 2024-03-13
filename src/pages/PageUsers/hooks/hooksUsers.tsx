@@ -18,6 +18,7 @@ export interface UsersData {
   admin?: boolean;
   group_id?: string;
   manager?: boolean;
+  user_interpres_code?: string;
 }
 
 interface HooksUsersData {
@@ -112,7 +113,8 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
             password: dataUsers.password,
             admin: dataUsers.admin === true ? 1 : 0,
             group_id: dataUsers.group_id,
-            manager: dataUsers.manager
+            manager: dataUsers.manager,
+            user_interpres_code: dataUsers.user_interpres_code
           },
           {
             headers: {
@@ -150,7 +152,8 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
             out_time: dataUser.out_time,
             admin: dataUser.admin === true ? 1 : 0,
             group_id: dataUser.group_id,
-            manager: dataUser.manager
+            manager: dataUser.manager,
+            user_interpres_code: dataUser.user_interpres_code
           },
           {
             headers: {

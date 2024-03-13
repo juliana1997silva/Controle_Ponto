@@ -92,6 +92,9 @@ const RegistrationUsers: React.FC = () => {
           <Form.ControlLabel>E-mail:</Form.ControlLabel>
           <Form.Control name="email" />
 
+          <Form.ControlLabel>Usuário Interpress:</Form.ControlLabel>
+          <Form.Control name="user_interpres_code" />
+          
           <Form.Group controlId="coordinator">
             <Form.ControlLabel>Coordenador:</Form.ControlLabel>
             <Form.Control
@@ -108,6 +111,7 @@ const RegistrationUsers: React.FC = () => {
           <Form.Group controlId="admin">
             Coordenador: <Form.Control name="manager" accepter={Toggle} />
           </Form.Group>
+
           <Form.Group>
             <Divider>Expediente</Divider>
             <Form.ControlLabel>Entrada:</Form.ControlLabel>
@@ -133,7 +137,7 @@ const RegistrationUsers: React.FC = () => {
                 <Form.Control name="password" type={visible ? 'text' : 'password'} />
                 <InputGroup.Button onClick={handleChangePassword}>{visible ? <EyeIcon /> : <EyeSlashIcon />}</InputGroup.Button>
               </InputGroup>
-              <Button appearance="link" style={{textDecoration: "none", padding: 0 }} onClick={getPassword}>
+              <Button appearance="link" style={{ textDecoration: 'none', padding: 0 }} onClick={getPassword}>
                 Gerar Senha
               </Button>
             </Form.Group>

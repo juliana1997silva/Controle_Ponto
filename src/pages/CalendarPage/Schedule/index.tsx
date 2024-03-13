@@ -2,7 +2,7 @@ import { EventClickArg, EventContentArg } from '@fullcalendar/core';
 import { EventImpl } from '@fullcalendar/core/internal';
 import ptLocale from '@fullcalendar/core/locales/pt-br';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
@@ -21,8 +21,9 @@ export interface dataModal {
 
 const Schedule: React.FC = () => {
   const { listEvents, dataEvents, setMode, list, openModal, setOpenModal } = useCalendar();
-  const [dateSelect] = useState<string>({} as string);
+  const [dateSelect, setDateSelect] = useState<Date>({} as Date);
   const [dataModal, setDataModal] = useState<EventImpl>({} as EventImpl);
+  const [allDaySelect, setAllDaySelect] = useState<boolean>({} as boolean);
 
   const handleEventClick = useCallback(
     (clickInfo: EventClickArg) => {
@@ -31,6 +32,16 @@ const Schedule: React.FC = () => {
       setMode('edit');
     },
     [setDataModal, setOpenModal, setMode]
+  );
+
+  const handleEventAdd = useCallback(
+    (clickInfo: DateClickArg) => {
+      console.log('clickInfo::', clickInfo);
+      setDateSelect(clickInfo.date);
+      setOpenModal(true);
+      setAllDaySelect(clickInfo.allDay);
+    },
+    [setDateSelect, setOpenModal, setAllDaySelect]
   );
 
   useLayoutEffect(() => {
@@ -58,14 +69,13 @@ const Schedule: React.FC = () => {
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
           }}
           initialView="dayGridMonth"
-          weekends
-          selectable
-          selectMirror
           dayMaxEvents
           nextDayThreshold={'08:00:00'}
           initialEvents={dataEvents}
           eventContent={renderEventContent}
           eventClick={handleEventClick}
+          eventAdd={(e) => console.log(e)}
+          dateClick={handleEventAdd}
           locale={ptLocale}
         />
       )}
@@ -77,6 +87,7 @@ const Schedule: React.FC = () => {
         }}
         date={dateSelect}
         rowData={dataModal}
+        allDay={allDaySelect}
       />
     </Panel>
   );

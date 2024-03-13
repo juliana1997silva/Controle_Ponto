@@ -44,6 +44,9 @@ const Frame: React.FC = () => {
                 <Nav.Item eventKey="6" icon={<DocPassIcon />} onSelect={() => navigate('/groups')}>
                   Grupos
                 </Nav.Item>
+                <Nav.Item eventKey="7" icon={<DocPassIcon />} onSelect={() => navigate('/consults')}>
+                  Consultas
+                </Nav.Item>
               </>
             ) : (
               <></>
@@ -52,7 +55,7 @@ const Frame: React.FC = () => {
               Registro Ponto
             </Nav.Item>
 
-            <Nav.Item eventKey="5" icon={<DocPassIcon />} onSelect={() => navigate('/teste')}>
+            <Nav.Item eventKey="5" icon={<DocPassIcon />} onSelect={() => navigate('/schedule')}>
               Agenda
             </Nav.Item>
           </Nav>

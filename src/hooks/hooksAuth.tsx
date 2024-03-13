@@ -92,7 +92,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         })
         .catch(function (error) {
           //console.log(error.response.data.message);
-          toast.error(error.response.data.message);
+          if(error.response) toast.error(error.response.data.message);
         });
       setLoading(false);
     },

@@ -8,8 +8,9 @@ import ptBR from 'rsuite/locales/pt_BR';
 import { EventsData, useCalendar } from '../../../hooks/hooksCalendar';
 
 interface EventModalProps extends ModalProps {
-  date: string;
+  date: Date;
   rowData: EventImpl;
+  allDay: boolean
 }
 
 const EventModal = (props: EventModalProps) => {
@@ -40,11 +41,11 @@ const EventModal = (props: EventModalProps) => {
       id: rowData.id,
       allDay: rowData.allDay,
       backgroundColor: rowData.backgroundColor,
-      end: moment(rowData.end).format('YYYY-MM-DDTHH:mm'),
-      start: moment(rowData.start).format('YYYY-MM-DDTHH:mm'),
+      end: rowData.end ? moment(rowData.end).format('YYYY-MM-DDTHH:mm') : moment(String(date)).format('YYYY-MM-DDTHH:mm'),
+      start: rowData.start ? moment(rowData.start).format('YYYY-MM-DDTHH:mm') : moment(String(date)).format('YYYY-MM-DDTHH:mm'),
       title: rowData.title
     });
-  }, [setDataForm, rowData]);
+  }, [setDataForm, rowData, date]);
 
   useEffect(() => {
     if (dataForm.allDay === true) {
@@ -96,7 +97,7 @@ const EventModal = (props: EventModalProps) => {
             <Form.ControlLabel>Ínicio</Form.ControlLabel>
             <Stack spacing={6}>
               <CustomProvider locale={ptBR}>
-                <Form.Control name="start" accepter={Input} type="datetime-local" disabled={disabledDate} />
+                <Form.Control name="start" accepter={Input} type="datetime" disabled={disabledDate} />
               </CustomProvider>
             </Stack>
           </Form.Group>
@@ -105,7 +106,7 @@ const EventModal = (props: EventModalProps) => {
             <Form.ControlLabel>Término</Form.ControlLabel>
             <Stack spacing={6}>
               <CustomProvider locale={ptBR}>
-                <Form.Control name="end" accepter={Input} type="datetime-local" disabled={disabledDate} />
+                <Form.Control name="end" accepter={Input} type="datetime" disabled={disabledDate} />
               </CustomProvider>
             </Stack>
           </Form.Group>
