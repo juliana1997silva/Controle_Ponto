@@ -1,3 +1,4 @@
+import moment from 'moment';
 import 'moment/locale/pt-br';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -7,7 +8,6 @@ import { useAuth } from '../../../hooks/hooksAuth';
 import ListPoint from '../ListPoint';
 import { consultsData, nonBusinessData, timeData, useCheckPoint } from '../hooks/hookCheckPoint';
 import { TextEdit, TitlePage } from './styles';
-import moment from 'moment';
 
 const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as="textarea" ref={ref} />);
 
@@ -92,7 +92,7 @@ const Point: React.FC = () => {
     (data: nonBusinessData) => {
       const filterData = dataConsults.filter((result) => result.id !== data.id);
       setDataConsults(filterData);
-     if(data.id) deleteConsult(data.id);
+      if (data.id) deleteConsult(data.id);
     },
     [dataConsults, setDataConsults, deleteConsult]
   );
@@ -101,7 +101,7 @@ const Point: React.FC = () => {
     dataConsults.push({
       id: formDataConsults.id ? formDataConsults.id : null,
       registry_id: formDataConsults.registry_id,
-      queries: formDataConsults.queries,
+      request_key: formDataConsults.request_key,
       description: formDataConsults.description
     });
     setFormDataConsults({} as consultsData);
@@ -112,7 +112,7 @@ const Point: React.FC = () => {
     if (mode === 'created') {
       if (formDataTime.location !== undefined && formDataTime.date !== undefined) {
         registerPoint(formDataTime, businessData, dataConsults);
-       //console.log(formDataTime);
+        //console.log(formDataTime);
       } else {
         toast.error('Por favor, preencha todos os campos');
       }
@@ -155,7 +155,7 @@ const Point: React.FC = () => {
       entry_time: user.entry_time,
       lunch_entry_time: user.lunch_entry_time,
       lunch_out_time: user.lunch_out_time,
-      out_time: user.out_time,
+      out_time: user.out_time
     }));
   }, [setFormDataTime, user]);
 
@@ -197,7 +197,7 @@ const Point: React.FC = () => {
             <br />
             <Form.Control
               name="date"
-              style={{width: 200}}
+              style={{ width: 200 }}
               accepter={MaskedInput}
               placeholder="Data"
               showMask={true}
@@ -316,7 +316,7 @@ const Point: React.FC = () => {
             <Form onChange={handleChangeConsultation} formValue={formDataConsults}>
               <Form.Group>
                 <Form.ControlLabel>Nº Consulta</Form.ControlLabel>
-                <Form.Control name="queries" />
+                <Form.Control name="request_key" />
               </Form.Group>
               <br />
               <Form.Group>
@@ -338,7 +338,7 @@ const Point: React.FC = () => {
                 <Table data={dataConsults}>
                   <Column width={100} align="center">
                     <HeaderCell>Nº Consulta</HeaderCell>
-                    <Cell dataKey="queries" />
+                    <Cell dataKey="request_key" />
                   </Column>
                   <Column width={300}>
                     <HeaderCell>Descrição</HeaderCell>

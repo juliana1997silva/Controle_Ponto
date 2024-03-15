@@ -1,9 +1,9 @@
-import React from 'react';
-import { useCheckPoint } from '../../../CheckPoint/hooks/hookCheckPoint';
-import { Button, Divider, Drawer, Table } from 'rsuite';
-import { PulaLinha, TitleRegistry } from './styles';
-import { useReleasePoint } from '../../hooks/hookReleasePoint';
 import moment from 'moment';
+import React from 'react';
+import { Button, Divider, Drawer, Table } from 'rsuite';
+import { useCheckPoint } from '../../../CheckPoint/hooks/hookCheckPoint';
+import { useReleasePoint } from '../../hooks/hookReleasePoint';
+import { PulaLinha, TitleRegistry } from './styles';
 
 interface dataView {
   name: string;
@@ -82,7 +82,7 @@ const DrawerView: React.FC<dataView> = ({ name }) => {
                 <Table data={dataRegisterStore.consults} style={{ width: '100%' }}>
                   <Column resizable>
                     <HeaderCell>Nº Consulta:</HeaderCell>
-                    <Cell dataKey="queries" />
+                    <Cell dataKey="request_key" />
                   </Column>
                   <Column resizable width={200}>
                     <HeaderCell>Descrição:</HeaderCell>

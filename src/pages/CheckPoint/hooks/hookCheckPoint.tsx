@@ -7,7 +7,7 @@ import api from '../../../services/api';
 import { IProps } from '../../../types';
 
 export interface consultsData {
-  queries?: string;
+  request_key?: string;
   description?: string;
   id?: string | undefined | null;
   link?: string;

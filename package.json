@@ -46,6 +46,7 @@
     "react-router-dom": "^6.6.2",
     "react-scripts": "^5.0.1",
     "react-toastify": "^9.1.1",
+    "reactjs-popup": "^2.0.6",
     "rsuite": "^5.53.2",
     "rsuite-color-picker": "^0.2.0",
     "string-encode-decode": "^1.0.7",
