@@ -1,42 +1,29 @@
 import VisibleIcon from '@rsuite/icons/Visible';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonGroup, IconButton, Panel, Table, Tooltip, Whisper } from 'rsuite';
 import ConsultsCreated from '../ConsultsCreated';
 import DrawerDetails from '../components/DrawerDetails';
 import { TitlePage } from './styles';
+import api from '../../../services/api';
 
 const Consults: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
   const [showCreated, setShowCreated] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [dataConsults, setDataConsults] = useState<[]>([]);
 
-  const data = [
-    {
-      request_key: '59396',
-      user: 'wfelix',
-      situation: 'Desenvolvimento',
-      documentation: 1,
-      revision: 1,
-      bug: 1,
-      daily: 1,
-      update: 1,
-      service_forecast: 1,
-      commit: 0
-    },
+  const consultsGet = useCallback(async () => {
+    const data = await api.get('consults');
 
-    {
-      request_key: '59396',
-      user: 'wfelix',
-      situation: 'Desenvolvimento',
-      documentation: 0,
-      revision: 1,
-      bug: 1,
-      daily: 1,
-      update: 1,
-      service_forecast: 1,
-      commit: 1
-    }
-  ];
+    console.log('data::consults:',data.data);
+    setDataConsults(data.data);
+    setShowCreated(false)
+
+  },[]);
+
+  useEffect(() => {
+    consultsGet()
+  },[])
 
   if (showCreated) {
     return <ConsultsCreated />;
@@ -54,10 +41,18 @@ const Consults: React.FC = () => {
             Novo
           </Button>
         </div>
-        <Table data={data}>
+        <Table data={dataConsults} autoHeight>
           <Column>
             <HeaderCell>Consulta</HeaderCell>
-            <Cell dataKey="request_key" />
+            <Cell>
+              {(rowData: any) => (
+                <>
+                  <a href={rowData.link} target="_blank" rel="noopener noreferrer">
+                    {rowData.request_key}
+                  </a>
+                </>
+              )}
+            </Cell>
           </Column>
           <Column>
             <HeaderCell>Usuário</HeaderCell>
