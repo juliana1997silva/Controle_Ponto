@@ -47,6 +47,9 @@ const Frame: React.FC = () => {
                 <Nav.Item eventKey="7" icon={<DocPassIcon />} onSelect={() => navigate('/consults')}>
                   Consultas
                 </Nav.Item>
+                <Nav.Item eventKey="8" icon={<DocPassIcon />} onSelect={() => navigate('/user-groups')}>
+                  Usuarios x Grupos
+                </Nav.Item>
               </>
             ) : (
               <></>

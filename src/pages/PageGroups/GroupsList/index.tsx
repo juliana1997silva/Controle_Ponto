@@ -42,10 +42,6 @@ const GroupsList: React.FC = () => {
             <Cell dataKey="name" />
           </Column>
           <Column width={300}>
-            <HeaderCell>Responsável</HeaderCell>
-            <Cell dataKey="manager" />
-          </Column>
-          <Column width={300}>
             <HeaderCell>Status</HeaderCell>
             <Cell>
               {(rowData: any) => {

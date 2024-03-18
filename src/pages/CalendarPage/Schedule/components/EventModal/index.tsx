@@ -1,8 +1,9 @@
 import { EventImpl } from '@fullcalendar/core/internal';
 import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 import { Button, Checkbox, CustomProvider, Form, Input, Modal, ModalProps, Stack } from 'rsuite';
-import ColorPicker from 'rsuite-color-picker';
 import 'rsuite-color-picker/lib/styles.css';
 import ptBR from 'rsuite/locales/pt_BR';
 import { EventsData, useCalendar } from '../../../hooks/hooksCalendar';
@@ -10,7 +11,7 @@ import { EventsData, useCalendar } from '../../../hooks/hooksCalendar';
 interface EventModalProps extends ModalProps {
   date: Date;
   rowData: EventImpl;
-  allDay: boolean
+  allDay: boolean;
 }
 
 const EventModal = (props: EventModalProps) => {
@@ -19,6 +20,8 @@ const EventModal = (props: EventModalProps) => {
   const [dataForm, setDataForm] = useState<EventsData>({} as EventsData);
   const [disabledDate, setDisabledDate] = useState(false);
   const [check] = useState(false);
+
+  const colors = ['#ffeb3c', '#ff9900', '#f44437', '#ea1e63', '#9c26b0', '#3f51b5', '', '#009788', '#4baf4f', '#7e5d4e'];
 
   const handleChange = useCallback(
     (form: EventsData) => {
@@ -67,17 +70,32 @@ const EventModal = (props: EventModalProps) => {
             <Form.Control name="title" />
           </Form.Group>
           <Form.Group controlId="backgroundColor">
-            <Form.ControlLabel>Cor</Form.ControlLabel>
-            <Form.Control
-              accepter={ColorPicker}
-              name="backgroundColor"
-              onChange={(e) =>
-                setDataForm((prevState: EventsData) => ({
-                  ...prevState,
-                  backgroundColor: e.hex
-                }))
+            <Popup
+              trigger={
+                <>
+                  <Button>Cor</Button>
+                </>
               }
-            />
+            >
+              <div className="crud-color-row">
+                {colors.map((color, index) =>
+                  index < 5 ? (
+                    <div key={index} data-value={color}>
+                      <div style={{ background: color }}></div>
+                    </div>
+                  ) : null
+                )}
+              </div>
+              <div className="crud-color-row">
+                {colors.map((color, index) =>
+                  index >= 5 ? (
+                    <div key={index} data-value={color}>
+                      <div style={{ background: color }}></div>
+                    </div>
+                  ) : null
+                )}
+              </div>
+            </Popup>
           </Form.Group>
           <Form.Group controlId="allDay">
             <Form.Control

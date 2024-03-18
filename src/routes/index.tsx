@@ -17,6 +17,7 @@ const PageGroups = React.lazy(() => import('../pages/PageGroups'));
 const PageCoordinator = React.lazy(() => import('../pages/PageCoordinator'));
 const CalendarPage = React.lazy(() => import('../pages/CalendarPage'));
 const PageConsults = React.lazy(() => import('../pages/PageConsults'));
+const PageUserGroups = React.lazy(() => import('../pages/PageUserGroups'));
 
 export function Router() {
   return (
@@ -117,6 +118,16 @@ export function Router() {
             <React.Suspense fallback={<Fallback />}>
               <PrivateRoute>
                 <PageConsults />
+              </PrivateRoute>
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="/user-groups"
+          element={
+            <React.Suspense fallback={<Fallback />}>
+              <PrivateRoute>
+                <PageUserGroups />
               </PrivateRoute>
             </React.Suspense>
           }

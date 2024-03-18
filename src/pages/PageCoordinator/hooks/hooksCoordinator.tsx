@@ -7,7 +7,7 @@ import { IProps } from '../../../types';
 export interface CoordinatorData {
   id?: string;
   name?: string;
-  group_id?: string;
+  team_id?: string;
   status?: number;
   created_at?: string;
   updated_at?: string;

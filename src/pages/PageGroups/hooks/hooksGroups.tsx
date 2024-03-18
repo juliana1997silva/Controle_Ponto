@@ -8,7 +8,6 @@ import { IProps } from '../../../types';
 export interface GroupsData {
   id?: string;
   name?: string;
-  manager?: string;
   status?: number;
   created_at?: string;
   updated_at?: string;

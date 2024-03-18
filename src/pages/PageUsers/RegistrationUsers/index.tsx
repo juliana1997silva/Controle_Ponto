@@ -94,24 +94,6 @@ const RegistrationUsers: React.FC = () => {
 
           <Form.ControlLabel>Usuário Interpress:</Form.ControlLabel>
           <Form.Control name="user_interpres_code" />
-          
-          <Form.Group controlId="coordinator">
-            <Form.ControlLabel>Coordenador:</Form.ControlLabel>
-            <Form.Control
-              name="group_id"
-              accepter={SelectPicker}
-              data={coordinator}
-              searchable={false}
-              placeholder="Selecione o Coordenador"
-            />
-          </Form.Group>
-          <Form.Group controlId="admin">
-            Admin: <Form.Control name="admin" accepter={Toggle} />
-          </Form.Group>
-          <Form.Group controlId="admin">
-            Coordenador: <Form.Control name="manager" accepter={Toggle} />
-          </Form.Group>
-
           <Form.Group>
             <Divider>Expediente</Divider>
             <Form.ControlLabel>Entrada:</Form.ControlLabel>

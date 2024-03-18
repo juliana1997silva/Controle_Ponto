@@ -58,7 +58,7 @@ const CoordinatorRegister: React.FC = () => {
 
           <Form.ControlLabel>Grupo:</Form.ControlLabel>
           <br />
-          <Form.Control accepter={SelectPicker} name="group_id" data={groups} placeholder="Selecione o grupo" searchable={false} />
+          <Form.Control accepter={SelectPicker} name="team_id" data={groups} placeholder="Selecione o grupo" searchable={false} />
           <DivButton>
             <ButtonToolbar>
               <Button appearance="primary" type="submit" style={{ backgroundColor: '#1976D2' }} onClick={handleSubmit}>

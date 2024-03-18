@@ -16,7 +16,7 @@ export interface UsersData {
   out_time?: string;
   password?: string;
   admin?: boolean;
-  group_id?: string;
+  team_id?: string;
   manager?: boolean;
   user_interpres_code?: string;
 }
@@ -78,23 +78,26 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
   }, [setCoordinatorData, setListCoordinatorData, user]);
 
   //lista os usuarios
-  const listUsers = useCallback(async () => {
-    await api
-      .get('/users', {
-        headers: {
-          Authorization: `Bearer ${user.token}`
-        }
-      })
-      .then((response) => {
-        //console.log('user:: ', response.data);
-        setDataListUsers(response.data);
-      })
-      .catch((error) => {
-        ////console.log(error);
-        toast.error('Ocorreu um erro. Tente Novamente!');
-      });
-    setList(true);
-  }, [setDataListUsers, setList, user]);
+  const listUsers = useCallback(
+    async () => {
+     await api
+       .get(`/users`, {
+         headers: {
+           Authorization: `Bearer ${user.token}`
+         }
+       })
+       .then((response) => {
+         setDataListUsers(response.data);
+       })
+       .catch((error) => {
+         ////console.log(error);
+         toast.error('Ocorreu um erro. Tente Novamente!');
+       });
+      
+      setList(true);
+    },
+    [setDataListUsers, setList, user]
+  );
 
   //registra o usuario
   const RegisterUsers = useCallback(
@@ -112,7 +115,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
             out_time: dataUsers.out_time,
             password: dataUsers.password,
             admin: dataUsers.admin === true ? 1 : 0,
-            group_id: dataUsers.group_id,
+            team_id: dataUsers.team_id,
             manager: dataUsers.manager,
             user_interpres_code: dataUsers.user_interpres_code
           },
@@ -151,7 +154,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
             lunch_out_time: dataUser.lunch_out_time,
             out_time: dataUser.out_time,
             admin: dataUser.admin === true ? 1 : 0,
-            group_id: dataUser.group_id,
+            team_id: dataUser.team_id,
             manager: dataUser.manager,
             user_interpres_code: dataUser.user_interpres_code
           },
@@ -223,7 +226,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
         setCoordinatorData,
         listCoordinator,
         listCoordinatorData,
-        setListCoordinatorData
+        setListCoordinatorData,
       }}
     >
       {children}

@@ -18,7 +18,7 @@ export interface UserData {
   name: string;
   phone: string;
   email: string;
-  group_id: string;
+  team_id: string | any;
   entry_time: string;
   lunch_entry_time: string;
   lunch_out_time: string;
@@ -28,6 +28,7 @@ export interface UserData {
   admin: number;
   token: string;
   manager: number;
+  user_interpres_code: string;
 }
 
 interface HooksAuthData {
@@ -44,7 +45,7 @@ interface HooksAuthData {
   loading: boolean;
   setLoading(loading: boolean): void;
   expanded: boolean;
-  setExpanded(expanded: boolean):void;
+  setExpanded(expanded: boolean): void;
 }
 
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
@@ -72,7 +73,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
             name: response.data.name,
             phone: response.data.phone,
             email: response.data.email,
-            group_id: response.data.group_id,
+            team_id: response.data.team_id,
             entry_time: response.data.entry_time,
             lunch_entry_time: response.data.lunch_entry_time,
             lunch_out_time: response.data.lunch_out_time,
@@ -81,7 +82,8 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
             status: response.data.status,
             admin: response.data.admin,
             token: response.data.token,
-            manager: response.data.manager
+            manager: response.data.manager,
+            user_interpres_code: response.data.user_interpres_code
           };
 
           setUserCookies('user', setCookie, {
@@ -92,7 +94,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         })
         .catch(function (error) {
           //console.log(error.response.data.message);
-          if(error.response) toast.error(error.response.data.message);
+          if (error.response) toast.error(error.response.data.message);
         });
       setLoading(false);
     },
