@@ -43,7 +43,7 @@ const ConsultsCreated: React.FC = () => {
 
     const data = await api.post(`consult/${requestData.request_key}/${requestData.user_id}`);
     console.log('data::', data);
-    // setShowList(true)
+    setShowList(true)
   }, [requestData])
 
   useEffect(() => {
