@@ -1,7 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // css do toast
-import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
 
@@ -30,13 +29,13 @@ interface HooksConsultsData {
   consultsGet(): void;
   list: boolean;
   setList(list: boolean): void;
-  consultsPost(requestData: RequestDataForm):void;
+  consultsPost(requestData: RequestDataForm): void;
 }
 
 const ConsultsContext = createContext<HooksConsultsData>({} as HooksConsultsData);
 
 const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
-  const { user } = useAuth();
+  //const { user } = useAuth();
   const [consultsData, setConsultsData] = useState<ConsultsData[]>({} as ConsultsData[]);
   const [list, setList] = useState(false);
 
@@ -49,16 +48,16 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
       setConsultsData(data.data);
     }
     setList(true);
-  }, [user, setConsultsData, setList]);
+  }, [setConsultsData, setList]);
 
   const consultsPost = useCallback(
     async (requestData: RequestDataForm) => {
       const data = await api.post(`consult/${requestData.request_key}/${requestData.user_id}`).catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
       if (data) {
         consultsGet();
-        toast.success("Consulta cadastrada com sucesso")
+        toast.success('Consulta cadastrada com sucesso');
       }
     },
     [consultsGet]

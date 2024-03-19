@@ -160,7 +160,7 @@ const Point: React.FC = () => {
   }, [setFormDataTime, user]);
 
   //console.log('dataRegisterStore:: ', dataRegisterStore);
-  console.log('formDataTime:: ', formDataTime);
+ // console.log('formDataTime:: ', formDataTime);
 
   if (showBack) {
     return <ListPoint />;

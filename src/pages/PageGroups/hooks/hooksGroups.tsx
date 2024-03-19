@@ -46,7 +46,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-        console.log(response.data);
+       // console.log(response.data);
         setDataGroups(response.data);
       })
       .catch((error) => {

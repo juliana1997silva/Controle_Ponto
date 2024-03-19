@@ -36,7 +36,7 @@ const Schedule: React.FC = () => {
 
   const handleEventAdd = useCallback(
     (clickInfo: DateClickArg) => {
-      console.log('clickInfo::', clickInfo);
+      //console.log('clickInfo::', clickInfo);
       setDateSelect(clickInfo.date);
       setOpenModal(true);
       setAllDaySelect(clickInfo.allDay);
@@ -74,7 +74,7 @@ const Schedule: React.FC = () => {
           initialEvents={dataEvents}
           eventContent={renderEventContent}
           eventClick={handleEventClick}
-          eventAdd={(e) => console.log(e)}
+         // eventAdd={(e) => console.log(e)}
           dateClick={handleEventAdd}
           locale={ptLocale}
         />

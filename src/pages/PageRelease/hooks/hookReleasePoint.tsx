@@ -56,7 +56,7 @@ const ReleasePointContextProvider: React.FC<IProps> = ({ children }) => {
           }
         })
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           setDataHourUsers(response.data);
         })
         .catch(function (error) {

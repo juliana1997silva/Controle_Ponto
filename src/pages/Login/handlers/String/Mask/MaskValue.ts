@@ -76,7 +76,7 @@ export const MaskValue = (value: string, { mask, charCodes, maskReverse, valuePl
 
         for (const i in placeholderArray) {
           const placeholderRamains = placeholder.substring(0, placeholder.length - fails);
-          console.log(i);
+         // console.log(i);
           if (placeholderRamains) {
             if (value.indexOf(placeholderRamains, 0) === 0) return true;
             else fails++;

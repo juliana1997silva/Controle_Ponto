@@ -23,7 +23,7 @@ const ResetPassword: React.FC = () => {
 
   const handleChange = useCallback(
     (form: dataPassword) => {
-      console.log('form::', form);
+     // console.log('form::', form);
       setDataForm(form);
     },
     [setDataForm]

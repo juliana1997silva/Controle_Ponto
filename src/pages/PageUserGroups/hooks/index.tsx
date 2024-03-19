@@ -1,6 +1,5 @@
 import React from 'react';
 import { UserGroupsContextProvider } from './hooksUserGroups';
-import { UsersContextProvider } from '../../PageUsers/hooks/hooksUsers';
 
 interface IProps {
   children: React.ReactNode;

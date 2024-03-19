@@ -1,7 +1,6 @@
 import VisibleIcon from '@rsuite/icons/Visible';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, ButtonGroup, IconButton, Panel, Table, Tooltip, Whisper, Form, Input, SelectPicker } from 'rsuite';
-import { useUserGroups } from '../../PageUserGroups/hooks/hooksUserGroups';
+import { Button, ButtonGroup, Form, IconButton, Input, Panel, SelectPicker, Table, Tooltip, Whisper } from 'rsuite';
 import ConsultsCreated from '../ConsultsCreated';
 import DrawerDetails from '../components/DrawerDetails';
 import { useConsults } from '../hooks/hooksConsults';
@@ -21,11 +20,10 @@ interface selectData {
 
 const Consults: React.FC = () => {
   const { consultsData, consultsGet, list } = useConsults();
-  const { listGroups, groupsData } = useUserGroups();
   const { Column, HeaderCell, Cell } = Table;
   const [showCreated, setShowCreated] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [selectTeam, setSelectTeam] = useState < selectData[]>([] as selectData[]);
+  const [selectTeam, setSelectTeam] = useState<selectData[]>([] as selectData[]);
   const [selectUser, setSelectUser] = useState<selectData[]>([] as selectData[]);
   const [dataForm, setDataForm] = useState<formSearch>({} as formSearch);
 
@@ -79,13 +77,12 @@ const Consults: React.FC = () => {
     }));
 
     setSelectUser(users);
-  })
+  }, [consultsData, setSelectTeam, setSelectUser]);
 
   useEffect(() => {
     if (!list) {
       consultsGet();
     }
-    
   }, [list, consultsGet]);
 
   if (showCreated) {

@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { AutoComplete, Button, ButtonToolbar, Form, Panel, SelectPicker } from 'rsuite';
+import { Button, ButtonToolbar, Form, Panel, SelectPicker } from 'rsuite';
 import { useReleasePoint } from '../../PageRelease/hooks/hookReleasePoint';
 import Consults from '../Consults';
 import { TitlePage } from '../Consults/styles';
-import api from '../../../services/api';
 import { RequestDataForm, useConsults } from '../hooks/hooksConsults';
-
-
 
 const ConsultsCreated: React.FC = () => {
   const { consultsPost } = useConsults();
-  const { dataListUsers, listUsers, listHoursUsers, } = useReleasePoint();
+  const { dataListUsers, listUsers, listHoursUsers } = useReleasePoint();
   const [showList, setShowList] = useState(false);
   const [requestData, setRequestData] = useState<RequestDataForm>({} as RequestDataForm);
 
@@ -39,9 +36,7 @@ const ConsultsCreated: React.FC = () => {
 
   useEffect(() => {
     listUsers();
-
   }, [listUsers]);
-
 
   if (showList) {
     return <Consults />;
@@ -62,7 +57,7 @@ const ConsultsCreated: React.FC = () => {
 
           <Button appearance="primary" onClick={() => setShowList(true)} style={{ backgroundColor: 'red', width: 120 }}>
             Voltar
-          </Button>          
+          </Button>
         </ButtonToolbar>
       </div>
 
@@ -95,7 +90,6 @@ const ConsultsCreated: React.FC = () => {
               />
             </div>
           </Form.Group>
-
         </Form.Group>
       </Form>
     </Panel>

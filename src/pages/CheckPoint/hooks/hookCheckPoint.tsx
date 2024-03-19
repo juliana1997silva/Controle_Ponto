@@ -157,7 +157,7 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
 
   const updatePoint = useCallback(
     async (dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]) => {
-      console.log('consultations update:: ', consultations);
+     // console.log('consultations update:: ', consultations);
       const data = {
         user_id: dataTime.user_id,
         date: dataTime.date,
