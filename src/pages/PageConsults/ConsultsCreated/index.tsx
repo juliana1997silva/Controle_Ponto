@@ -4,20 +4,15 @@ import { useReleasePoint } from '../../PageRelease/hooks/hookReleasePoint';
 import Consults from '../Consults';
 import { TitlePage } from '../Consults/styles';
 import api from '../../../services/api';
+import { RequestDataForm, useConsults } from '../hooks/hooksConsults';
 
-interface RequestDataForm {
-  user_id?: string;
-  request_key?: string;
-}
+
 
 const ConsultsCreated: React.FC = () => {
+  const { consultsPost } = useConsults();
   const { dataListUsers, listUsers, listHoursUsers, } = useReleasePoint();
   const [showList, setShowList] = useState(false);
   const [requestData, setRequestData] = useState<RequestDataForm>({} as RequestDataForm);
-
-  const autoCompleteData = Object.values(dataListUsers || []).map((item) => {
-    return item.name;
-  });
 
   const dataSelect = Object.values(dataListUsers).map((item) => {
     return {
@@ -29,7 +24,6 @@ const ConsultsCreated: React.FC = () => {
 
   const handleChange = useCallback(
     (form: any) => {
-      console.log(form);
       setRequestData({
         ...requestData,
         request_key: form.consults
@@ -39,12 +33,9 @@ const ConsultsCreated: React.FC = () => {
   );
 
   const handleSubmit = useCallback(async () => {
-    console.log('requestData::', requestData);
-
-    const data = await api.post(`consult/${requestData.request_key}/${requestData.user_id}`);
-    console.log('data::', data);
-    setShowList(true)
-  }, [requestData])
+    consultsPost(requestData);
+    setShowList(true);
+  }, [requestData, consultsPost]);
 
   useEffect(() => {
     listUsers();

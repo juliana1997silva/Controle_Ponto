@@ -10,12 +10,14 @@ import { useUsers } from '../../PageUsers/hooks/hooksUsers';
 interface RecordType {
   key: string;
   title: string;
-  team_id: any;
+  team_id: string | null;
 }
 
 function UserGroups() {
   const { list, listGroups, groupsData, listUsersGroups, usersData } = useUserGroups();
-
+  const [keySelect, setKeySelect] = useState('');
+  const [targetKeys, setTargetKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const data: RecordType[] = Object.values(usersData || []).map((item) => {
     return {
       key: item.id,
@@ -23,15 +25,7 @@ function UserGroups() {
       team_id: item.team_id
     };
   });
-
-  const initialTargetKeys = data.map((item) => (item.team_id === null ? item.key : ''));
-  
-  const [keySelect, setKeySelect] = useState('');
-  const [targetKeys, setTargetKeys] = useState(initialTargetKeys);
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-
-  console.log('dataListUsers::', usersData);
-
+  const initialTargetKeys = data.filter((item) => item.team_id !== keySelect).map((item) => item.key);
   const selectGroups = Object.values(groupsData || []).map((item) => {
     return {
       value: item.id,
@@ -39,14 +33,6 @@ function UserGroups() {
     };
   });
 
-  const userList = Object.values(usersData || []).map((item) => {
-    return {
-      key: item.id,
-      title: item.name
-    };
-  });
-
-  console.log('targetKeys ::', targetKeys);
   const onChange: TransferProps['onChange'] = (nextTargetKeys, direction, moveKeys) => {
     console.log('targetKeys:', nextTargetKeys);
     console.log('direction:', direction);
@@ -60,15 +46,14 @@ function UserGroups() {
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
 
-  const onScroll: TransferProps['onScroll'] = (direction, e) => {
-    console.log('direction:', direction);
-    console.log('target:', e.target);
-  };
+  useEffect(() => {
+    if (targetKeys.length === 0) setTargetKeys(initialTargetKeys);
+  }, [targetKeys, setTargetKeys, initialTargetKeys]);
 
   useEffect(() => {
     if (!list) listGroups();
     if (keySelect !== '') listUsersGroups(keySelect);
-  }, [list, listGroups, keySelect, listUsersGroups]);
+  }, [list, listGroups, keySelect, listUsersGroups, ]);
 
   return (
     <Panel header={<TitlePage className="title">Vincular Usuario X Grupo</TitlePage>}>
@@ -84,12 +69,11 @@ function UserGroups() {
       {keySelect !== '' && (
         <Transfer
           dataSource={data}
-          titles={['Usuário', 'Grupo']}
+          titles={['Usuarios do Grupo', 'Outros Usuarios']}
           targetKeys={targetKeys}
           selectedKeys={selectedKeys}
           onChange={onChange}
           onSelectChange={onSelectChange}
-          onScroll={onScroll}
           render={(item: any) => item.title}
           listStyle={{
             width: '40%',
