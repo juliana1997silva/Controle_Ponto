@@ -1,18 +1,33 @@
-import { Timeline } from 'antd';
+import { Timeline, Input } from 'antd';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { Button, Drawer, Panel, Table } from 'rsuite';
 import { useConsults } from '../../hooks/hooksConsults';
+import Loading from '../../../../components/Loading';
 
 interface dataDrawer {
   open: boolean;
   onClose: () => void;
   onClickCancel: () => void;
+  request_key: string;
 }
 
-const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }) => {
+const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, request_key }) => {
   const { Column, HeaderCell, Cell } = Table;
+  const { TextArea } = Input;
   const { dataDetails } = useConsults();
+
+  const statusDescription = dataDetails.status_description || '';
+  let datas;
+  if (statusDescription.includes('..')) {
+    datas = statusDescription.split('..');
+  } else if (statusDescription.includes('<br>')) {
+    datas = statusDescription.split('<br>');
+  } else {
+    datas = [statusDescription];
+  }
+
+  const textoComQuebras = datas.map((data, index) => data.trim()).join('\n');
 
   const items =
     dataDetails.event && dataDetails.event.status && dataDetails.event.status.history
@@ -27,22 +42,45 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }) =
         }))
       : [];
 
-  useEffect(() => {
-    console.log('dataDetails ::', dataDetails);
-  }, [dataDetails]);
-
   return (
-    <>
-      <Drawer open={open} onClose={onClose} size="calc(100% - 120px)">
-        <Drawer.Header>
-          <Drawer.Title>Detalhes da Consulta</Drawer.Title>
-          <Drawer.Actions>
-            <Button onClick={onClickCancel} color="red" appearance="primary">
-              Fechar
-            </Button>
-          </Drawer.Actions>
-        </Drawer.Header>
+    <Drawer open={open} onClose={onClose} size="calc(100% - 120px)">
+      <Drawer.Header>
+        <Drawer.Title>
+          {request_key} - {dataDetails.description}
+        </Drawer.Title>
+        <Drawer.Actions>
+          <Button onClick={onClickCancel} color="red" appearance="primary">
+            Fechar
+          </Button>
+        </Drawer.Actions>
+      </Drawer.Header>
+      {dataDetails.description ? (
         <Drawer.Body>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '55%' }}>
+            <div style={{ marginRight: 15 }}>
+              <span>Inicio Previsto</span>
+              <Input
+                value={dataDetails.planned_begin_time && moment(dataDetails.planned_begin_time).format('DD/MM/YYYY - HH:mm:ss')}
+                disabled
+              />
+              <span>Fim Previsto</span>
+              <Input
+                value={dataDetails.planned_end_time && moment(dataDetails.planned_end_time).format('DD/MM/YYYY - HH:mm:ss')}
+                disabled
+              />
+            </div>
+            <div>
+              <span>Inicio Real</span>
+              <Input value={dataDetails.begin_time && moment(dataDetails.begin_time).format('DD/MM/YYYY - HH:mm:ss')} disabled />
+              <span>Fim Real</span>
+              <Input value={dataDetails.end_time && moment(dataDetails.end_time).format('DD/MM/YYYY - HH:mm:ss')} disabled />
+            </div>
+          </div>
+          <div style={{ padding: 5 }} />
+          <h5>Detalhamento da Situação</h5>
+          <div style={{ padding: 5 }} />
+          <TextArea readOnly={true} autoSize={{ minRows: 10, maxRows: 10 }} value={textoComQuebras} disabled />
+          <div style={{ padding: 5 }} />
           <Panel header="Historico Situação" collapsible bordered>
             <Timeline items={items} />
           </Panel>
@@ -83,8 +121,10 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }) =
             </Table>
           </Panel>
         </Drawer.Body>
-      </Drawer>
-    </>
+      ) : (
+        <Loading />
+      )}
+    </Drawer>
   );
 };
 export default DrawerDetails;

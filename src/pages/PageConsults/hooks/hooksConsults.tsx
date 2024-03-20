@@ -22,10 +22,12 @@ export interface ConsultsData {
   service_forecast: number;
   commit: number;
   team_id: string;
-  user_interpres_code:string;
+  user_interpres_code: string;
 }
 
-interface dataConsultsDetails {
+export interface dataConsultsDetails {
+  status_description: string;
+  description: string;
   attachment: [
     {
       name: string;
@@ -138,6 +140,7 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
 
   const consultsDetailsGet = useCallback(
     async (requestData: RequestDataForm) => {
+     
       const data = await api.get(`consult/${requestData.request_key}/${requestData.user_id}`).catch((error) => {
         // console.log(error);
       });
@@ -145,7 +148,7 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
         setDataDetails(data.data);
       }
     },
-    [setDataDetails]
+    [setDataDetails, setLoading]
   );
 
   if (loading) {

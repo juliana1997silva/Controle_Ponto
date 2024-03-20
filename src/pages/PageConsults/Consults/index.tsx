@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonGroup, Form, IconButton, Input, Panel, SelectPicker, Table, Tooltip, Whisper } from 'rsuite';
 import ConsultsCreated from '../ConsultsCreated';
 import DrawerDetails from '../components/DrawerDetails';
-import { ConsultsData, useConsults } from '../hooks/hooksConsults';
+import { ConsultsData, RequestDataForm, dataConsultsDetails, useConsults } from '../hooks/hooksConsults';
 import { ContainerSearch, TitlePage } from './styles';
 
 interface formSearch {
@@ -20,13 +20,14 @@ interface selectData {
 }
 
 const Consults: React.FC = () => {
-  const { consultsData, consultsGet, list, consultsPut, consultsDetailsGet } = useConsults();
+  const { consultsData, consultsGet, list, consultsPut, consultsDetailsGet, setDataDetails } = useConsults();
   const { Column, HeaderCell, Cell } = Table;
   const [showCreated, setShowCreated] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [selectTeam, setSelectTeam] = useState<selectData[]>([] as selectData[]);
   const [selectUser, setSelectUser] = useState<selectData[]>([] as selectData[]);
   const [dataForm, setDataForm] = useState<formSearch>({} as formSearch);
+  const [dataSend, setDataSend] = useState<RequestDataForm>({} as RequestDataForm);
 
   const dataTableConsults = Object.values(consultsData).filter((value) => {
     if (dataForm.consult) {
@@ -49,14 +50,15 @@ const Consults: React.FC = () => {
 
   const handleView = useCallback(
     (data: ConsultsData) => {
-      let dataSend = {
+      let dataRequest = {
         user_id: data.user_interpres_code,
         request_key: data.request_key
       };
-      consultsDetailsGet(dataSend);
+      consultsDetailsGet(dataRequest);
       setShowDetails(true);
+      setDataSend(dataRequest);
     },
-    [consultsDetailsGet, setShowDetails]
+    [consultsDetailsGet, setShowDetails, setDataSend]
   );
 
   useEffect(() => {
@@ -263,8 +265,16 @@ const Consults: React.FC = () => {
           </Column>
         </Table>
       </Panel>
-      {showDetails && (
-        <DrawerDetails open={showDetails} onClose={() => setShowDetails(false)} onClickCancel={() => setShowDetails(false)} />
+      {showDetails && dataSend.request_key && (
+        <DrawerDetails
+          open={showDetails}
+          onClose={() => setShowDetails(false)}
+          onClickCancel={() => {
+            setShowDetails(false);
+            setDataDetails({} as dataConsultsDetails);
+          }}
+          request_key={dataSend.request_key}
+        />
       )}
     </>
   );
