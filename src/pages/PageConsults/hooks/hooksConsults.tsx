@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // css do toast
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import Loading from '../../../components/Loading';
 
 export interface RequestDataForm {
   user_id?: string;
@@ -35,11 +36,12 @@ interface HooksConsultsData {
 const ConsultsContext = createContext<HooksConsultsData>({} as HooksConsultsData);
 
 const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
-  //const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [consultsData, setConsultsData] = useState<ConsultsData[]>({} as ConsultsData[]);
   const [list, setList] = useState(false);
 
   const consultsGet = useCallback(async () => {
+    setLoading(true);
     const data = await api.get('/consults').catch((error) => {
       //console.log(error);
     });
@@ -48,7 +50,8 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
       setConsultsData(data.data);
     }
     setList(true);
-  }, [setConsultsData, setList]);
+    setLoading(false);
+  }, [setConsultsData, setList,setLoading]);
 
   const consultsPost = useCallback(
     async (requestData: RequestDataForm) => {
@@ -62,6 +65,10 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
     },
     [consultsGet]
   );
+  
+  if(loading){
+    return <Loading />
+  }
 
   return (
     <ConsultsContext.Provider value={{ consultsGet, consultsData, setConsultsData, list, setList, consultsPost }}>

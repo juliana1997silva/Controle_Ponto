@@ -1,4 +1,5 @@
 import VisibleIcon from '@rsuite/icons/Visible';
+import { BsArrowClockwise } from 'react-icons/bs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonGroup, Form, IconButton, Input, Panel, SelectPicker, Table, Tooltip, Whisper } from 'rsuite';
 import ConsultsCreated from '../ConsultsCreated';
@@ -112,14 +113,11 @@ const Consults: React.FC = () => {
             <Form.Group>
               <Form.Control accepter={SelectPicker} name="user" placeholder="Selecione o usuario" data={selectUser} />
             </Form.Group>
-
-            {/*  <Form.Item>
-              <IconButton icon={<IoSearch />} type="submit" circle appearance="primary" color="cyan" />
-            </Form.Item> */}
           </Form>
+          <Button startIcon={<BsArrowClockwise />} appearance="link" onClick={() => consultsGet()}>
+            Atualizar tudo
+          </Button>
         </ContainerSearch>
-
-        <div style={{ padding: 20 }} />
         <Table data={dataForm.consult || dataForm.team || dataForm.user ? dataTableConsults : consultsData} autoHeight>
           <Column>
             <HeaderCell>Consulta</HeaderCell>
@@ -133,15 +131,15 @@ const Consults: React.FC = () => {
               )}
             </Cell>
           </Column>
-          <Column>
+          <Column width={130}>
             <HeaderCell>Usuário</HeaderCell>
             <Cell dataKey="user" />
           </Column>
-          <Column width={130}>
+          <Column width={180}>
             <HeaderCell>Status</HeaderCell>
             <Cell dataKey="situation" />
           </Column>
-          <Column width={130} align="center">
+          <Column width={100} align="center">
             <HeaderCell>Documentação</HeaderCell>
             <Cell>
               {(rowData: any) => (
@@ -169,7 +167,7 @@ const Consults: React.FC = () => {
               )}
             </Cell>
           </Column>
-          <Column align="center">
+          <Column width={80} align="center">
             <HeaderCell>BUG</HeaderCell>
             <Cell>
               {(rowData: any) => (
@@ -183,7 +181,7 @@ const Consults: React.FC = () => {
               )}
             </Cell>
           </Column>
-          <Column align="center">
+          <Column width={80} align="center">
             <HeaderCell>Diário</HeaderCell>
             <Cell>
               {(rowData: any) => (
@@ -197,7 +195,7 @@ const Consults: React.FC = () => {
               )}
             </Cell>
           </Column>
-          <Column align="center">
+          <Column width={80} align="center">
             <HeaderCell>Atualização</HeaderCell>
             <Cell>
               {(rowData: any) => (
