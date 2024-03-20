@@ -3,6 +3,11 @@ import PageNextIcon from '@rsuite/icons/PageNext';
 import PagePreviousIcon from '@rsuite/icons/PagePrevious';
 import TaskIcon from '@rsuite/icons/Task';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
+import AdminIcon from '@rsuite/icons/Admin';
+import PeoplesIcon from '@rsuite/icons/Peoples';
+import CodeIcon from '@rsuite/icons/Code';
+import PeoplesUploadedIcon from '@rsuite/icons/PeoplesUploaded';
+import CalendarIcon from '@rsuite/icons/Calendar';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Nav, Navbar, Sidenav } from 'rsuite';
@@ -38,16 +43,16 @@ const Frame: React.FC = () => {
                 <Nav.Item eventKey="2" icon={<DocPassIcon />} onSelect={() => navigate('/release-checkpoint')}>
                   Liberar Ficha
                 </Nav.Item>
-                <Nav.Item eventKey="3" icon={<DocPassIcon />} onSelect={() => navigate('/users')}>
+                <Nav.Item eventKey="3" icon={<AdminIcon />} onSelect={() => navigate('/users')}>
                   Usuarios
                 </Nav.Item>
-                <Nav.Item eventKey="6" icon={<DocPassIcon />} onSelect={() => navigate('/groups')}>
+                <Nav.Item eventKey="6" icon={<PeoplesIcon />} onSelect={() => navigate('/groups')}>
                   Grupos
                 </Nav.Item>
-                <Nav.Item eventKey="7" icon={<DocPassIcon />} onSelect={() => navigate('/consults')}>
+                <Nav.Item eventKey="7" icon={<CodeIcon />} onSelect={() => navigate('/consults')}>
                   Consultas
                 </Nav.Item>
-                <Nav.Item eventKey="8" icon={<DocPassIcon />} onSelect={() => navigate('/user-groups')}>
+                <Nav.Item eventKey="8" icon={<PeoplesUploadedIcon />} onSelect={() => navigate('/user-groups')}>
                   Usuarios x Grupos
                 </Nav.Item>
               </>
@@ -58,7 +63,7 @@ const Frame: React.FC = () => {
               Registro Ponto
             </Nav.Item>
 
-            <Nav.Item eventKey="5" icon={<DocPassIcon />} onSelect={() => navigate('/schedule')}>
+            <Nav.Item eventKey="5" icon={<CalendarIcon />} onSelect={() => navigate('/schedule')}>
               Agenda
             </Nav.Item>
           </Nav>

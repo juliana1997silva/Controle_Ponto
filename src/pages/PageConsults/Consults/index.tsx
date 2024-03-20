@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonGroup, Form, IconButton, Input, Panel, SelectPicker, Table, Tooltip, Whisper } from 'rsuite';
 import ConsultsCreated from '../ConsultsCreated';
 import DrawerDetails from '../components/DrawerDetails';
-import { useConsults } from '../hooks/hooksConsults';
+import { ConsultsData, useConsults } from '../hooks/hooksConsults';
 import { ContainerSearch, TitlePage } from './styles';
 
 interface formSearch {
@@ -20,7 +20,7 @@ interface selectData {
 }
 
 const Consults: React.FC = () => {
-  const { consultsData, consultsGet, list, consultsPut } = useConsults();
+  const { consultsData, consultsGet, list, consultsPut, consultsDetailsGet } = useConsults();
   const { Column, HeaderCell, Cell } = Table;
   const [showCreated, setShowCreated] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -45,6 +45,18 @@ const Consults: React.FC = () => {
       setDataForm(form);
     },
     [setDataForm]
+  );
+
+  const handleView = useCallback(
+    (data: ConsultsData) => {
+      let dataSend = {
+        user_id: data.user_interpres_code,
+        request_key: data.request_key
+      };
+      consultsDetailsGet(dataSend);
+      setShowDetails(true);
+    },
+    [consultsDetailsGet, setShowDetails]
   );
 
   useEffect(() => {
@@ -240,11 +252,13 @@ const Consults: React.FC = () => {
           <Column>
             <HeaderCell>Ações</HeaderCell>
             <Cell>
-              <ButtonGroup>
-                <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Visualizar Detalhes</Tooltip>}>
-                  <IconButton icon={<VisibleIcon />} onClick={() => setShowDetails(true)} style={{ color: '#000' }} />
-                </Whisper>
-              </ButtonGroup>
+              {(rowData: any) => (
+                <ButtonGroup>
+                  <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Visualizar Detalhes</Tooltip>}>
+                    <IconButton icon={<VisibleIcon />} onClick={() => handleView(rowData)} style={{ color: '#000' }} />
+                  </Whisper>
+                </ButtonGroup>
+              )}
             </Cell>
           </Column>
         </Table>

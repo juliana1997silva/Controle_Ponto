@@ -1,8 +1,8 @@
 import { Timeline } from 'antd';
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Drawer, Panel, Table } from 'rsuite';
-import data from './data.json';
+import { useConsults } from '../../hooks/hooksConsults';
 
 interface dataDrawer {
   open: boolean;
@@ -12,18 +12,24 @@ interface dataDrawer {
 
 const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }) => {
   const { Column, HeaderCell, Cell } = Table;
+  const { dataDetails } = useConsults();
 
-  const items = Object.values(data.event.status.history).map((item) => {
-    return {
-      children: (
-        <>
-          <p>{moment(item.datetime).format('DD/MM/YYYY - HH:mm:ss')}</p>
-          <p>{item.user}</p>
-          <p>{item.message}</p>
-        </>
-      )
-    };
-  });
+  const items =
+    dataDetails.event && dataDetails.event.status && dataDetails.event.status.history
+      ? Object.values(dataDetails.event.status.history).map((item) => ({
+          children: (
+            <>
+              <p>{moment(item.datetime).format('DD/MM/YYYY - HH:mm:ss')}</p>
+              <p>{item.user}</p>
+              <p>{item.message}</p>
+            </>
+          )
+        }))
+      : [];
+
+  useEffect(() => {
+    console.log('dataDetails ::', dataDetails);
+  }, [dataDetails]);
 
   return (
     <>
@@ -41,7 +47,7 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }) =
             <Timeline items={items} />
           </Panel>
           <Panel header="Documentos Anexados" collapsible bordered>
-            <Table data={data.attachment} autoHeight>
+            <Table data={dataDetails.attachment} autoHeight>
               <Column width={600}>
                 <HeaderCell>Nome Documento</HeaderCell>
                 <Cell dataKey="name" />
@@ -61,7 +67,7 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }) =
             </Table>
           </Panel>
           <Panel header="Commits" collapsible bordered>
-            <Table data={data.cvs.program} autoHeight>
+            <Table data={dataDetails.cvs && dataDetails.cvs.program ? dataDetails.cvs.program : []} autoHeight>
               <Column width={150}>
                 <HeaderCell>Versão</HeaderCell>
                 <Cell dataKey="version" />
