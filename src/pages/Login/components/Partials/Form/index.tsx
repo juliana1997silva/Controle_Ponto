@@ -49,9 +49,8 @@ export interface MaskedFormFieldProps extends MaskValueProps {
   return?: "masked" | "unmasked";
 }
 
-export interface FormFieldProps
-  extends Omit<FormFieldConfig, "control" | "template"> {
-  template?: "MUI";
+export interface FormFieldProps extends Omit<FormFieldConfig, 'control' | 'template'> {
+  template?: 'MUI';
   validate?: Validate[];
   masked?: MaskedFormFieldProps;
 }
@@ -101,15 +100,10 @@ function Form({ onSubmit, formGrid, template, styles, buttons }: FormProps) {
     childs?.forEach((child, index) => {
       switch (child.type) {
         case "field":
-          content.push(
-            <FormField
-              key={child.content.name}
-              control={control}
-              {...child.content}
-              template={child.content.template ?? template}
-            />
-          );
-          break;
+         content.push(
+           <FormField key={child.content.name} control={control} {...child.content} template={child.content.template ?? template} />
+         );
+        break;
 
         case "checkbox":
           content.push(

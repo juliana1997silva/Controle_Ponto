@@ -15,7 +15,13 @@ const Signin: React.FC = () => {
   // Methods
   const handleSubmit = useCallback(
     async (data: dataLogin) => {
-      signin(data);
+      let emailcompleto = data.email?.includes('@conecto.com.br');
+      if (emailcompleto) {
+        signin(data);
+      } else {
+        data.email = data.email + '@conecto.com.br';
+        signin(data);
+      }
     },
     [signin]
   );
@@ -65,10 +71,10 @@ const Signin: React.FC = () => {
                     type: 'field',
                     content: {
                       name: 'email',
-                      label: 'E-mail',
-                      placeholder: 'Endereço de e-mail',
+                      label: 'E-mail ou Usuário Interpress',
+                      placeholder: 'Digite seu e-mail ou usuário interpress',
                       startAdornment: <Email color="primary" />,
-                      validate: [{ required: 'É necessario endereço de e-mail.' }, { email: 'Endereço de e-mail inválido.' }]
+                      validate: [{ required: 'Este campo é obrigatório' } /*  { email: 'Endereço de e-mail inválido.' } */]
                     }
                   },
                   {
