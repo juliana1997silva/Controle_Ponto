@@ -20,7 +20,7 @@ interface selectData {
 }
 
 const Consults: React.FC = () => {
-  const { consultsData, consultsGet, list } = useConsults();
+  const { consultsData, consultsGet, list, consultsPut } = useConsults();
   const { Column, HeaderCell, Cell } = Table;
   const [showCreated, setShowCreated] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -114,7 +114,7 @@ const Consults: React.FC = () => {
               <Form.Control accepter={SelectPicker} name="user" placeholder="Selecione o usuario" data={selectUser} />
             </Form.Group>
           </Form>
-          <Button startIcon={<BsArrowClockwise />} appearance="link" onClick={() => consultsGet()}>
+          <Button startIcon={<BsArrowClockwise />} appearance="link" onClick={() => consultsPut()}>
             Atualizar tudo
           </Button>
         </ContainerSearch>

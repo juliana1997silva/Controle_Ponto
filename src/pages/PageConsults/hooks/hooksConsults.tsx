@@ -31,6 +31,7 @@ interface HooksConsultsData {
   list: boolean;
   setList(list: boolean): void;
   consultsPost(requestData: RequestDataForm): void;
+  consultsPut():void;
 }
 
 const ConsultsContext = createContext<HooksConsultsData>({} as HooksConsultsData);
@@ -65,13 +66,25 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
     },
     [consultsGet]
   );
+
+  const consultsPut = useCallback(async () => {
+    setLoading(true);
+    const data = await api.put('/consults',{}).catch((error) => {
+      //console.log(error);
+    });
+
+    if (data) {
+      setConsultsData(data.data);
+    }
+    setLoading(false);
+  }, [setConsultsData, setList, setLoading]);
   
   if(loading){
     return <Loading />
   }
 
   return (
-    <ConsultsContext.Provider value={{ consultsGet, consultsData, setConsultsData, list, setList, consultsPost }}>
+    <ConsultsContext.Provider value={{ consultsGet, consultsData, setConsultsData, list, setList, consultsPost, consultsPut }}>
       {children}
     </ConsultsContext.Provider>
   );
