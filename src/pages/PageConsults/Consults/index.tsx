@@ -32,12 +32,14 @@ const Consults: React.FC = () => {
   const dataTableConsults = Object.values(consultsData).filter((value) => {
     if (dataForm.consult) {
       return value.request_key.toString().includes(dataForm.consult.toString());
+    } else if (dataForm.team && dataForm.user) {
+      return value.team_id.includes(dataForm.team) && value.user.includes(dataForm.user);
     } else if (dataForm.team) {
       return value.team_id.includes(dataForm.team);
     } else if (dataForm.user) {
       return value.user.includes(dataForm.user);
     }
-
+    
     return false;
   });
 

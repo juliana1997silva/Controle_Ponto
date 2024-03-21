@@ -1,9 +1,10 @@
-import { Timeline, Input } from 'antd';
+import FileDownloadIcon from '@rsuite/icons/FileDownload';
+import { Input, Timeline } from 'antd';
 import moment from 'moment';
-import React, { useEffect } from 'react';
-import { Button, Drawer, Panel, Table } from 'rsuite';
-import { useConsults } from '../../hooks/hooksConsults';
+import React from 'react';
+import { Button, Drawer, IconButton, Panel, Table } from 'rsuite';
 import Loading from '../../../../components/Loading';
+import { useConsults } from '../../hooks/hooksConsults';
 
 interface dataDrawer {
   open: boolean;
@@ -86,21 +87,25 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
           </Panel>
           <Panel header="Documentos Anexados" collapsible bordered>
             <Table data={dataDetails.attachment} autoHeight>
-              <Column width={600}>
-                <HeaderCell>Nome Documento</HeaderCell>
+              <Column width={550}>
+                <HeaderCell>Documento</HeaderCell>
                 <Cell dataKey="name" />
               </Column>
-              <Column width={320}>
+              <Column width={300}>
                 <HeaderCell>Descrição</HeaderCell>
                 <Cell dataKey="description" />
               </Column>
-              <Column width={200}>
+              <Column width={180}>
                 <HeaderCell>Data</HeaderCell>
                 <Cell>{(rowData: any) => <span>{moment(rowData.insertion).format('DD/MM/YYYY - HH:mm:ss')}</span>}</Cell>
               </Column>
               <Column width={100}>
                 <HeaderCell>Usuario</HeaderCell>
                 <Cell dataKey="user" />
+              </Column>
+              <Column width={90} align="center">
+                <HeaderCell>Download</HeaderCell>
+                <Cell>{(rowData: any) => <IconButton icon={<FileDownloadIcon />} />}</Cell>
               </Column>
             </Table>
           </Panel>
