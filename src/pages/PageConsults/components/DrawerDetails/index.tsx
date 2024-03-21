@@ -1,19 +1,12 @@
 import FileDownloadIcon from '@rsuite/icons/FileDownload';
 import { Input, Timeline } from 'antd';
 import moment from 'moment';
-<<<<<<< HEAD
-import React from 'react';
-import { Button, Drawer, IconButton, Panel, Table } from 'rsuite';
-import Loading from '../../../../components/Loading';
-import { useConsults } from '../../hooks/hooksConsults';
-=======
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonGroup, Drawer, IconButton, Panel, Table, Tooltip, Whisper } from 'rsuite';
 import VisibleIcon from '@rsuite/icons/Visible';
 import { RequestDataForm, dataConsultsDetails, useConsults } from '../../hooks/hooksConsults';
 import Loading from '../../../../components/Loading';
 import DrawerCVSDetails from '../DrawerCVSDetails';
->>>>>>> 7699b6fc3a583578398d709aac30bdf5372ad0b3
 
 interface dataDrawer {
   open: boolean;
@@ -94,66 +87,6 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
                 <Input value={dataDetails.end_time && moment(dataDetails.end_time).format('DD/MM/YYYY - HH:mm:ss')} disabled />
               </div>
             </div>
-<<<<<<< HEAD
-            <div>
-              <span>Inicio Real</span>
-              <Input value={dataDetails.begin_time && moment(dataDetails.begin_time).format('DD/MM/YYYY - HH:mm:ss')} disabled />
-              <span>Fim Real</span>
-              <Input value={dataDetails.end_time && moment(dataDetails.end_time).format('DD/MM/YYYY - HH:mm:ss')} disabled />
-            </div>
-          </div>
-          <div style={{ padding: 5 }} />
-          <h5>Detalhamento da Situação</h5>
-          <div style={{ padding: 5 }} />
-          <TextArea readOnly={true} autoSize={{ minRows: 10, maxRows: 10 }} value={textoComQuebras} disabled />
-          <div style={{ padding: 5 }} />
-          <Panel header="Historico Situação" collapsible bordered>
-            <Timeline items={items} />
-          </Panel>
-          <Panel header="Documentos Anexados" collapsible bordered>
-            <Table data={dataDetails.attachment} autoHeight>
-              <Column width={550}>
-                <HeaderCell>Documento</HeaderCell>
-                <Cell dataKey="name" />
-              </Column>
-              <Column width={300}>
-                <HeaderCell>Descrição</HeaderCell>
-                <Cell dataKey="description" />
-              </Column>
-              <Column width={180}>
-                <HeaderCell>Data</HeaderCell>
-                <Cell>{(rowData: any) => <span>{moment(rowData.insertion).format('DD/MM/YYYY - HH:mm:ss')}</span>}</Cell>
-              </Column>
-              <Column width={100}>
-                <HeaderCell>Usuario</HeaderCell>
-                <Cell dataKey="user" />
-              </Column>
-              <Column width={90} align="center">
-                <HeaderCell>Download</HeaderCell>
-                <Cell>{(rowData: any) => <IconButton icon={<FileDownloadIcon />} />}</Cell>
-              </Column>
-            </Table>
-          </Panel>
-          <Panel header="Commits" collapsible bordered>
-            <Table data={dataDetails.cvs && dataDetails.cvs.program ? dataDetails.cvs.program : []} autoHeight>
-              <Column width={150}>
-                <HeaderCell>Versão</HeaderCell>
-                <Cell dataKey="version" />
-              </Column>
-              <Column width={300}>
-                <HeaderCell>Arquivo</HeaderCell>
-                <Cell dataKey="file" />
-              </Column>
-              <Column width={300}>
-                <HeaderCell>Usuario</HeaderCell>
-                <Cell dataKey="user" />
-              </Column>
-            </Table>
-          </Panel>
-        </Drawer.Body>
-      ) : (
-        <Loading />
-=======
             <div style={{ padding: 5 }} />
             <h5>Detalhamento da Situação</h5>
             <div style={{ padding: 5 }} />
@@ -225,7 +158,6 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
           }}
           request_key={"1000"}
         />
->>>>>>> 7699b6fc3a583578398d709aac30bdf5372ad0b3
       )}
     </>
   );
