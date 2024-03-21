@@ -19,7 +19,7 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
   const { Column, HeaderCell, Cell } = Table;
   const { TextArea } = Input;
   const { dataDetails, setDataDetails } = useConsults();
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetailsCvs, setShowDetailsCvs] = useState(false);
   const [dataSend, setDataSend] = useState<RequestDataForm>({} as RequestDataForm);
 
   const statusDescription = dataDetails.status_description || '';
@@ -37,20 +37,21 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
   const items =
     dataDetails.event && dataDetails.event.status && dataDetails.event.status.history
       ? Object.values(dataDetails.event.status.history).map((item) => ({
-        children: (
-          <>
-            <p>{moment(item.datetime).format('DD/MM/YYYY HH:mm:ss')} - <b>{item.user}</b> </p>
-            <p>{item.message}</p>
-          </>
-        )
-      }))
+          children: (
+            <>
+              <p>
+                {moment(item.datetime).format('DD/MM/YYYY HH:mm:ss')} - <b>{item.user}</b>{' '}
+              </p>
+              <p>{item.message}</p>
+            </>
+          )
+        }))
       : [];
 
   const handleView = useCallback((data: any) => {
     console.log('data:', data);
-    setShowDetails(true);
-
-  }, [])
+    setShowDetailsCvs(true);
+  }, []);
 
   return (
     <>
@@ -97,21 +98,25 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
             </Panel>
             <Panel header="Documentos Anexados" collapsible bordered>
               <Table data={dataDetails.attachment} autoHeight>
-                <Column width={600}>
+                <Column width={550}>
                   <HeaderCell>Nome Documento</HeaderCell>
                   <Cell dataKey="name" />
                 </Column>
-                <Column width={320}>
+                <Column width={300}>
                   <HeaderCell>Descrição</HeaderCell>
                   <Cell dataKey="description" />
                 </Column>
-                <Column width={200}>
+                <Column width={180}>
                   <HeaderCell>Data</HeaderCell>
                   <Cell>{(rowData: any) => <span>{moment(rowData.insertion).format('DD/MM/YYYY - HH:mm:ss')}</span>}</Cell>
                 </Column>
                 <Column width={100}>
                   <HeaderCell>Usuario</HeaderCell>
                   <Cell dataKey="user" />
+                </Column>
+                <Column width={90}>
+                  <HeaderCell>Download</HeaderCell>
+                  <Cell>{(rowData: any) => <IconButton icon={<FileDownloadIcon />} />}</Cell>
                 </Column>
               </Table>
             </Panel>
@@ -134,7 +139,12 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
                   <Cell>
                     {(rowData: any) => (
                       <ButtonGroup>
-                        <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Visualizar Detalhes</Tooltip>}>
+                        <Whisper
+                          placement="top"
+                          controlId="control-id-focus"
+                          trigger="hover"
+                          speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
+                        >
                           <IconButton icon={<VisibleIcon />} onClick={() => handleView(rowData)} style={{ color: '#000' }} />
                         </Whisper>
                       </ButtonGroup>
@@ -148,15 +158,14 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
           <Loading />
         )}
       </Drawer>
-      {showDetails && (
+      {showDetailsCvs && (
         <DrawerCVSDetails
-          open={showDetails}
-          onClose={() => setShowDetails(false)}
+          open={showDetailsCvs}
+          onClose={() => setShowDetailsCvs(false)}
           onClickCancel={() => {
-            setShowDetails(false);
-            setDataDetails({} as dataConsultsDetails);
+            setShowDetailsCvs(false);
+            //setDataDetails({} as dataConsultsDetails);
           }}
-          request_key={"1000"}
         />
       )}
     </>

@@ -1,59 +1,19 @@
-import { Timeline, Input } from 'antd';
-import moment from 'moment';
-import React, { useCallback, useEffect } from 'react';
-import { Button, ButtonGroup, Drawer, IconButton, Panel, Table, Tooltip, Whisper } from 'rsuite';
-import VisibleIcon from '@rsuite/icons/Visible';
-import { useConsults } from '../../hooks/hooksConsults';
-import Loading from '../../../../components/Loading';
-import ReactDiffViewer, { DiffMethod } from "react-diff-viewer";
+import React from 'react';
+import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
+import { Button, Drawer } from 'rsuite';
 
 interface dataDrawer {
   open: boolean;
   onClose: () => void;
   onClickCancel: () => void;
-  request_key: string;
 }
 
-const DrawerCVSDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, request_key }) => {
-  const { Column, HeaderCell, Cell } = Table;
-  const { TextArea } = Input;
-  const { dataDetails } = useConsults();
-
-  const statusDescription = dataDetails.status_description || '';
-  let datas;
-  if (statusDescription.includes('..')) {
-    datas = statusDescription.split('..');
-  } else if (statusDescription.includes('<br>')) {
-    datas = statusDescription.split('<br>');
-  } else {
-    datas = [statusDescription];
-  }
-
-  const textoComQuebras = datas.map((data, index) => data.trim()).join('\n');
-
-  const items =
-    dataDetails.event && dataDetails.event.status && dataDetails.event.status.history
-      ? Object.values(dataDetails.event.status.history).map((item) => ({
-          children: (
-            <>
-              <p>{moment(item.datetime).format('DD/MM/YYYY - HH:mm:ss')}</p>
-              <p>{item.user}</p>
-              <p>{item.message}</p>
-            </>
-          )
-        }))
-      : [];
-
-  const handleView = useCallback((data: any) => {
-    console.log('data:',data);
-    
-  },[])    
-
+const DrawerCVSDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }) => {
   const newStyles = {
     variables: {
       light: {
-        codeFoldGutterBackground: "#6F767E",
-        codeFoldBackground: "#E2E4E5"
+        codeFoldGutterBackground: '#6F767E',
+        codeFoldBackground: '#E2E4E5'
       }
     }
   };
@@ -61,18 +21,16 @@ const DrawerCVSDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, 
   return (
     <Drawer open={open} onClose={onClose} size="calc(100% - 120px)">
       <Drawer.Header>
-        <Drawer.Title>
-          Alteração no codigo
-        </Drawer.Title>
+        <Drawer.Title>Alteração no codigo</Drawer.Title>
         <Drawer.Actions>
           <Button onClick={onClickCancel} color="red" appearance="primary">
-            Fechar
+            Voltar
           </Button>
         </Drawer.Actions>
       </Drawer.Header>
       <Drawer.Body>
-      <ReactDiffViewer
-        oldValue={`case 6:
+        <ReactDiffViewer
+          oldValue={`case 6:
         $MsgLoginFailed = $AD_msgs[$res];
         break;
     }
@@ -80,7 +38,7 @@ const DrawerCVSDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, 
     if ( $block == 2 ) {
       echo "<html><head><TITLE>";
         `}
-        newValue={`case 6:
+          newValue={`case 6:
         $MsgLoginFailed = $AD_msgs[$res];
         break;
    }
@@ -94,13 +52,12 @@ const DrawerCVSDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, 
     LogTransaction ($PHP_SELF, 0, 2, "login", "User_Id=$user_id", $MsgLoginFailed);
     if ( $block == 2 ) {
       echo "<html><head><TITLE>";`}
-        splitView={true}
-        compareMethod={DiffMethod.WORDS}
-        styles={newStyles}
-        leftTitle="Revision 2.56"
-        rightTitle="Revision 2.57"
-        
-      />
+          splitView={true}
+          compareMethod={DiffMethod.WORDS}
+          styles={newStyles}
+          leftTitle="Revision 2.56"
+          rightTitle="Revision 2.57"
+        />
       </Drawer.Body>
     </Drawer>
   );
