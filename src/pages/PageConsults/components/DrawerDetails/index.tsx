@@ -48,7 +48,7 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
       : [];
 
   const handleView = useCallback((data: any) => {
-    console.log('data:', data);
+   // console.log('data:', data);
     setShowDetailsCvs(true);
   }, []);
 

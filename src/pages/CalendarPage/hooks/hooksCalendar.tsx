@@ -13,7 +13,7 @@ export interface EventsData {
   title?: string;
   backgroundColor?: string;
   allDay?: boolean | number;
-  start?: string;
+  start?: Date | string | null;
   end?: Date | string | null;
   updated_at?: string;
   created_at?: string;
@@ -85,7 +85,7 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
           toast.success(response.data);
           listEvents();
           setOpenModal(false);
-          window.location.reload();
+          //window.location.reload();
         })
         .catch(function (error) {
           //console.log(error);

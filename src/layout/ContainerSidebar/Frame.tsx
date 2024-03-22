@@ -8,6 +8,7 @@ import PeoplesIcon from '@rsuite/icons/Peoples';
 import CodeIcon from '@rsuite/icons/Code';
 import PeoplesUploadedIcon from '@rsuite/icons/PeoplesUploaded';
 import CalendarIcon from '@rsuite/icons/Calendar';
+import SettingHorizontalIcon from '@rsuite/icons/SettingHorizontal';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Nav, Navbar, Sidenav } from 'rsuite';
@@ -54,6 +55,9 @@ const Frame: React.FC = () => {
                 </Nav.Item>
                 <Nav.Item eventKey="8" icon={<PeoplesUploadedIcon />} onSelect={() => navigate('/user-groups')}>
                   Usuarios x Grupos
+                </Nav.Item>
+                <Nav.Item eventKey="9" icon={<SettingHorizontalIcon />} onSelect={() => navigate('/permissions')}>
+                  Permissões
                 </Nav.Item>
               </>
             ) : (

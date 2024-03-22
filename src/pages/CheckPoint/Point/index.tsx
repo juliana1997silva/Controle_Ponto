@@ -141,7 +141,7 @@ const Point: React.FC = () => {
         status: 'pending'
       };
       updatePoint(data);
-      console.log('data update::', data);
+     // console.log('data update::', data);
     }
     setFormDataTime({} as timeData);
     setDataConsults({} as consultsData[]);
@@ -201,8 +201,6 @@ const Point: React.FC = () => {
       }));
     }
   }, [user, mode, dataRegisterStore, setDataConsults, setBusinessData, setFormDataTime]);
-
-  console.log('formDataTime:: ', formDataTime);
 
   if (showBack) {
     return <ListPoint />;
