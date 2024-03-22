@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import Loading from '../../../components/Loading';
 
 export interface CoordinatorData {
   id?: string;
@@ -35,9 +36,10 @@ const CoordinatorContextProvider: React.FC<IProps> = ({ children }) => {
   const [list, setList] = useState(false);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
   const [coordinatorStore, setCoordinatorStore] = useState<CoordinatorData>({} as CoordinatorData);
-
+const [loading, setLoading] = useState(false);
   //lista
   const listCoordinator = useCallback(async () => {
+    setLoading(true);
     await api
       .get('/manager')
       .then((response) => {
@@ -49,7 +51,8 @@ const CoordinatorContextProvider: React.FC<IProps> = ({ children }) => {
         ////console.log(error);
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
-  }, [setDataCoordinator, setList]);
+    setLoading(false);
+  }, [setDataCoordinator, setList, setLoading]);
 
   //criar
   const createdCoordinator = useCallback(
@@ -103,6 +106,9 @@ const CoordinatorContextProvider: React.FC<IProps> = ({ children }) => {
     },
     [listCoordinator]
   );
+    if (loading) {
+      return <Loading />;
+    }
 
   return (
     <CoordinatorContext.Provider

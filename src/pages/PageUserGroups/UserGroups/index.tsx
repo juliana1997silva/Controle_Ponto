@@ -13,10 +13,10 @@ interface RecordType {
 }
 
 function UserGroups() {
-  const { list, listGroups, groupsData, listUsersGroups, usersData, connectUser, setKeySelect, keySelect } = useUserGroups();
-
-  const [targetKeys, setTargetKeys] = useState<string[]>([]);
+  const { list, listGroups, groupsData, listUsersGroups, usersData, connectUser, setKeySelect, keySelect, setUsersData } = useUserGroups();
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [targetKeys, setTargetKeys] = useState<string[]>([]);
+  const [updatetarget, setUpdateTarget] = useState(false);
   const dataSource: RecordType[] = Object.values(usersData || []).map((item) => {
     return {
       key: item.id,
@@ -24,7 +24,15 @@ function UserGroups() {
       team_id: item.team_id
     };
   });
-  const initialTargetKeys = dataSource.filter((item) => item.team_id !== keySelect).map((item) => item.key);
+
+  // Efeito para inicializar targetKeys com initialTargetKeys quando keySelect muda
+  useEffect(() => {
+    if (keySelect !== '' && !updatetarget) {
+      const initialTargetKeys = dataSource.filter((item) => item.team_id !== keySelect).map((item) => item.key);
+      setTargetKeys(initialTargetKeys);
+    }
+  }, [keySelect, dataSource, updatetarget]);
+
   const selectGroups = Object.values(groupsData || []).map((item) => {
     return {
       value: item.id,
@@ -40,29 +48,27 @@ function UserGroups() {
   const onChange: TransferProps['onChange'] = useCallback(
     (nextTargetKeys: any, direction: any, moveKeys: any) => {
       setTargetKeys(nextTargetKeys);
+      setUpdateTarget(true);
     },
-    [setTargetKeys]
+    [setTargetKeys, setUpdateTarget]
   );
 
   const onSelectChange = useCallback(
     (sourceSelectedKeys: string[], targetSelectedKeys: string[]) => {
       setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
+      setUpdateTarget(true);
     },
-    [setSelectedKeys]
+    [setSelectedKeys, setUpdateTarget]
   );
 
   const handleSubmit = useCallback(() => {
     connectUser(keySelect, flattenedExemplo);
-  }, [flattenedExemplo, connectUser, keySelect]);
-
-  useEffect(() => {
-    if (targetKeys.length === 0) setTargetKeys(initialTargetKeys);
-  }, [targetKeys, setTargetKeys, initialTargetKeys]);
+    setUsersData([]);
+  }, [flattenedExemplo, connectUser, keySelect, setUsersData]);
 
   useEffect(() => {
     if (!list) listGroups();
-    if (keySelect !== '') listUsersGroups(keySelect);
-  }, [list, listGroups, keySelect, listUsersGroups]);
+  }, [list, listGroups]);
 
   return (
     <Panel header={<TitlePage className="title">Vincular Usuario X Grupo</TitlePage>}>
@@ -71,8 +77,14 @@ function UserGroups() {
         placeholder="Selecione o Grupo"
         style={{ width: 200 }}
         data={selectGroups}
-        onSelect={(e) => setKeySelect(e)}
-        onClean={() => setKeySelect('')}
+        onSelect={(e) => {
+          setKeySelect(e);
+          listUsersGroups(e);
+        }}
+        onClean={() => {
+          setKeySelect('');
+          setUsersData([]);
+        }}
       />
       <div style={{ padding: 10 }} />
       {keySelect !== '' && (

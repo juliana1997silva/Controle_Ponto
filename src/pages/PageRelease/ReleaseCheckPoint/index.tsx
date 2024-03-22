@@ -1,9 +1,10 @@
 import BlockIcon from '@rsuite/icons/Block';
 import CheckIcon from '@rsuite/icons/Check';
 import VisibleIcon from '@rsuite/icons/Visible';
+import EmailIcon from '@rsuite/icons/Email';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, ButtonGroup, IconButton, Panel, SelectPicker, Table, Tag, Tooltip, Whisper } from 'rsuite';
+import { Button, ButtonGroup, Form, IconButton, Modal, Panel, SelectPicker, Table, Tag, Tooltip, Whisper } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import { useCheckPoint } from '../../CheckPoint/hooks/hookCheckPoint';
 import DrawerView from '../components/DrawerView';
@@ -19,6 +20,7 @@ const ReleaseCheckPoint: React.FC = () => {
   const [select, setSelect] = useState('');
   const [buttonPDF, setButtonPDF] = useState(true);
   const [nameText, setNameText] = useState<string>({} as string);
+  const [showModal, setShowModal] = useState(false);
 
   const dataSelect = Object.values(dataListUsers).map((item) => {
     return {
@@ -217,6 +219,9 @@ const ReleaseCheckPoint: React.FC = () => {
           </>
         )}
         <ContainerButtonPDF>
+          <Button appearance="primary" style={{ backgroundColor: '#1976D2', width: 150 }} onClick={() => setShowModal(true)}>
+            Enviar E-mail
+          </Button>
           <Button
             appearance="primary"
             style={{ backgroundColor: '#1976D2', width: 150 }}
@@ -228,6 +233,21 @@ const ReleaseCheckPoint: React.FC = () => {
         </ContainerButtonPDF>
       </Panel>
       {openView && <DrawerView name={nameText} />}
+      <Modal open={showModal} onClose={() => setShowModal(false)}>
+        <Modal.Title>Enviar ficha teletrabalho por e-mail</Modal.Title>
+        <Modal.Body>
+          <Form layout="inline">
+            <Form.Group>
+              <Form.ControlLabel>E-mail</Form.ControlLabel>
+              <Form.Control name="email" />
+            </Form.Group>
+            <Form.Group>
+              <IconButton icon={<EmailIcon />} appearance="default" />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
     </>
   );
 };

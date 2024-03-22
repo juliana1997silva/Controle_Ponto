@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import Loading from '../../../components/Loading';
 
 export interface GroupsData {
   id?: string;
@@ -36,9 +37,10 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
   const [list, setList] = useState(false);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
   const [groupStore, setGroupStore] = useState<GroupsData>({} as GroupsData);
-
+const [loading, setLoading] = useState(false);
   //lista
   const listGroups = useCallback(async () => {
+    setLoading(true);
     await api
       .get('/group', {
         headers: {
@@ -46,7 +48,7 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
         }
       })
       .then((response) => {
-       // console.log(response.data);
+        // console.log(response.data);
         setDataGroups(response.data);
       })
       .catch((error) => {
@@ -54,7 +56,8 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
         toast.error('Ocorreu um erro. Tente Novamente!');
       });
     setList(true);
-  }, [setDataGroups, setList, user]);
+    setLoading(false);
+  }, [setDataGroups, setList, user, setLoading]);
 
   //criar
   const createdGroup = useCallback(
@@ -124,6 +127,10 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
     },
     [listGroups, user]
   );
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <GroupsContext.Provider

@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import Loading from '../../../components/Loading';
 
 export interface UsersData {
   name?: string;
@@ -57,7 +58,7 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
   const [list, setList] = useState(false);
   const [listCoordinatorData, setListCoordinatorData] = useState(false);
   const [coordinatorData, setCoordinatorData] = useState<UsersData[]>({} as UsersData[]);
-
+ const [loading, setLoading] = useState(false);
   //lista os grupos
   const listCoordinator = useCallback(async () => {
     await api
@@ -78,26 +79,25 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
   }, [setCoordinatorData, setListCoordinatorData, user]);
 
   //lista os usuarios
-  const listUsers = useCallback(
-    async () => {
-     await api
-       .get(`/users`, {
-         headers: {
-           Authorization: `Bearer ${user.token}`
-         }
-       })
-       .then((response) => {
-         setDataListUsers(response.data);
-       })
-       .catch((error) => {
-         ////console.log(error);
-         toast.error('Ocorreu um erro. Tente Novamente!');
-       });
-      
-      setList(true);
-    },
-    [setDataListUsers, setList, user]
-  );
+  const listUsers = useCallback(async () => {
+    setLoading(true);
+    await api
+      .get(`/users`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      })
+      .then((response) => {
+        setDataListUsers(response.data);
+      })
+      .catch((error) => {
+        ////console.log(error);
+        toast.error('Ocorreu um erro. Tente Novamente!');
+      });
+
+    setList(true);
+    setLoading(false);
+  }, [setDataListUsers, setList, user, setLoading]);
 
   //registra o usuario
   const RegisterUsers = useCallback(
@@ -202,6 +202,10 @@ const UsersContextProvider: React.FC<IProps> = ({ children }) => {
     },
     [listUsers, user]
   );
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <UsersContext.Provider

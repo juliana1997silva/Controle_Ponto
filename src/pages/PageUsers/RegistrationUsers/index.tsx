@@ -1,7 +1,7 @@
 import EyeIcon from '@rsuite/icons/legacy/Eye';
 import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, ButtonToolbar, Divider, Form, InputGroup, Panel, SelectPicker, Toggle } from 'rsuite';
+import { Button, ButtonToolbar, Divider, Form, InputGroup, Panel } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import UserList from '../UserList';
 import { UsersData, useUsers } from '../hooks/hooksUsers';
@@ -18,7 +18,6 @@ const RegistrationUsers: React.FC = () => {
     setShowRegister,
     listCoordinatorData,
     listCoordinator,
-    coordinatorData
   } = useUsers();
   const [visible, setVisible] = useState(false);
   const [formData, setFormData] = useState<UsersData>({} as UsersData);
@@ -35,14 +34,6 @@ const RegistrationUsers: React.FC = () => {
     },
     [setFormData]
   );
-
-  const coordinator = Object.values(coordinatorData).map((item) => {
-    return {
-      value: item.id,
-      label: item.name,
-      role: item.name
-    };
-  });
 
   const handleSubmit = useCallback(() => {
     if (mode === 'create') {

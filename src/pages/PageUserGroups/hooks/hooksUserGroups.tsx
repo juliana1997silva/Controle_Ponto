@@ -1,10 +1,13 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserData, useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
 import { GroupsData } from '../../PageGroups/hooks/hooksGroups';
+import Loading from '../../../components/Loading';
+import { setSeconds } from 'date-fns';
+import { UsersData } from '../../PageUsers/hooks/hooksUsers';
 
 export interface UserGroupsData {
   name?: string;
@@ -40,6 +43,7 @@ const UserGroupsContext = createContext<HooksUserGroupsData>({} as HooksUserGrou
 
 const UserGroupsContextProvider: React.FC<IProps> = ({ children }) => {
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [groupsData, setGroupsData] = useState<GroupsData[]>({} as GroupsData[]);
   const [list, setList] = useState(false);
   const [usersData, setUsersData] = useState<UserData[]>({} as UserData[]);
@@ -83,6 +87,7 @@ const UserGroupsContextProvider: React.FC<IProps> = ({ children }) => {
 
   const connectUser = useCallback(
     async (idGroup: string, idUsers: string[]) => {
+      setLoading(true);
       const data = {
         group_id: idGroup,
         user_id: idUsers
@@ -98,13 +103,17 @@ const UserGroupsContextProvider: React.FC<IProps> = ({ children }) => {
         });
 
       if (dataUsers) {
-        listUsersGroups(idGroup);
+        listUsersGroups(idGroup); // Atualize os dados na página
         toast.success(`${dataUsers.data}`);
       }
+      setLoading(false);
     },
-    [user, listUsersGroups]
+    [user, listUsersGroups, setLoading]
   );
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <UserGroupsContext.Provider
       value={{

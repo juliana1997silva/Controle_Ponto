@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'; // css do toast
 import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import Loading from '../../../components/Loading';
 
 export interface EventsData {
   id?: string;
@@ -36,12 +37,14 @@ const CalendarContext = createContext<HooksCalendarData>({} as HooksCalendarData
 
 const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [dataEvents, setDataEvents] = useState<EventInput[]>([] as EventInput[]);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
   const [list, setList] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const listEvents = useCallback(async () => {
+    setLoading(true);
     await api
       .get(`/events`, {
         headers: {
@@ -56,7 +59,8 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
         //console.log(error);
       });
     setList(true);
-  }, [setDataEvents, setList, user]);
+    setLoading(false);
+  }, [setDataEvents, setList, user, setLoading]);
 
   const createEvents = useCallback(
     async (data: EventsData) => {
@@ -121,6 +125,10 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
     },
     [listEvents, setOpenModal, user]
   );
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <CalendarContext.Provider

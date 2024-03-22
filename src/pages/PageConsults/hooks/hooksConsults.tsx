@@ -136,7 +136,7 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
       setConsultsData(data.data);
     }
     setLoading(false);
-  }, [setConsultsData, setList, setLoading]);
+  }, [setConsultsData, setLoading]);
 
   const consultsDetailsGet = useCallback(
     async (requestData: RequestDataForm) => {
@@ -148,7 +148,7 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
         setDataDetails(data.data);
       }
     },
-    [setDataDetails, setLoading]
+    [setDataDetails]
   );
 
   if (loading) {

@@ -1,7 +1,7 @@
-import moment from 'moment';
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // css do toast
+import Loading from '../../../components/Loading';
 import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
@@ -53,8 +53,8 @@ export interface timeData {
   out_time?: string;
   created_at?: string;
   updated_at?: string;
-  nonbusiness?: nonBusinessData[];
-  consults?: consultsData[];
+  nonbusiness?: nonBusinessData[] | null;
+  consults?: consultsData[] | null;
   status?: string;
 }
 
@@ -69,7 +69,7 @@ interface HooksCheckPointData {
   setCommercial(commercial: nonBusinessData[]): void;
   openCommercial: boolean;
   setOpenCommercial(openCommercial: boolean): void;
-  registerPoint(dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]): void;
+  registerPoint(dataTime: timeData): void;
   listPoint(): void;
   dataRegister: timeData[];
   setDataRegister(dataRegister: timeData[]): void;
@@ -77,9 +77,7 @@ interface HooksCheckPointData {
   setDataRegisterStore(dataRegister: timeData): void;
   mode: 'created' | 'edit';
   setMode(mode: 'created' | 'edit'): void;
-  updateData: boolean;
-  setUpdateData(updateData: boolean): void;
-  updatePoint(dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]): void;
+  updatePoint(dataTime: timeData): void;
   list: boolean;
   setList(list: boolean): void;
   showBack: boolean;
@@ -91,6 +89,7 @@ const CheckPointContext = createContext<HooksCheckPointData>({} as HooksCheckPoi
 
 const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [dataModal, setDataModal] = useState<timeData>({} as timeData);
   const [commercialData, setCommercialData] = useState<nonBusinessData>({} as nonBusinessData);
@@ -99,11 +98,11 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
   const [dataRegister, setDataRegister] = useState<timeData[]>([] as timeData[]);
   const [dataRegisterStore, setDataRegisterStore] = useState<timeData>({} as timeData);
   const [mode, setMode] = useState<'created' | 'edit'>('created');
-  const [updateData, setUpdateData] = useState(false);
   const [list, setList] = useState(false);
   const [showBack, setShowBack] = useState(false);
 
   const listPoint = useCallback(async () => {
+    setLoading(true);
     const response = await api
       .get(`/checkpoint`, {
         headers: {
@@ -117,26 +116,15 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
     if (response) {
       //console.log(response.data);
       setDataRegister(response.data);
-      setList(true);
     }
-  }, [setDataRegister, user, setList]);
+    setList(true);
+    setLoading(false);
+  }, [setDataRegister, user, setList, setLoading]);
 
   const registerPoint = useCallback(
-    async (dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]) => {
-      const data = {
-        user_id: user.id,
-        date: moment(dataTime.date, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-        location: dataTime.location,
-        entry_time: dataTime.entry_time,
-        lunch_entry_time: dataTime.lunch_entry_time,
-        lunch_out_time: dataTime.lunch_out_time,
-        out_time: dataTime.out_time,
-        nonbusiness: nonBusiness.length > 0 ? nonBusiness : null,
-        consults: consultations.length > 0 ? consultations : null,
-        status: 'pending'
-      };
+    async (dataTime: timeData) => {
       const registerData = await api
-        .post(`/checkpoint`, data, {
+        .post(`/checkpoint`, dataTime, {
           headers: {
             Authorization: `Bearer ${user.token}`
           }
@@ -149,30 +137,15 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
         //console.log('registerData.data::', registerData.data);
         toast.success('Ponto registrado com sucesso !');
         listPoint();
-        setUpdateData(true);
       }
     },
-    [user, listPoint, setUpdateData]
+    [user, listPoint]
   );
 
   const updatePoint = useCallback(
-    async (dataTime: timeData, nonBusiness: nonBusinessData[], consultations: consultsData[]) => {
-     // console.log('consultations update:: ', consultations);
-      const data = {
-        user_id: dataTime.user_id,
-        date: dataTime.date,
-        location: dataTime.location,
-        entry_time: dataTime.entry_time,
-        lunch_entry_time: dataTime.lunch_entry_time,
-        lunch_out_time: dataTime.lunch_out_time,
-        out_time: dataTime.out_time,
-        nonbusiness: nonBusiness.length > 0 ? nonBusiness : null,
-        consults: consultations.length > 0 ? consultations : null,
-        status: dataTime.status
-      };
-
+    async (dataTime: timeData) => {
       await api
-        .put(`/checkpoint/${dataTime.id}`, data, {
+        .put(`/checkpoint/${dataTime.id}`, dataTime, {
           headers: {
             Authorization: `Bearer ${user.token}`
           }
@@ -181,13 +154,12 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
           //console.log(response.data);
           toast.success('Atualização realizada com sucesso !');
           listPoint();
-          setUpdateData(true);
         })
         .catch(function (error) {
           //console.log(error);
         });
     },
-    [listPoint, setUpdateData, user]
+    [listPoint, user]
   );
 
   const deleteConsult = useCallback(
@@ -209,6 +181,9 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
     [user]
   );
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <CheckPointContext.Provider
       value={{
@@ -230,8 +205,6 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
         setDataRegisterStore,
         mode,
         setMode,
-        updateData,
-        setUpdateData,
         updatePoint,
         list,
         setList,

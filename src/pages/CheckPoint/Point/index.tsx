@@ -1,8 +1,7 @@
 import moment from 'moment';
-import 'moment/locale/pt-br';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Button, Form, Input, MaskedInput, Panel, SelectPicker, Table } from 'rsuite';
+import { Button, ButtonToolbar, DatePicker, Form, Input, Panel, SelectPicker, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import { useAuth } from '../../../hooks/hooksAuth';
 import ListPoint from '../ListPoint';
@@ -13,7 +12,7 @@ const Textarea = React.forwardRef((props: any, ref: any) => <Input {...props} as
 
 const Point: React.FC = () => {
   const { user } = useAuth();
-  const { registerPoint, dataRegisterStore, mode, updatePoint, updateData, deleteConsult } = useCheckPoint();
+  const { registerPoint, dataRegisterStore, mode, updatePoint, deleteConsult, setMode } = useCheckPoint();
   const { Column, HeaderCell, Cell } = Table;
   const [formDataTime, setFormDataTime] = useState<timeData>({} as timeData);
   const [formDataNonBusiness, setFormDataNonBusiness] = useState<nonBusinessData>({} as nonBusinessData);
@@ -111,56 +110,99 @@ const Point: React.FC = () => {
   const handleSubmit = useCallback(() => {
     if (mode === 'created') {
       if (formDataTime.location !== undefined && formDataTime.date !== undefined) {
-        registerPoint(formDataTime, businessData, dataConsults);
-        //console.log(formDataTime);
+        const data: timeData = {
+          user_id: user.id,
+          date: formDataTime.date && moment(formDataTime.date, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          location: formDataTime.location,
+          entry_time: formDataTime.entry_time,
+          lunch_entry_time: formDataTime.lunch_entry_time,
+          lunch_out_time: formDataTime.lunch_out_time,
+          out_time: formDataTime.out_time,
+          nonbusiness: businessData.length > 0 ? businessData : null,
+          consults: dataConsults.length > 0 ? dataConsults : null,
+          status: 'pending'
+        };
+        registerPoint(data);
       } else {
         toast.error('Por favor, preencha todos os campos');
       }
     } else {
-      updatePoint(formDataTime, businessData, dataConsults);
+      const data: timeData = {
+        id: formDataTime.id,
+        user_id: formDataTime.user_id,
+        date: moment(formDataTime.date, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+        location: formDataTime.location,
+        entry_time: formDataTime.entry_time,
+        lunch_entry_time: formDataTime.lunch_entry_time,
+        lunch_out_time: formDataTime.lunch_out_time,
+        out_time: formDataTime.out_time,
+        nonbusiness: businessData.length > 0 ? businessData : null,
+        consults: dataConsults.length > 0 ? dataConsults : null,
+        status: 'pending'
+      };
+      updatePoint(data);
+      console.log('data update::', data);
     }
     setFormDataTime({} as timeData);
     setDataConsults({} as consultsData[]);
     setBusinessData({} as nonBusinessData[]);
-  }, [registerPoint, formDataTime, businessData, dataConsults, setFormDataTime, updatePoint, setDataConsults, setBusinessData, mode]);
+    setShowBack(true);
+  }, [
+    registerPoint,
+    formDataTime,
+    businessData,
+    dataConsults,
+    setFormDataTime,
+    updatePoint,
+    setDataConsults,
+    setBusinessData,
+    mode,
+    setShowBack,
+    user
+  ]);
+
+  const handleLink = useCallback((link: string) => {
+    window.open(link, '_blank');
+  }, []);
+
+  const handleBack = useCallback(() => {
+    setShowBack(true);
+    setFormDataTime({} as timeData);
+    setDataConsults({} as consultsData[]);
+    setBusinessData({} as nonBusinessData[]);
+    setMode('created');
+  }, [setShowBack, setFormDataTime, setDataConsults, setBusinessData, setMode]);
 
   useEffect(() => {
-    if (mode === 'edit') {
-      if (dataRegisterStore) {
-        setFormDataTime({
-          date: moment(dataRegisterStore.date).format('DD/MM/YYYY'),
-          entry_time: dataRegisterStore.entry_time,
-          lunch_entry_time: dataRegisterStore.lunch_entry_time,
-          lunch_out_time: dataRegisterStore.lunch_out_time,
-          out_time: dataRegisterStore.out_time,
-          location: dataRegisterStore.location
-        });
+    if (mode === 'edit' && dataRegisterStore && dataRegisterStore.date) {
+      // Criar uma cópia dos dados de dataRegisterStore
+      const formData = {
+        ...dataRegisterStore,
+        // Garantir que o formato da data seja o esperado
+       // date: moment(dataRegisterStore.date, 'YYYY-MM-DD').format('DD/MM/YYYY')
+      };
 
-        if (dataRegisterStore.consults) {
-          setDataConsults(dataRegisterStore.consults);
-        } else if (dataRegisterStore.nonbusiness) {
-          setBusinessData(dataRegisterStore.nonbusiness);
-        }
+      // Atualizar o estado formDataTime com os dados copiados
+      setFormDataTime(formData);
+
+      if (dataRegisterStore.consults) {
+        setDataConsults(dataRegisterStore.consults);
       }
+      if (dataRegisterStore.nonbusiness) {
+        setBusinessData(dataRegisterStore.nonbusiness);
+      }
+    } else {
+      setFormDataTime((prevTime: timeData) => ({
+        ...prevTime,
+        entry_time: user.entry_time,
+        lunch_entry_time: user.lunch_entry_time,
+        lunch_out_time: user.lunch_out_time,
+        out_time: user.out_time
+      }));
     }
-  }, [mode, dataRegisterStore, setDataConsults, setBusinessData, setFormDataTime]);
+  }, [user, mode, dataRegisterStore, setDataConsults, setBusinessData, setFormDataTime]);
 
-  useEffect(() => {
-    if (updateData) setShowBack(true);
-  }, [updateData, setShowBack]);
-
-  useEffect(() => {
-    setFormDataTime((prevTime: timeData) => ({
-      ...prevTime,
-      entry_time: user.entry_time,
-      lunch_entry_time: user.lunch_entry_time,
-      lunch_out_time: user.lunch_out_time,
-      out_time: user.out_time
-    }));
-  }, [setFormDataTime, user]);
-
-  //console.log('dataRegisterStore:: ', dataRegisterStore);
- // console.log('formDataTime:: ', formDataTime);
+  console.log('formDataTime:: ', formDataTime);
 
   if (showBack) {
     return <ListPoint />;
@@ -177,16 +219,7 @@ const Point: React.FC = () => {
           }}
         >
           <BreadcrumbComponent active="Registro de Ponto" href="/dashboard" label="Dashboard" />
-          <Button
-            appearance="primary"
-            color="red"
-            onClick={() => {
-              setShowBack(true);
-              setFormDataTime({} as timeData);
-              setDataConsults({} as consultsData[]);
-              setBusinessData({} as nonBusinessData[]);
-            }}
-          >
+          <Button appearance="primary" color="red" onClick={handleBack}>
             Voltar
           </Button>
         </div>
@@ -198,10 +231,11 @@ const Point: React.FC = () => {
             <Form.Control
               name="date"
               style={{ width: 200 }}
-              accepter={MaskedInput}
+              accepter={DatePicker}
+              oneTap
               placeholder="Data"
-              showMask={true}
-              mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/]}
+              format="dd/MM/yyyy"
+              value={moment(formDataTime.date, 'YYYY-MM-DD').toDate()}
             />
           </Form.Group>
           <Form.Group>
@@ -213,8 +247,7 @@ const Point: React.FC = () => {
               accepter={SelectPicker}
               data={[
                 { label: 'Home-Office', value: 'Home-Office' },
-                { label: 'Em Cliente', value: 'Em Cliente' },
-                { label: 'Presencial', value: 'Presencial' }
+                { label: 'Em Cliente', value: 'Em Cliente' }
               ]}
             />
           </Form.Group>
@@ -282,7 +315,7 @@ const Point: React.FC = () => {
                       <HeaderCell>Ações</HeaderCell>
                       <Cell>
                         {(rowData: any) => (
-                          <>
+                          <ButtonToolbar>
                             <Button
                               appearance="primary"
                               color="blue"
@@ -303,7 +336,7 @@ const Point: React.FC = () => {
                                 Excluir
                               </Button>
                             )}
-                          </>
+                          </ButtonToolbar>
                         )}
                       </Cell>
                     </Column>
@@ -336,11 +369,11 @@ const Point: React.FC = () => {
               </Form.Group>
               {dataConsults && dataConsults.length !== 0 && (
                 <Table data={dataConsults}>
-                  <Column width={100} align="center">
-                    <HeaderCell>Nº Consulta</HeaderCell>
+                  <Column width={100}>
+                    <HeaderCell>Consulta</HeaderCell>
                     <Cell dataKey="request_key" />
                   </Column>
-                  <Column width={300}>
+                  <Column width={200}>
                     <HeaderCell>Descrição</HeaderCell>
                     <Cell dataKey="description" />
                   </Column>
@@ -350,7 +383,10 @@ const Point: React.FC = () => {
                       {(rowData: any) => (
                         <>
                           {rowData.id ? (
-                            <>
+                            <ButtonToolbar>
+                              <Button appearance="primary" color="green" onClick={() => handleLink(rowData.link)}>
+                                Visualizar
+                              </Button>
                               <Button
                                 appearance="primary"
                                 color="blue"
@@ -360,7 +396,6 @@ const Point: React.FC = () => {
                               >
                                 Editar
                               </Button>
-
                               <Button
                                 appearance="primary"
                                 color="red"
@@ -370,7 +405,7 @@ const Point: React.FC = () => {
                               >
                                 Excluir
                               </Button>
-                            </>
+                            </ButtonToolbar>
                           ) : (
                             <TextEdit>Clique em "Salvar" para finalizar a edição</TextEdit>
                           )}

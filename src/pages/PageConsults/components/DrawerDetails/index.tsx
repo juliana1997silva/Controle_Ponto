@@ -1,11 +1,11 @@
 import FileDownloadIcon from '@rsuite/icons/FileDownload';
+import VisibleIcon from '@rsuite/icons/Visible';
 import { Input, Timeline } from 'antd';
 import moment from 'moment';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, ButtonGroup, Drawer, IconButton, Panel, Table, Tooltip, Whisper } from 'rsuite';
-import VisibleIcon from '@rsuite/icons/Visible';
-import { RequestDataForm, dataConsultsDetails, useConsults } from '../../hooks/hooksConsults';
 import Loading from '../../../../components/Loading';
+import { useConsults } from '../../hooks/hooksConsults';
 import DrawerCVSDetails from '../DrawerCVSDetails';
 
 interface dataDrawer {
@@ -18,9 +18,8 @@ interface dataDrawer {
 const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, request_key }) => {
   const { Column, HeaderCell, Cell } = Table;
   const { TextArea } = Input;
-  const { dataDetails, setDataDetails } = useConsults();
+  const { dataDetails } = useConsults();
   const [showDetailsCvs, setShowDetailsCvs] = useState(false);
-  const [dataSend, setDataSend] = useState<RequestDataForm>({} as RequestDataForm);
 
   const statusDescription = dataDetails.status_description || '';
   let datas;

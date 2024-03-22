@@ -7,13 +7,12 @@ import { useCheckPoint } from '../hooks/hookCheckPoint';
 
 const ListPoint: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
-  const { listPoint, dataRegister, setMode, setUpdateData, setDataRegisterStore, list } = useCheckPoint();
+  const { listPoint, dataRegister, setMode, setDataRegisterStore, list } = useCheckPoint();
   const [showCreated, setShowCreated] = useState(false);
 
   useEffect(() => {
     if (!list) listPoint();
-    setUpdateData(false);
-  }, [list, listPoint, setUpdateData]);
+  }, [list, listPoint]);
 
   if (showCreated) {
     return <Point />;
