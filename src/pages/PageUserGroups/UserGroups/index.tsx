@@ -64,7 +64,8 @@ function UserGroups() {
   const handleSubmit = useCallback(() => {
     connectUser(keySelect, flattenedExemplo);
     setUsersData([]);
-  }, [flattenedExemplo, connectUser, keySelect, setUsersData]);
+    setKeySelect('');
+  }, [flattenedExemplo, connectUser, keySelect, setUsersData, setKeySelect]);
 
   useEffect(() => {
     if (!list) listGroups();
