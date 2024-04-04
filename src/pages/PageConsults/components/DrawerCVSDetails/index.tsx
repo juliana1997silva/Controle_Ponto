@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
 import { Button, Drawer } from 'rsuite';
+import { useConsults } from '../../hooks/hooksConsults';
 
 interface dataDrawer {
   open: boolean;
   onClose: () => void;
   onClickCancel: () => void;
+  request_key: string;
 }
 
-const DrawerCVSDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }) => {
+const DrawerCVSDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, request_key }) => {
+  const { consultsDataCVS, consultCVSDetails } = useConsults();
+
+  useEffect(() => {
+    if (request_key) {
+      consultCVSDetails({
+        request_key: request_key
+      });
+
+      console.log('view: ', consultsDataCVS);
+    }
+  }, [request_key, consultCVSDetails]);
+
   const newStyles = {
     variables: {
       light: {
@@ -29,35 +43,35 @@ const DrawerCVSDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel }
         </Drawer.Actions>
       </Drawer.Header>
       <Drawer.Body>
-        <ReactDiffViewer
-          oldValue={`case 6:
-        $MsgLoginFailed = $AD_msgs[$res];
-        break;
-    }
-    LogTransaction ($PHP_SELF, 0, 2, "login", "User_Id=$user_id", $MsgLoginFailed);
-    if ( $block == 2 ) {
-      echo "<html><head><TITLE>";
-        `}
-          newValue={`case 6:
-        $MsgLoginFailed = $AD_msgs[$res];
-        break;
-   }
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+          <div style={{ marginRight: 15 }}></div>
+        </div>
+        {consultsDataCVS && consultsDataCVS.cvs && (
+          <>
+            {consultsDataCVS.cvs.program.map((program) => {
+              console.log('LINE: ', program);
 
-   // Select para trazer a mensagem de login de erro default
-   $LoginMSGALT  = db_select("select prm_value from parameter where prm_id = 'LOGINMSGAL'", 1 );
-   $row_MsgAlt = db_fetch_row($LoginMSGALT);
-   if ( isset($row_MsgAlt[0]) && empty($row_MsgAlt[0]) )
-     $MsgLoginFailed = $row_MsgAlt[0];
-
-    LogTransaction ($PHP_SELF, 0, 2, "login", "User_Id=$user_id", $MsgLoginFailed);
-    if ( $block == 2 ) {
-      echo "<html><head><TITLE>";`}
-          splitView={true}
-          compareMethod={DiffMethod.WORDS}
-          styles={newStyles}
-          leftTitle="Revision 2.56"
-          rightTitle="Revision 2.57"
-        />
+              return (
+                <>
+                  <h4>{program.file}</h4>
+                  {program.changes.map((change) => (
+                    <>
+                      <ReactDiffViewer
+                        oldValue={change.before.text}
+                        newValue={change.after.text}
+                        splitView={true}
+                        compareMethod={DiffMethod.WORDS}
+                        styles={newStyles}
+                        leftTitle={change.before.line}
+                        rightTitle={change.after.line}
+                      />
+                    </>
+                  ))}
+                </>
+              );
+            })}
+          </>
+        )}
       </Drawer.Body>
     </Drawer>
   );

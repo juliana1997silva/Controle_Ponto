@@ -3,7 +3,7 @@ import VisibleIcon from '@rsuite/icons/Visible';
 import { Input, Timeline } from 'antd';
 import moment from 'moment';
 import React, { useCallback, useState } from 'react';
-import { Button, ButtonGroup, Drawer, IconButton, Panel, Table, Tooltip, Whisper } from 'rsuite';
+import { Button, ButtonGroup, Drawer, IconButton, Panel, Stack, Table, Tooltip, Whisper } from 'rsuite';
 import Loading from '../../../../components/Loading';
 import { useConsults } from '../../hooks/hooksConsults';
 import DrawerCVSDetails from '../DrawerCVSDetails';
@@ -18,7 +18,7 @@ interface dataDrawer {
 const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, request_key }) => {
   const { Column, HeaderCell, Cell } = Table;
   const { TextArea } = Input;
-  const { dataDetails } = useConsults();
+  const { dataDetails, consultCVSDetails } = useConsults();
   const [showDetailsCvs, setShowDetailsCvs] = useState(false);
 
   const statusDescription = dataDetails.status_description || '';
@@ -47,10 +47,14 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
         }))
       : [];
 
-  const handleView = useCallback((data: any) => {
-   // console.log('data:', data);
-    setShowDetailsCvs(true);
-  }, []);
+  const handleView = useCallback(
+    (data: any) => {
+      // console.log('data:', data);
+      setShowDetailsCvs(true);
+      consultCVSDetails(data);
+    },
+    [consultCVSDetails]
+  );
 
   return (
     <>
@@ -119,7 +123,20 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
                 </Column>
               </Table>
             </Panel>
-            <Panel header="Commits" collapsible bordered>
+            <Panel
+              header={
+                <Stack justifyContent="space-between">
+                  <span>Commits</span>
+                  <ButtonGroup>
+                    <Whisper placement="top" controlId="control-id-focus" trigger="hover" speaker={<Tooltip>Visualizar Detalhes</Tooltip>}>
+                      <IconButton icon={<VisibleIcon />} onClick={() => handleView('')} style={{ color: '#000' }} />
+                    </Whisper>
+                  </ButtonGroup>
+                </Stack>
+              }
+              collapsible
+              bordered
+            >
               <Table data={dataDetails.cvs && dataDetails.cvs.program ? dataDetails.cvs.program : []} autoHeight>
                 <Column width={150}>
                   <HeaderCell>Versão</HeaderCell>
@@ -132,23 +149,6 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
                 <Column width={300}>
                   <HeaderCell>Usuario</HeaderCell>
                   <Cell dataKey="user" />
-                </Column>
-                <Column>
-                  <HeaderCell>Ações</HeaderCell>
-                  <Cell>
-                    {(rowData: any) => (
-                      <ButtonGroup>
-                        <Whisper
-                          placement="top"
-                          controlId="control-id-focus"
-                          trigger="hover"
-                          speaker={<Tooltip>Visualizar Detalhes</Tooltip>}
-                        >
-                          <IconButton icon={<VisibleIcon />} onClick={() => handleView(rowData)} style={{ color: '#000' }} />
-                        </Whisper>
-                      </ButtonGroup>
-                    )}
-                  </Cell>
                 </Column>
               </Table>
             </Panel>
@@ -165,6 +165,7 @@ const DrawerDetails: React.FC<dataDrawer> = ({ open, onClose, onClickCancel, req
             setShowDetailsCvs(false);
             //setDataDetails({} as dataConsultsDetails);
           }}
+          request_key={request_key}
         />
       )}
     </>

@@ -27,6 +27,32 @@ export interface ConsultsData {
   customer_name?:string;
 }
 
+export interface dataConsultCVSDetails {
+  cvs: {
+    program: [
+      {
+        file: string;
+        revision: {
+          before: string;
+          after: string;
+        },
+        changes: [
+          {
+            before: {
+              line: string;
+              text: string;
+            },
+            after : {
+              line: string;
+              text: string;
+            }
+          }
+        ]
+      }
+    ]
+  }  
+};
+
 export interface dataConsultsDetails {
   status_description: string;
   description: string;
@@ -92,6 +118,9 @@ interface HooksConsultsData {
   consultsDetailsGet(requestData: RequestDataForm): void;
   dataDetails: dataConsultsDetails;
   setDataDetails(dataDetails: dataConsultsDetails): void;
+  consultsDataCVS: dataConsultCVSDetails;
+  setConsultsDataCVS(consultsData: dataConsultCVSDetails): void;
+  consultCVSDetails(requestData: RequestDataForm):void;
 }
 
 const ConsultsContext = createContext<HooksConsultsData>({} as HooksConsultsData);
@@ -102,6 +131,27 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
   const [consultsData, setConsultsData] = useState<ConsultsData[]>({} as ConsultsData[]);
   const [list, setList] = useState(false);
   const [dataDetails, setDataDetails] = useState<dataConsultsDetails>({} as dataConsultsDetails);
+  const [consultsDataCVS, setConsultsDataCVS] = useState<dataConsultCVSDetails>({} as dataConsultCVSDetails);
+
+  const consultCVSDetails = useCallback(
+    async (requestData: RequestDataForm) => {
+     
+      const data = await api.get(`consult/${requestData.request_key}/cvs`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      }).catch((error) => {
+        // console.log(error);
+      });
+
+      if ( data ) {
+        console.log('data:',data.data);
+        setConsultsDataCVS(data.data)
+      }
+      
+    },
+    [setDataDetails, setLoading,user]
+  );
 
   const consultsGet = useCallback(async () => {
     setLoading(true);
@@ -201,7 +251,10 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
         consultsPut,
         consultsDetailsGet,
         dataDetails,
-        setDataDetails
+        setDataDetails,
+        consultsDataCVS,
+        setConsultsDataCVS,
+        consultCVSDetails
       }}
     >
       {children}
