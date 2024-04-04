@@ -120,7 +120,7 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
     }
     setList(true);
     setLoading(false);
-  }, [setConsultsData, setList, setLoading]);
+  }, [setConsultsData, setList, setLoading, user]);
 
   const consultsPost = useCallback(
     async (requestData: RequestDataForm) => {
@@ -142,7 +142,7 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
         toast.success('Consulta cadastrada com sucesso');
       }
     },
-    [consultsGet]
+    [consultsGet, user]
   );
 
   const consultsPut = useCallback(async () => {
@@ -165,13 +165,12 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
       setConsultsData(data.data);
     }
     setLoading(false);
-  }, [setConsultsData, setLoading]);
+  }, [setConsultsData, setLoading, user]);
 
   const consultsDetailsGet = useCallback(
     async (requestData: RequestDataForm) => {
-     
       const data = await api
-        .get(`consult/${requestData.request_key}/${requestData.user_id}`, {
+        .get(`consult/${requestData.request_key}/user/${requestData.user_id}`, {
           headers: {
             Authorization: `Bearer ${user.token}`
           }
@@ -183,7 +182,7 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
         setDataDetails(data.data);
       }
     },
-    [setDataDetails]
+    [setDataDetails, user]
   );
 
   if (loading) {
