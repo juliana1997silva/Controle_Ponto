@@ -6,10 +6,10 @@ import { TitlePage } from '../Consults/styles';
 import { RequestDataForm, useConsults } from '../hooks/hooksConsults';
 
 const ConsultsCreated: React.FC = () => {
-  const { consultsPost } = useConsults();
+  const { consultsPost, showListConsults} = useConsults();
   const { dataListUsers, listUsers, listHoursUsers } = useReleasePoint();
-  const [showList, setShowList] = useState(false);
   const [requestData, setRequestData] = useState<RequestDataForm>({} as RequestDataForm);
+  const [showList, setShowList] = useState(false);
 
   const dataSelect = Object.values(dataListUsers).map((item) => {
     return {
@@ -31,12 +31,12 @@ const ConsultsCreated: React.FC = () => {
 
   const handleSubmit = useCallback(async () => {
     consultsPost(requestData);
-    setShowList(true);
   }, [requestData, consultsPost]);
 
   useEffect(() => {
     listUsers();
-  }, [listUsers]);
+    if (showListConsults) setShowList(true);
+  }, [listUsers, showListConsults, setShowList]);
 
   if (showList) {
     return <Consults />;

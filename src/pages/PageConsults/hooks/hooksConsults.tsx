@@ -120,7 +120,9 @@ interface HooksConsultsData {
   setDataDetails(dataDetails: dataConsultsDetails): void;
   consultsDataCVS: dataConsultCVSDetails;
   setConsultsDataCVS(consultsData: dataConsultCVSDetails): void;
-  consultCVSDetails(requestData: RequestDataForm):void;
+  consultCVSDetails(requestData: RequestDataForm): void;
+  showListConsults: boolean;
+  setShowListConsults(showListConsults: boolean):void;
 }
 
 const ConsultsContext = createContext<HooksConsultsData>({} as HooksConsultsData);
@@ -132,6 +134,7 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
   const [list, setList] = useState(false);
   const [dataDetails, setDataDetails] = useState<dataConsultsDetails>({} as dataConsultsDetails);
   const [consultsDataCVS, setConsultsDataCVS] = useState<dataConsultCVSDetails>({} as dataConsultCVSDetails);
+  const [showListConsults, setShowListConsults] = useState(false);
 
   const consultCVSDetails = useCallback(
     async (requestData: RequestDataForm) => {
@@ -188,11 +191,12 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
           // console.log(error);
         });
       if (data) {
+        setShowListConsults(true);
         consultsGet();
         toast.success('Consulta cadastrada com sucesso');
       }
     },
-    [consultsGet, user]
+    [consultsGet, user, setShowListConsults]
   );
 
   const consultsPut = useCallback(async () => {
@@ -254,7 +258,9 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
         setDataDetails,
         consultsDataCVS,
         setConsultsDataCVS,
-        consultCVSDetails
+        consultCVSDetails,
+        showListConsults,
+        setShowListConsults
       }}
     >
       {children}
