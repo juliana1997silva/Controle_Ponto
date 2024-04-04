@@ -3,16 +3,21 @@ import { Button, Panel, Table } from 'rsuite';
 import BreadcrumbComponent from '../../../components/Breadcrumb';
 import { useAuth } from '../../../hooks/hooksAuth';
 import GroupsRegister from '../GroupsRegister';
-import { useGroups } from '../hooks/hooksGroups';
+import { GroupsData, useGroups } from '../hooks/hooksGroups';
 import { ContainerButton, TitlePage } from './styles';
 import AcessPermissions from '../AcessPermissions';
+import { useUserGroups } from '../../PageUserGroups/hooks/hooksUserGroups';
+import Membros from '../Membros';
 
 const GroupsList: React.FC = () => {
   const { user } = useAuth();
   const { Column, HeaderCell, Cell } = Table;
   const { listGroups, dataGroups, list, setMode, setGroupStore, releaseGroup } = useGroups();
+  const { listUsersGroups } = useUserGroups();
   const [showRegister, setShowRegister] = useState(false);
   const [showPermissions, setShowPermissions] = useState(false);
+  const [showMembros, setShowMembros] = useState(false);
+  const [data, setData] = useState<GroupsData>({} as GroupsData);
 
   const handlePermissions = useCallback(
     (idGroup: string) => {
@@ -20,6 +25,15 @@ const GroupsList: React.FC = () => {
       setShowPermissions(true);
     },
     [setShowPermissions]
+  );
+
+  const handleMembros = useCallback(
+    (idGroup: string) => {
+      console.log('idGroup::', idGroup);
+      listUsersGroups(idGroup);
+      setShowMembros(true);
+    },
+    [setShowMembros, listUsersGroups]
   );
 
   useEffect(() => {
@@ -31,8 +45,13 @@ const GroupsList: React.FC = () => {
   }
 
   if (showPermissions){
-    return <AcessPermissions />
+    return <AcessPermissions data={data} />;
   }
+
+  if (showMembros) {
+    return <Membros data={data}/>;
+  }
+
     return (
       <>
         <Panel header={<TitlePage className="title">Grupos</TitlePage>}>
@@ -77,7 +96,7 @@ const GroupsList: React.FC = () => {
               </Cell>
             </Column>
 
-            <Column width={300}>
+            <Column width={500}>
               <HeaderCell>Ações</HeaderCell>
               <Cell>
                 {(rowData: any) => {
@@ -111,22 +130,34 @@ const GroupsList: React.FC = () => {
                           <Button
                             appearance="primary"
                             type="submit"
+                            color="blue"
+                            onClick={() => {
+                              handlePermissions(rowData.id);
+                              setData(rowData);
+                            }}
+                          >
+                            Permissões
+                          </Button>
+                          <Button
+                            appearance="primary"
+                            type="submit"
+                            color="cyan"
+                            onClick={() => {
+                              handleMembros(rowData.id);
+                              setData(rowData);
+                            }}
+                          >
+                            Membros
+                          </Button>
+                          <Button
+                            appearance="primary"
+                            type="submit"
                             color="red"
                             onClick={() => {
                               releaseGroup(rowData.id);
                             }}
                           >
                             Desativar
-                          </Button>
-                          <Button
-                            appearance="primary"
-                            type="submit"
-                            color="blue"
-                            onClick={() => {
-                              handlePermissions(rowData.id);
-                            }}
-                          >
-                            Permissões
                           </Button>
                         </>
                       )}

@@ -17,13 +17,14 @@ const ResetPassword: React.FC = () => {
   const handleChangePasswordNew = () => {
     setVisibleNew(!visibleNew);
   };
+
   const handleChangePasswordConfirmation = () => {
     setVisibleConfirmation(!visibleConfirmation);
   };
 
   const handleChange = useCallback(
     (form: dataPassword) => {
-     // console.log('form::', form);
+      // console.log('form::', form);
       setDataForm(form);
     },
     [setDataForm]
@@ -58,7 +59,9 @@ const ResetPassword: React.FC = () => {
             <Form.ControlLabel>Confirme a Nova Senha:</Form.ControlLabel>
             <InputGroup>
               <Form.Control name="confirmation_password" type={visibleConfirmation ? 'text' : 'password'} />
-              <InputGroup.Button onClick={handleChangePasswordConfirmation}>{visibleConfirmation ? <EyeIcon /> : <EyeSlashIcon />}</InputGroup.Button>
+              <InputGroup.Button onClick={handleChangePasswordConfirmation}>
+                {visibleConfirmation ? <EyeIcon /> : <EyeSlashIcon />}
+              </InputGroup.Button>
             </InputGroup>
           </Form.Group>
         </Form>
@@ -75,7 +78,14 @@ const ResetPassword: React.FC = () => {
         >
           Alterar
         </Button>
-        <Button appearance="subtle" onClick={() => setShowModalPassword(false)}>
+        <Button
+          appearance="primary"
+          color="red"
+          onClick={() => {
+            setShowModalPassword(false);
+            setDataForm({} as dataPassword);
+          }}
+        >
           Cancelar
         </Button>
       </Modal.Footer>

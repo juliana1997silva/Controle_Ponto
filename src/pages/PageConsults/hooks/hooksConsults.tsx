@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css'; // css do toast
 import Loading from '../../../components/Loading';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
+import { useAuth } from '../../../hooks/hooksAuth';
 
 export interface RequestDataForm {
   user_id?: string;
@@ -23,6 +24,7 @@ export interface ConsultsData {
   commit: number;
   team_id: string;
   user_interpres_code: string;
+  customer_name?:string;
 }
 
 export interface dataConsultsDetails {
@@ -95,6 +97,7 @@ interface HooksConsultsData {
 const ConsultsContext = createContext<HooksConsultsData>({} as HooksConsultsData);
 
 const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
+  const {user} = useAuth();
   const [loading, setLoading] = useState(false);
   const [consultsData, setConsultsData] = useState<ConsultsData[]>({} as ConsultsData[]);
   const [list, setList] = useState(false);
@@ -102,9 +105,15 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
 
   const consultsGet = useCallback(async () => {
     setLoading(true);
-    const data = await api.get('/consults').catch((error) => {
-      //console.log(error);
-    });
+    const data = await api
+      .get('/consults', {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      })
+      .catch((error) => {
+        //console.log(error);
+      });
 
     if (data) {
       setConsultsData(data.data);
@@ -115,9 +124,19 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
 
   const consultsPost = useCallback(
     async (requestData: RequestDataForm) => {
-      const data = await api.post(`consult/${requestData.request_key}/${requestData.user_id}`).catch((error) => {
-        // console.log(error);
-      });
+      const data = await api
+        .post(
+          `consult/${requestData.request_key}/${requestData.user_id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }
+        )
+        .catch((error) => {
+          // console.log(error);
+        });
       if (data) {
         consultsGet();
         toast.success('Consulta cadastrada com sucesso');
@@ -128,9 +147,19 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
 
   const consultsPut = useCallback(async () => {
     setLoading(true);
-    const data = await api.put('/consults', {}).catch((error) => {
-      //console.log(error);
-    });
+    const data = await api
+      .put(
+        '/consults',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          }
+        }
+      )
+      .catch((error) => {
+        //console.log(error);
+      });
 
     if (data) {
       setConsultsData(data.data);
@@ -141,9 +170,15 @@ const ConsultsContextProvider: React.FC<IProps> = ({ children }) => {
   const consultsDetailsGet = useCallback(
     async (requestData: RequestDataForm) => {
      
-      const data = await api.get(`consult/${requestData.request_key}/${requestData.user_id}`).catch((error) => {
-        // console.log(error);
-      });
+      const data = await api
+        .get(`consult/${requestData.request_key}/${requestData.user_id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          }
+        })
+        .catch((error) => {
+          // console.log(error);
+        });
       if (data) {
         setDataDetails(data.data);
       }

@@ -1,15 +1,17 @@
 import { EventClickArg, EventContentArg } from '@fullcalendar/core';
-import { EventImpl } from '@fullcalendar/core/internal';
 import ptLocale from '@fullcalendar/core/locales/pt-br';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import { Button, Panel } from 'rsuite';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
+import { Panel, Radio, SelectPicker } from 'rsuite';
 import { useCalendar } from '../hooks/hooksCalendar';
 import EventModal from './components/EventModal';
 import { TitlePage } from './styles';
+import { useAuth } from '../../../hooks/hooksAuth';
+import { Select } from 'antd';
+import { useReleasePoint } from '../../PageRelease/hooks/hookReleasePoint';
 
 export interface dataModal {
   title?: string;
@@ -20,10 +22,18 @@ export interface dataModal {
 }
 
 const Schedule: React.FC = () => {
+  const { user } = useAuth();
   const { listEvents, dataEvents, setMode, list, openModal, setOpenModal } = useCalendar();
-  const [dateSelect, setDateSelect] = useState<Date>({} as Date);
+  const { listUsers, dataListUsers } = useReleasePoint();
   const [dataModal, setDataModal] = useState<DateClickArg>({} as DateClickArg);
-  const [allDaySelect, setAllDaySelect] = useState<boolean>({} as boolean);
+
+  const selectUsers = Object.values(dataListUsers).map((item) => {
+    return {
+      value: item?.id,
+      label: item?.name,
+      role: item?.name
+    };
+  });
 
   const handleEventClick = useCallback(
     (clickInfo: EventClickArg) => {
@@ -43,28 +53,48 @@ const Schedule: React.FC = () => {
   );
 
   useLayoutEffect(() => {
-    if (!list) listEvents();
-  }, [list, listEvents]);
+    if (!list) {
+      listEvents();
+      listUsers();
+    }
+  }, [list, listEvents, listUsers]);
+
+  console.log('dataListUsers', dataListUsers);
 
   return (
     <Panel header={<TitlePage className="title">Agenda</TitlePage>}>
       {list && (
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-          }}
-          initialView="dayGridMonth"
-          dayMaxEvents
-          nextDayThreshold={'08:00:00'}
-          initialEvents={dataEvents}
-          eventContent={renderEventContent}
-          eventClick={handleEventClick}
-          dateClick={handleEventAdd}
-          locale={ptLocale}
-        />
+        <>
+          {user.manager === 1 ? (
+            <>
+           {Object.values(dataListUsers).map((item) => {
+            return (
+              <Radio value={item.id}>{item.name}</Radio>
+            )
+           })}
+            </>
+            
+          ) : (
+            <>{user.admin === 1 && <SelectPicker data={selectUsers} onSelect={(e) => console.log(e)} />}</>
+          )}
+
+          <FullCalendar
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            }}
+            initialView="dayGridMonth"
+            dayMaxEvents
+            nextDayThreshold={'08:00:00'}
+            initialEvents={dataEvents}
+            eventContent={renderEventContent}
+            eventClick={handleEventClick}
+            dateClick={handleEventAdd}
+            locale={ptLocale}
+          />
+        </>
       )}
       <EventModal
         open={openModal}

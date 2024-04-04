@@ -31,6 +31,7 @@ interface HooksCalendarData {
   openModal: boolean;
   setOpenModal(openModal: boolean): void;
   updateEvents(data: EventsData): void;
+  showEvents(id:string): void;
 }
 
 const CalendarContext = createContext<HooksCalendarData>({} as HooksCalendarData);
@@ -126,6 +127,28 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
     [listEvents, setOpenModal, user]
   );
 
+  const showEvents = useCallback(
+    async (id: string) => {
+      await api
+        .get(
+          `/events/${id}`,
+
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }
+        )
+        .then((response) => {
+          setDataEvents(response.data);
+        })
+        .catch(function (error) {
+          //console.log(error);
+        });
+    },
+    [user, setDataEvents]
+  );
+
   if (loading) {
     return <Loading />;
   }
@@ -143,7 +166,8 @@ const CalendarContextProvider: React.FC<IProps> = ({ children }) => {
         setList,
         openModal,
         setOpenModal,
-        updateEvents
+        updateEvents,
+        showEvents
       }}
     >
       {children}

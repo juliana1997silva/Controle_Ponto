@@ -96,6 +96,9 @@ const Consults: React.FC = () => {
     setSelectUser(users);
   }, [consultsData, setSelectTeam, setSelectUser]);
 
+
+  console.log('consultsData::', consultsData);
+
   useEffect(() => {
     if (!list) {
       consultsGet();
@@ -135,7 +138,7 @@ const Consults: React.FC = () => {
           </Button>
         </ContainerSearch>
         <Table data={dataForm.consult || dataForm.team || dataForm.user ? dataTableConsults : consultsData} autoHeight>
-          <Column>
+          <Column width={100}>
             <HeaderCell>Consulta</HeaderCell>
             <Cell>
               {(rowData: any) => (
@@ -148,8 +151,16 @@ const Consults: React.FC = () => {
             </Cell>
           </Column>
           <Column width={130}>
+            <HeaderCell>Cliente</HeaderCell>
+            <Cell dataKey="customer_name" />
+          </Column>
+          <Column width={130}>
             <HeaderCell>Usuário</HeaderCell>
             <Cell dataKey="user" />
+          </Column>
+          <Column width={130}>
+            <HeaderCell>Equipe</HeaderCell>
+            <Cell dataKey="team_id" />
           </Column>
           <Column width={180}>
             <HeaderCell>Status</HeaderCell>

@@ -18,24 +18,6 @@ import { useAuth } from '../../../hooks/hooksAuth';
 const Profile: React.FC = () => {
   const { user } = useAuth();
   const { showModalPassword, setShowModalPassword } = useProfile();
-  //const toaster = useToaster();
-  //const [uploading, setUploading] = useState(false);
-  //const [fileInfo, setFileInfo] = useState(null);
-  //const [buttonPhone, setButtonPhone] = useState(false);
-  //const [phone, setPhone] = useState('');
-  //const [mode, setMode] = useState<'create' | 'edit'>('create');
-
-  // const handleChange = useCallback((value: any) => {
-  //  const phoneFormat = value
-  //    .replace(/\D/g, '')
-  //    .replace(/(\d{2})(\d)/, '($1) $2')
-  //    .replace(/(\d{5})(\d)/, '$1-$2')
-  //    .replace(/(-\d{4})(\d+?)$/, '$1');
-  // //console.log(phoneFormat);
-  //  setPhone(phoneFormat);
-  // setButtonPhone(true);
-  //  setMode('edit');
-  // }, []);
 
   return (
     <>

@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { Button, ButtonToolbar, Panel, Table } from 'rsuite';
 import { TitlePage } from '../GroupsList/styles';
 import GroupsList from '../GroupsList';
+import { GroupsData } from '../hooks/hooksGroups';
 
-const AcessPermissions: React.FC = () => {
+interface dataMembros {
+  data: GroupsData;
+}
+
+const AcessPermissions: React.FC<dataMembros> = ({data}) => {
   const { Column, HeaderCell, Cell } = Table;
   const [showGroups, setShowGroups] = useState(false);
-  const data = [
+  const dataTable = [
     {
       id: '1',
       name: 'Permissão 001',
@@ -38,7 +43,7 @@ const AcessPermissions: React.FC = () => {
   }
   return (
     <>
-      <Panel header={<TitlePage className="title">Permissões do Grupo - XXXXXXXXXXXX</TitlePage>}>
+      <Panel header={<TitlePage className="title">Permissões do Grupo - {data.name}</TitlePage>}>
         <div
           style={{
             display: 'flex',
@@ -49,7 +54,7 @@ const AcessPermissions: React.FC = () => {
             Voltar
           </Button>
         </div>
-        <Table data={data} autoHeight>
+        <Table data={dataTable} autoHeight>
           <Column width={300}>
             <HeaderCell>Nome</HeaderCell>
             <Cell dataKey="name" />
