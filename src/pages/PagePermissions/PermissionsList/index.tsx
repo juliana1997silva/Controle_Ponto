@@ -1,38 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Panel, Table } from 'rsuite';
 import { Image, TitlePage } from '../styles';
 import PermissionsCreated from '../PermissionsCreated';
 import CreativeIcon from '@rsuite/icons/Creative';
+import { usePermissions } from '../hooks/hooksPermission';
 
 const PermissionsList: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
   const [showCreated, setShowCreated] = useState(false);
-  const data = [
-    {
-      id: '1',
-      name: 'Permissão 001',
-      description: 'Descricao 001',
-      image: null
-    },
-    {
-      id: '2',
-      name: 'Permissão 002',
-      description: 'Descricao 002',
-      image: null
-    },
-    {
-      id: '3',
-      name: 'Permissão 003',
-      description: 'Descricao 003',
-      image: null
-    },
-    {
-      id: '4',
-      name: 'Permissão 004',
-      description: 'Descricao 004',
-      image: null
-    }
-  ];
+  const { listPermissions, list, dataPermissions , setMode, setDataPermissionsStore, deletePermission} = usePermissions();
+
+  useEffect(() => {
+    if (!list) listPermissions();
+  }, [list, listPermissions]);
 
   if (showCreated) {
     return <PermissionsCreated />;
@@ -49,7 +29,7 @@ const PermissionsList: React.FC = () => {
           Novo
         </Button>
       </div>
-      <Table data={data} autoHeight>
+      <Table data={dataPermissions} autoHeight>
         <Column width={90}>
           <HeaderCell>Imagem</HeaderCell>
           <Cell dataKey="image">
@@ -70,13 +50,44 @@ const PermissionsList: React.FC = () => {
           <HeaderCell>Descrição</HeaderCell>
           <Cell dataKey="description" />
         </Column>
+        <Column width={100} align="center">
+          <HeaderCell>Status</HeaderCell>
+          <Cell>
+            {(rowData: any) => (
+              <>
+                {rowData.status === '1' ? (
+                  <div style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: 'green' }} />
+                ) : (
+                  <div style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: 'red' }} />
+                )}
+              </>
+            )}
+          </Cell>
+        </Column>
         <Column width={300}>
           <HeaderCell>Ações</HeaderCell>
           <Cell>
             {(rowData: any) => (
               <ButtonToolbar>
-                <Button appearance="primary" color="blue">
-                  Visualizar
+                <Button
+                  appearance="primary"
+                  color="orange"
+                  onClick={() => {
+                    setMode('edit');
+                    setDataPermissionsStore(rowData);
+                    setShowCreated(true);
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button
+                  appearance="primary"
+                  color="red"
+                  onClick={() => {
+                    deletePermission(rowData.id);
+                  }}
+                >
+                  Excluir
                 </Button>
               </ButtonToolbar>
             )}

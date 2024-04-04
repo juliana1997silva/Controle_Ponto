@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Button, Form, Input, Panel } from 'rsuite';
 import PermissionsList from '../PermissionsList';
 import { PermissionsData, usePermissions } from '../hooks/hooksPermission';
@@ -9,7 +9,7 @@ const Textarea = React.forwardRef((props, ref) => <Input {...props} as="textarea
 
 const PermissionsCreated: React.FC = () => {
   const [showList, setShowList] = useState(false);
-  const { createdPermission } = usePermissions();
+  const { createdPermission, mode, dataPermissionsStore, updatePermission } = usePermissions();
   const [dataForm, setDataForm] = useState<PermissionsData>({} as PermissionsData);
   const [image, setImage] = useState<File>({} as File);
 
@@ -27,12 +27,24 @@ const PermissionsCreated: React.FC = () => {
   };
 
   const handleSubmit = useCallback(() => {
-    if (image.name === undefined) {
-      console.log('sem imagem');
+    if (mode === 'create') {
+      if (image.name === undefined) {
+        createdPermission(dataForm);
+      } else {
+        createdPermission(dataForm, image);
+      }
     } else {
-      createdPermission(dataForm, image);
+      if (image.name === undefined) {
+        updatePermission(dataForm);
+      } else {
+        updatePermission(dataForm, image);
+      }
     }
-  }, [createdPermission, dataForm, image]);
+  }, [createdPermission, dataForm, image, updatePermission]);
+
+  useEffect(() => {
+    if (mode === 'edit') setDataForm(dataPermissionsStore);
+  }, [mode, setDataForm, dataPermissionsStore]);
 
   if (showList) {
     return <PermissionsList />;
@@ -49,7 +61,7 @@ const PermissionsCreated: React.FC = () => {
           Voltar
         </Button>
       </div>
-      <Form onChange={handleChange}>
+      <Form onChange={handleChange} formValue={dataForm} >
         <Form.Group>
           <Form.ControlLabel>Nome</Form.ControlLabel>
           <Form.Control name="name" />

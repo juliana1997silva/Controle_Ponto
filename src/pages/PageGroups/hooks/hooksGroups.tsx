@@ -5,6 +5,7 @@ import { useAuth } from '../../../hooks/hooksAuth';
 import api from '../../../services/api';
 import { IProps } from '../../../types';
 import Loading from '../../../components/Loading';
+import { PermissionsData } from '../../PagePermissions/hooks/hooksPermission';
 
 export interface GroupsData {
   id?: string;
@@ -27,6 +28,10 @@ interface HooksGroupsData {
   setGroupStore(groupStore: GroupsData): void;
   updateGroup(dataGroup: GroupsData): void;
   releaseGroup(id: string): void;
+  listPermissionsGroups(id: string): void;
+  dataPermissions: PermissionsData[];
+  setDataPermissions(dataPermissions: PermissionsData[]): void;
+  connectPermission(idGroup: string, idPermission: string): void;
 }
 
 const GroupsContext = createContext<HooksGroupsData>({} as HooksGroupsData);
@@ -37,7 +42,11 @@ const GroupsContextProvider: React.FC<IProps> = ({ children }) => {
   const [list, setList] = useState(false);
   const [mode, setMode] = useState<'create' | 'edit'>('create');
   const [groupStore, setGroupStore] = useState<GroupsData>({} as GroupsData);
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [dataPermissions, setDataPermissions] = useState<PermissionsData[]>({} as PermissionsData[])
+
+
+
   //lista
   const listGroups = useCallback(async () => {
     setLoading(true);
@@ -128,6 +137,51 @@ const [loading, setLoading] = useState(false);
     [listGroups, user]
   );
 
+  //LISTA PERMISSÕES DO GRUPO
+  const listPermissionsGroups = useCallback(
+    async (id: string) => {
+      const list = await api
+        .get(`/permission/groups/${id}`, {
+          headers: {
+           // Authorization: `Bearer ${user.token}`
+          }
+        })
+        .catch((error) => {
+          ////console.log(error);
+          toast.error('Ocorreu um erro. Tente Novamente!');
+        });
+
+      if (list) {
+        setDataPermissions(list.data);
+      }
+    },
+    [user, setDataPermissions]
+  );
+
+  const connectPermission = useCallback(
+    async (idGroup: string, idPermission: string) => {
+      const permissions = await api
+        .put(
+          `/permission/${idGroup}/connect/${idPermission}`,
+          {},
+          {
+            /* headers: {
+            Authorization: `Bearer ${user.token}`
+          }*/
+          }
+        )
+        .catch((error) => {
+          ////console.log(error);
+        });
+
+      if (permissions) {
+        listPermissionsGroups(idGroup);
+        toast.success('Permissão habilitada para o grupo com sucesso');
+      }
+    },
+    [listPermissionsGroups]
+  );
+
   if (loading) {
     return <Loading />;
   }
@@ -146,7 +200,11 @@ const [loading, setLoading] = useState(false);
         groupStore,
         setGroupStore,
         updateGroup,
-        releaseGroup
+        releaseGroup,
+        listPermissionsGroups,
+        dataPermissions,
+        setDataPermissions,
+        connectPermission
       }}
     >
       {children}

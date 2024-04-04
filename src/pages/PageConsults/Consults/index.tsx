@@ -11,6 +11,7 @@ interface formSearch {
   consult?: number;
   team?: string;
   user?: string;
+  customers?: string;
 }
 
 interface selectData {
@@ -26,6 +27,7 @@ const Consults: React.FC = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [selectTeam, setSelectTeam] = useState<selectData[]>([] as selectData[]);
   const [selectUser, setSelectUser] = useState<selectData[]>([] as selectData[]);
+  const [selectCustomers, setSelectCustumers] = useState<selectData[]>([] as selectData[]);
   const [dataForm, setDataForm] = useState<formSearch>({} as formSearch);
   const [dataSend, setDataSend] = useState<RequestDataForm>({} as RequestDataForm);
 
@@ -38,6 +40,12 @@ const Consults: React.FC = () => {
       return value.team_id.includes(dataForm.team);
     } else if (dataForm.user) {
       return value.user.includes(dataForm.user);
+    } else if (dataForm.customers) {
+      return value.customer_name.includes(dataForm.customers);
+    } else if (dataForm.customers && dataForm.team && dataForm.user) {
+      return (
+        value.customer_name.includes(dataForm.customers) && value.team_id.includes(dataForm.team) && value.user.includes(dataForm.user)
+      );
     }
     
     return false;
@@ -94,7 +102,22 @@ const Consults: React.FC = () => {
     }));
 
     setSelectUser(users);
-  }, [consultsData, setSelectTeam, setSelectUser]);
+
+    const uniqueCustomersIds: Set<string> = new Set();
+
+    Object.values(consultsData).forEach((item) => {
+      if (!uniqueCustomersIds.has(item.customer_name)) {
+        uniqueCustomersIds.add(item.customer_name);
+      }
+    });
+    const customers: selectData[] = Array.from(uniqueCustomersIds).map((customersId) => ({
+      value: customersId,
+      label: customersId,
+      role: customersId
+    }));
+
+    setSelectCustumers(customers);
+  }, [consultsData, setSelectTeam, setSelectUser, setSelectCustumers]);
 
 
   console.log('consultsData::', consultsData);
@@ -131,6 +154,9 @@ const Consults: React.FC = () => {
             </Form.Group>
             <Form.Group>
               <Form.Control accepter={SelectPicker} name="user" placeholder="Selecione o usuario" data={selectUser} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Control accepter={SelectPicker} name="customers" placeholder="Selecione o cliente" data={selectCustomers} />
             </Form.Group>
           </Form>
           <Button startIcon={<BsArrowClockwise />} appearance="link" onClick={() => consultsPut()}>

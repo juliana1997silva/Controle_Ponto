@@ -1,42 +1,29 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Panel, Table } from 'rsuite';
 import { TitlePage } from '../GroupsList/styles';
 import GroupsList from '../GroupsList';
-import { GroupsData } from '../hooks/hooksGroups';
+import { GroupsData, useGroups } from '../hooks/hooksGroups';
+import { PermissionsData, usePermissions } from '../../PagePermissions/hooks/hooksPermission';
 
 interface dataMembros {
-  data: GroupsData;
+  data: PermissionsData;
 }
 
-const AcessPermissions: React.FC<dataMembros> = ({data}) => {
+const AcessPermissions: React.FC<dataMembros> = ({ data }) => {
   const { Column, HeaderCell, Cell } = Table;
   const [showGroups, setShowGroups] = useState(false);
-  const dataTable = [
-    {
-      id: '1',
-      name: 'Permissão 001',
-      description: 'Descricao 001',
-      active: 1
+  const { listPermissionsGroups, dataPermissions, connectPermission } = useGroups();
+
+  const handleConnect = useCallback(
+    (dataPermission: PermissionsData) => {
+      if (data.id && dataPermission.id) connectPermission(data.id, dataPermission.id);
     },
-    {
-      id: '2',
-      name: 'Permissão 002',
-      description: 'Descricao 002',
-      active: 0
-    },
-    {
-      id: '3',
-      name: 'Permissão 003',
-      description: 'Descricao 003',
-      active: 0
-    },
-    {
-      id: '4',
-      name: 'Permissão 004',
-      description: 'Descricao 004',
-      active: 1
-    }
-  ];
+    [connectPermission]
+  );
+
+  useEffect(() => {
+    if (data.id) listPermissionsGroups(data.id);
+  }, [listPermissionsGroups]);
 
   if (showGroups) {
     return <GroupsList />;
@@ -54,7 +41,7 @@ const AcessPermissions: React.FC<dataMembros> = ({data}) => {
             Voltar
           </Button>
         </div>
-        <Table data={dataTable} autoHeight>
+        <Table data={dataPermissions} autoHeight>
           <Column width={300}>
             <HeaderCell>Nome</HeaderCell>
             <Cell dataKey="name" />
@@ -63,12 +50,12 @@ const AcessPermissions: React.FC<dataMembros> = ({data}) => {
             <HeaderCell>Descrição</HeaderCell>
             <Cell dataKey="description" />
           </Column>
-          <Column width={300}>
+          <Column width={210}>
             <HeaderCell>Status</HeaderCell>
             <Cell>
               {(rowData: any) => (
                 <>
-                  {rowData.active === 1 ? (
+                  {rowData.status === 1 ? (
                     <div style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: 'green' }} />
                   ) : (
                     <div style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: 'red' }} />
@@ -82,18 +69,15 @@ const AcessPermissions: React.FC<dataMembros> = ({data}) => {
             <Cell>
               {(rowData: any) => (
                 <ButtonToolbar>
-                  <Button appearance="primary" color="blue">
-                    Visualizar
+                  <Button
+                    appearance="primary"
+                    color={rowData.status === 1 ? 'red' : 'green'}
+                    onClick={() => {
+                      handleConnect(rowData);
+                    }}
+                  >
+                    {rowData.status === 1 ? 'Desabilitar' : 'Habilitar'}
                   </Button>
-                  {rowData.active === 1 ? (
-                    <Button appearance="primary" color="red">
-                      Desativar
-                    </Button>
-                  ) : (
-                    <Button appearance="primary" color="green">
-                      Ativar
-                    </Button>
-                  )}
                 </ButtonToolbar>
               )}
             </Cell>

@@ -24,7 +24,7 @@ export interface ConsultsData {
   commit: number;
   team_id: string;
   user_interpres_code: string;
-  customer_name?:string;
+  customer_name:string;
 }
 
 export interface dataConsultCVSDetails {
