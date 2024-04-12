@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import AppProvider from './hooks';
 import { Router } from './routes';
 import 'rsuite/dist/rsuite.min.css'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
   return (

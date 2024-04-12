@@ -284,6 +284,13 @@ const Point: React.FC = () => {
                 <br />
                 <Form.Control type="time" name="out_time" style={{ width: 200 }} />
               </Form.Group>
+              <br />
+              <Form.Group>
+                <Form.ControlLabel>Observação</Form.ControlLabel>
+                <br />
+                <Form.Control rows={5} accepter={Textarea} name="observation" style={{ width: 830 }} />
+              </Form.Group>
+              <br />
               <Form.Group style={{ marginLeft: 10, marginTop: 9 }}>
                 <br />
                 <Button appearance="primary" style={{ width: 120, backgroundColor: '#1976D2' }} onClick={handleAddNonBusiness}>

@@ -1,53 +1,18 @@
-import React from "react";
-import { Table } from "rsuite";
-import {
-  Circle,
-  Container,
-  ContainerStatus,
-  Divider,
-  DividerFichas,
-  Status,
-  Title,
-} from "./styles";
+import React from 'react';
+import { Table } from 'rsuite';
+import { useAuth } from '../../../../hooks/hooksAuth';
+import { Circle, Container, ContainerStatus, Divider, DividerFichas, Status, Title } from './styles';
 
 const CardCheckPoint: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
-  const data = [
-    {
-      date: "19/Mar/2023",
-      status: "Aprovada",
-    },
-    {
-      date: "20/Mar/2023",
-      status: "Aprovada",
-    },
-    {
-      date: "21/Mar/2023",
-      status: "Reprovada",
-    },
-    {
-      date: "22/Mar/2023",
-      status: "Aprovada",
-    },
-    {
-      date: "23/Mar/2023",
-      status: "Reprovada",
-    },
-    {
-      date: "24/Mar/2023",
-      status: "Aprovada",
-    },
-    {
-      date: "25/Mar/2023",
-      status: "Aprovada",
-    },
-  ];
+  const { dataDashboard } = useAuth();
+
   return (
     <Container>
       <Divider />
       <Title>Últimas Fichas</Title>
       <DividerFichas />
-      <Table data={data} autoHeight>
+      <Table data={dataDashboard.cheats} autoHeight>
         <Column width={270} align="left">
           <HeaderCell>Data</HeaderCell>
           <Cell dataKey="date" />
@@ -57,24 +22,24 @@ const CardCheckPoint: React.FC = () => {
           <Cell>
             {(rowData: any) => {
               switch (rowData.status) {
-                case "Aprovada":
+                case 'Aprovada':
                   return (
                     <ContainerStatus>
                       <Circle
                         style={{
-                          backgroundColor: "green",
+                          backgroundColor: 'green'
                         }}
                       />
                       <Status>{rowData.status}</Status>
                     </ContainerStatus>
                   );
 
-                case "Reprovada":
+                case 'Reprovada':
                   return (
                     <ContainerStatus>
                       <Circle
                         style={{
-                          backgroundColor: "red",
+                          backgroundColor: 'red'
                         }}
                       />
                       <Status>{rowData.status}</Status>
@@ -86,7 +51,7 @@ const CardCheckPoint: React.FC = () => {
                     <ContainerStatus>
                       <Circle
                         style={{
-                          backgroundColor: "yellow",
+                          backgroundColor: 'yellow'
                         }}
                       />
                       <Status>{rowData.status}</Status>

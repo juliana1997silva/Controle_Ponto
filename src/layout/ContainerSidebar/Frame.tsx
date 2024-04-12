@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { Nav, Navbar, Sidenav } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import { useAuth } from '../../hooks/hooksAuth';
+import NavItem from './NavItem';
 
 const NavToggle = ({ expand, onChange }: any) => {
   return (
@@ -36,40 +37,27 @@ const Frame: React.FC = () => {
       <Sidenav expanded={expanded} style={{ color: '#1976d2' }}>
         <Sidenav.Body>
           <Nav>
-            <Nav.Item eventKey="1" icon={<DashboardIcon />} onSelect={() => navigate('/dashboard')}>
-              Dashboard
-            </Nav.Item>
-            {user.admin === 1 || user.manager === 1 ? (
-              <>
-                <Nav.Item eventKey="2" icon={<DocPassIcon />} onSelect={() => navigate('/release-checkpoint')}>
-                  Liberar Ficha
-                </Nav.Item>
-                <Nav.Item eventKey="3" icon={<AdminIcon />} onSelect={() => navigate('/users')}>
-                  Usuarios
-                </Nav.Item>
-                <Nav.Item eventKey="6" icon={<PeoplesIcon />} onSelect={() => navigate('/groups')}>
-                  Grupos
-                </Nav.Item>
-                <Nav.Item eventKey="7" icon={<CodeIcon />} onSelect={() => navigate('/consults')}>
-                  Consultas
-                </Nav.Item>
-                <Nav.Item eventKey="8" icon={<PeoplesUploadedIcon />} onSelect={() => navigate('/user-groups')}>
-                  Usuarios x Grupos
-                </Nav.Item>
-                <Nav.Item eventKey="9" icon={<SettingHorizontalIcon />} onSelect={() => navigate('/permissions')}>
-                  Permissões
-                </Nav.Item>
-              </>
-            ) : (
-              <></>
-            )}
-            <Nav.Item eventKey="4" icon={<TaskIcon />} onSelect={() => navigate('/checkpoint')}>
-              Registro Ponto
-            </Nav.Item>
+            <NavItem eventKey="1" icone={<DashboardIcon />} name="Dashboard" role="menu_dashboard" router="/dashboard" />
+            <NavItem
+              eventKey="2"
+              icone={<DocPassIcon />}
+              name="Liberação Ficha"
+              role="menu_release_checkpoint"
+              router="/release-checkpoint"
+            />
+            <NavItem eventKey="3" icone={<AdminIcon />} name="Usuarios" role="menu_users" router="/users" />
 
-            <Nav.Item eventKey="5" icon={<CalendarIcon />} onSelect={() => navigate('/schedule')}>
-              Agenda
-            </Nav.Item>
+            <NavItem eventKey="4" icone={<PeoplesIcon />} name="Grupos" role="menu_groups" router="/groups" />
+
+            <NavItem eventKey="5" icone={<CodeIcon />} name="Conultas" role="menu_consults" router="/consults" />
+
+            <NavItem eventKey="6" icone={<PeoplesUploadedIcon />} name="Usuarios X Grupos" role="menu_user_groups" router="/user-groups" />
+
+            <NavItem eventKey="7" icone={<SettingHorizontalIcon />} name="Permissões" role="menu_permissions" router="/permissions" />
+
+            <NavItem eventKey="8" icone={<TaskIcon />} name="Registro Ponto" role="menu_checkpoint" router="/checkpoint" />
+
+            <NavItem eventKey="9" icone={<CalendarIcon />} name="Agenda" role="menu_schedule" router="/schedule" />
           </Nav>
         </Sidenav.Body>
       </Sidenav>

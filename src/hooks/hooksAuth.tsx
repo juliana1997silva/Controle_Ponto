@@ -7,6 +7,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../components/Loading';
 import api from '../services/api';
 import { IProps } from '../types';
+import { Roles, RolesInput, RolesSelect } from '../types/permissions';
+
+export interface DashboardData {
+  consultations: [string[]];
+  cheats: any[];
+}
 
 export interface dataLogin {
   email?: string;
@@ -29,6 +35,7 @@ export interface UserData {
   token: string;
   manager: number;
   user_interpres_code: string;
+  permissions: string[];
 }
 
 interface HooksAuthData {
@@ -46,19 +53,63 @@ interface HooksAuthData {
   setLoading(loading: boolean): void;
   expanded: boolean;
   setExpanded(expanded: boolean): void;
+  getRole(role: Roles | RolesInput | RolesSelect): boolean;
+  getCookie(name: string): string;
+  listDashboard(): void;
+  dataDashboard: DashboardData;
+  setDataDashboard(dataDashboard: DashboardData): void;
+  list: boolean;
+  setList(list: boolean): void;
+  consultationsData: any[];
+  setConsultationsData(consultationsData: any[]):void;
 }
 
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
 
 const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [showHome, setShowHome] = useState(false);
+  const [wHeight, setWHeight] = useState(window.innerHeight);
   const [loading, setLoading] = useState(false);
   const [errorLogin, setErrorLogin] = useState(false);
   const [user, setUser] = useState<UserData>({} as UserData);
-  const [userCookies, setUserCookies, removeUserCookies] = useCookies(['user']);
+  const [userCookies, setUserCookies, removeUserCookies] = useCookies(['user', 'permissions']);
   const [namePath, setNamePath] = useState('');
   const [expanded, setExpanded] = useState(true);
   const navigate = useNavigate();
+  const [dataDashboard, setDataDashboard] = useState<DashboardData>({} as DashboardData);
+  const [list, setList] = useState(false);
+  const [consultationsData, setConsultationsData] = useState<any[]>([]);
+
+  //lista
+  const listDashboard = useCallback(async () => {
+    setLoading(true);
+    console.log('CHAMANDO O HOOKS PARA CONSULTA');
+    const dataHome = await api
+      .get(
+        '/dashboard' /* {
+        headers: {
+          // Authorization: `Bearer ${user.token}`
+        }
+      } */
+      )
+      .catch((error) => {
+        ////console.log(error);
+        toast.error('Ocorreu um erro. Tente Novamente!');
+      });
+    if (dataHome) {
+      console.log('datahooks', dataHome.data);
+      setDataDashboard(dataHome.data);
+
+      const formattedData = [
+        ['', '', { role: 'style' }, { sourceColumn: 0, role: 'annotation', type: 'string', calc: 'stringify' }],
+        ...dataHome.data.consultations.map(([category, value, color]: any) => [category, value, color, null])
+      ];
+
+      setConsultationsData(formattedData);
+    }
+    setList(true);
+    setLoading(false);
+  }, [setLoading, setDataDashboard, setList, setConsultationsData]);
 
   const signin = useCallback(
     async (data: dataLogin) => {
@@ -83,7 +134,8 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
             admin: response.data.admin,
             token: response.data.token,
             manager: response.data.manager,
-            user_interpres_code: response.data.user_interpres_code
+            user_interpres_code: response.data.user_interpres_code,
+            permissions: response.data.permissions
           };
 
           setUserCookies('user', setCookie, {
@@ -91,6 +143,12 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
             encode,
             expires: date
           });
+          setUserCookies('permissions', response.data.permissions, {
+            path: '/',
+            encode,
+            expires: date
+          });
+          listDashboard();
         })
         .catch(function (error) {
           //console.log(error.response.data.message);
@@ -98,15 +156,50 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         });
       setLoading(false);
     },
-    [setUser, setUserCookies]
+    [setUser, setUserCookies, listDashboard]
   );
 
   const SignOut = useCallback(() => {
     removeUserCookies('user');
+    removeUserCookies('permissions');
     setUser({} as UserData);
     setShowHome(false);
     // window.location.reload();
   }, [removeUserCookies, setUser, setShowHome]);
+
+  const getRole = useCallback(
+    (role: string) => {
+      if (user) {
+        if (user.permissions) {
+          const isRole = user.permissions.find((manage) => manage === role);
+          if (isRole && isRole === role) return true;
+        }
+        if (user.permissions) {
+          const isRole = user.permissions.find((permission) => permission === role);
+          if (isRole && isRole === role) return true;
+        }
+      }
+
+      setWHeight(window.innerHeight - 165);
+      return false;
+    },
+    [user]
+  );
+
+  const getCookie = useCallback((cname: string) => {
+    var name = cname + '=';
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return '';
+  }, []);
 
   useEffect(() => {
     if (userCookies.user) {
@@ -162,7 +255,16 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         loading,
         setLoading,
         expanded,
-        setExpanded
+        setExpanded,
+        getRole,
+        getCookie,
+        listDashboard,
+        dataDashboard,
+        setDataDashboard,
+        list,
+        setList,
+        consultationsData,
+        setConsultationsData
       }}
     >
       {children}

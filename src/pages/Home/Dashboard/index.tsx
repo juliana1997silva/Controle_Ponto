@@ -1,6 +1,7 @@
 import { mdiAlarm, mdiFileDocumentOutline } from '@mdi/js';
 import React, { useEffect, useState } from 'react';
 import { Animation } from 'rsuite';
+import { useAuth } from '../../../hooks/hooksAuth';
 import Card from '../components/Card';
 import CardCheckPoint from '../components/CardCheckPoint';
 import CardConsults from '../components/CardConsults';
@@ -9,6 +10,13 @@ import { Container, ContainerGlobal, ContainerGrafic } from './styles';
 
 const Dashboard: React.FC = () => {
   const [show, setShow] = useState(false);
+  const { dataDashboard, listDashboard, list } = useAuth();
+
+  useEffect(() => {
+    setShow(true);
+    if(!list)listDashboard();
+  }, [setShow, listDashboard, list]);
+
 
   const Cards = React.forwardRef(({ ...props }, ref: any) => (
     <div
@@ -37,49 +45,49 @@ const Dashboard: React.FC = () => {
     </div>
   ));
 
-  useEffect(() => {
-    setShow(true);
-  }, [setShow]);
-
   return (
     <>
-      <ContainerGlobal>
-        {/* <Button onClick={onChange}>CLique AQUI</Button> */}
-        <Animation.Transition
-          exitedClassName="custom-exited"
-          exitingClassName="custom-exiting"
-          enteredClassName="custom-entered"
-          enteringClassName="custom-entering"
-          in={show}
-        >
-          {(props, ref) => <Cards {...props} ref={ref} />}
-        </Animation.Transition>
-      </ContainerGlobal>
-      <Container>
-        <ContainerGrafic>
-          <Animation.Transition
-            exitedClassName="custom-exited"
-            exitingClassName="custom-exiting"
-            enteredClassName="custom-entered"
-            enteringClassName="custom-entering"
-            in={show}
-          >
-            {(props, ref) => <ConsultsGraphic {...props} ref={ref} />}
-          </Animation.Transition>
-        </ContainerGrafic>
+      {dataDashboard && (
+        <>
+          <ContainerGlobal>
+            {/* <Button onClick={onChange}>CLique AQUI</Button> */}
+            <Animation.Transition
+              exitedClassName="custom-exited"
+              exitingClassName="custom-exiting"
+              enteredClassName="custom-entered"
+              enteringClassName="custom-entering"
+              in={show}
+            >
+              {(props, ref) => <Cards {...props} ref={ref} />}
+            </Animation.Transition>
+          </ContainerGlobal>
+          <Container>
+            <ContainerGrafic>
+              <Animation.Transition
+                exitedClassName="custom-exited"
+                exitingClassName="custom-exiting"
+                enteredClassName="custom-entered"
+                enteringClassName="custom-entering"
+                in={show}
+              >
+                {(props, ref) => <ConsultsGraphic {...props} ref={ref} />}
+              </Animation.Transition>
+            </ContainerGrafic>
 
-        <ContainerGrafic>
-          <Animation.Transition
-            exitedClassName="custom-exited"
-            exitingClassName="custom-exiting"
-            enteredClassName="custom-entered"
-            enteringClassName="custom-entering"
-            in={show}
-          >
-            {(props, ref) => <GraphicCheckPoint {...props} ref={ref} />}
-          </Animation.Transition>
-        </ContainerGrafic>
-      </Container>
+            <ContainerGrafic>
+              <Animation.Transition
+                exitedClassName="custom-exited"
+                exitingClassName="custom-exiting"
+                enteredClassName="custom-entered"
+                enteringClassName="custom-entering"
+                in={show}
+              >
+                {(props, ref) => <GraphicCheckPoint {...props} ref={ref} />}
+              </Animation.Transition>
+            </ContainerGrafic>
+          </Container>
+        </>
+      )}
     </>
   );
 };

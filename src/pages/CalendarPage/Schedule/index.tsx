@@ -65,18 +65,6 @@ const Schedule: React.FC = () => {
     <Panel header={<TitlePage className="title">Agenda</TitlePage>}>
       {list && (
         <>
-          {user.manager === 1 ? (
-            <>
-           {Object.values(dataListUsers).map((item) => {
-            return (
-              <Radio value={item.id}>{item.name}</Radio>
-            )
-           })}
-            </>
-            
-          ) : (
-            <>{user.admin === 1 && <SelectPicker data={selectUsers} onSelect={(e) => console.log(e)} />}</>
-          )}
 
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

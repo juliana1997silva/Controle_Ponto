@@ -10,6 +10,7 @@ import { useUserGroups } from '../../PageUserGroups/hooks/hooksUserGroups';
 import Membros from '../Membros';
 import { PermissionsData } from '../../PagePermissions/hooks/hooksPermission';
 import { ConnectingAirportsOutlined } from '@mui/icons-material';
+import ButtonCustom from '../../../components/ButtonCustom';
 
 const GroupsList: React.FC = () => {
   const { user } = useAuth();
@@ -60,18 +61,17 @@ const GroupsList: React.FC = () => {
     <>
       <Panel header={<TitlePage className="title">Grupos</TitlePage>}>
         <BreadcrumbComponent active="Grupos" href="/dashboard" label="Dashboard" />
-        {user.admin === 1 && (
-          <ContainerButton>
-            <Button
-              appearance="primary"
-              type="submit"
-              style={{ backgroundColor: '#1976D2', width: 120 }}
-              onClick={() => setShowRegister(true)}
-            >
-              Novo
-            </Button>
-          </ContainerButton>
-        )}
+        <ContainerButton>
+          <ButtonCustom
+            appearance="primary"
+            type="submit"
+            style={{ backgroundColor: '#1976D2', width: 120 }}
+            onClick={() => setShowRegister(true)}
+            role="button_new_groups"
+          >
+            Novo
+          </ButtonCustom>
+        </ContainerButton>
         <Table data={dataGroups}>
           <Column width={300}>
             <HeaderCell>Nome</HeaderCell>
