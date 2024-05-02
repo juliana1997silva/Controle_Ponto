@@ -47,16 +47,21 @@ const Point: React.FC = () => {
   );
 
   const handleAddNonBusiness = useCallback(() => {
-    businessData.push({
-      id: formDataNonBusiness.id ? formDataNonBusiness.id : null,
-      registry_id: formDataNonBusiness.registry_id,
-      entry_time: formDataNonBusiness.entry_time,
-      lunch_entry_time: formDataNonBusiness.lunch_entry_time ? formDataNonBusiness.lunch_entry_time : null,
-      lunch_out_time: formDataNonBusiness.lunch_out_time ? formDataNonBusiness.lunch_out_time : null,
-      out_time: formDataNonBusiness.out_time
-    });
-    setFormDataNonBusiness({} as nonBusinessData);
-    if (hourMode === 'edit') setHourMode('create');
+    if (formDataNonBusiness.observation === undefined) {
+      toast.error('Campo "Observação" obrigatório');
+    } else {
+      businessData.push({
+        id: formDataNonBusiness.id ? formDataNonBusiness.id : null,
+        registry_id: formDataNonBusiness.registry_id,
+        entry_time: formDataNonBusiness.entry_time,
+        lunch_entry_time: formDataNonBusiness.lunch_entry_time ? formDataNonBusiness.lunch_entry_time : null,
+        lunch_out_time: formDataNonBusiness.lunch_out_time ? formDataNonBusiness.lunch_out_time : null,
+        out_time: formDataNonBusiness.out_time,
+        observation: formDataNonBusiness.observation
+      });
+       setFormDataNonBusiness({} as nonBusinessData);
+       if (hourMode === 'edit') setHourMode('create');
+    }   
   }, [businessData, formDataNonBusiness, setFormDataNonBusiness, hourMode, setHourMode]);
 
   const handleEditHour = useCallback(
@@ -141,7 +146,7 @@ const Point: React.FC = () => {
         status: 'pending'
       };
       updatePoint(data);
-     // console.log('data update::', data);
+      // console.log('data update::', data);
     }
     setFormDataTime({} as timeData);
     setDataConsults({} as consultsData[]);
@@ -177,9 +182,9 @@ const Point: React.FC = () => {
     if (mode === 'edit' && dataRegisterStore && dataRegisterStore.date) {
       // Criar uma cópia dos dados de dataRegisterStore
       const formData = {
-        ...dataRegisterStore,
+        ...dataRegisterStore
         // Garantir que o formato da data seja o esperado
-       // date: moment(dataRegisterStore.date, 'YYYY-MM-DD').format('DD/MM/YYYY')
+        // date: moment(dataRegisterStore.date, 'YYYY-MM-DD').format('DD/MM/YYYY')
       };
 
       // Atualizar o estado formDataTime com os dados copiados
@@ -316,7 +321,11 @@ const Point: React.FC = () => {
                       <HeaderCell>Saída</HeaderCell>
                       <Cell dataKey="out_time" />
                     </Column>
-                    <Column width={300}>
+                    <Column width={450} >
+                      <HeaderCell>Observação</HeaderCell>
+                      <Cell dataKey="observation" />
+                    </Column>
+                    <Column width={100}>
                       <HeaderCell>Ações</HeaderCell>
                       <Cell>
                         {(rowData: any) => (

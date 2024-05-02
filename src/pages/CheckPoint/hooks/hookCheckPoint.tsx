@@ -40,6 +40,7 @@ export interface nonBusinessData {
   out_time?: string;
   created_at?: string;
   updated_at?: string;
+  observation?: string;
 }
 
 export interface timeData {
@@ -123,6 +124,8 @@ const CheckPointContextProvider: React.FC<IProps> = ({ children }) => {
 
   const registerPoint = useCallback(
     async (dataTime: timeData) => {
+
+      console.log('dataTime', dataTime)
       const registerData = await api
         .post(`/checkpoint`, dataTime, {
           headers: {

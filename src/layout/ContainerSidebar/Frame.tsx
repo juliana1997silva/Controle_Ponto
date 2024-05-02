@@ -49,7 +49,7 @@ const Frame: React.FC = () => {
 
             <NavItem eventKey="4" icone={<PeoplesIcon />} name="Grupos" role="menu_groups" router="/groups" />
 
-            <NavItem eventKey="5" icone={<CodeIcon />} name="Conultas" role="menu_consults" router="/consults" />
+            <NavItem eventKey="5" icone={<CodeIcon />} name="Consultas" role="menu_consults" router="/consults" />
 
             <NavItem eventKey="6" icone={<PeoplesUploadedIcon />} name="Usuarios X Grupos" role="menu_user_groups" router="/user-groups" />
 
