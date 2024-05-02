@@ -9,11 +9,6 @@ import api from '../services/api';
 import { IProps } from '../types';
 import { Roles, RolesInput, RolesSelect } from '../types/permissions';
 
-export interface DashboardData {
-  consultations: [string[]];
-  cheats: any[];
-}
-
 export interface dataLogin {
   email?: string;
   password?: string;
@@ -55,13 +50,8 @@ interface HooksAuthData {
   setExpanded(expanded: boolean): void;
   getRole(role: Roles | RolesInput | RolesSelect): boolean;
   getCookie(name: string): string;
-  listDashboard(): void;
-  dataDashboard: DashboardData;
-  setDataDashboard(dataDashboard: DashboardData): void;
   list: boolean;
   setList(list: boolean): void;
-  consultationsData: any[];
-  setConsultationsData(consultationsData: any[]):void;
 }
 
 const AuthContext = createContext<HooksAuthData>({} as HooksAuthData);
@@ -76,40 +66,8 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [namePath, setNamePath] = useState('');
   const [expanded, setExpanded] = useState(true);
   const navigate = useNavigate();
-  const [dataDashboard, setDataDashboard] = useState<DashboardData>({} as DashboardData);
   const [list, setList] = useState(false);
-  const [consultationsData, setConsultationsData] = useState<any[]>([]);
-
-  //lista
-  const listDashboard = useCallback(async () => {
-    setLoading(true);
-    console.log('CHAMANDO O HOOKS PARA CONSULTA');
-    const dataHome = await api
-      .get(
-        '/dashboard' /* {
-        headers: {
-          // Authorization: `Bearer ${user.token}`
-        }
-      } */
-      )
-      .catch((error) => {
-        ////console.log(error);
-        toast.error('Ocorreu um erro. Tente Novamente!');
-      });
-    if (dataHome) {
-      console.log('datahooks', dataHome.data);
-      setDataDashboard(dataHome.data);
-
-      const formattedData = [
-        ['', '', { role: 'style' }, { sourceColumn: 0, role: 'annotation', type: 'string', calc: 'stringify' }],
-        ...dataHome.data.consultations.map(([category, value, color]: any) => [category, value, color, null])
-      ];
-
-      setConsultationsData(formattedData);
-    }
-    setList(true);
-    setLoading(false);
-  }, [setLoading, setDataDashboard, setList, setConsultationsData]);
+  
 
   const signin = useCallback(
     async (data: dataLogin) => {
@@ -148,7 +106,6 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
             encode,
             expires: date
           });
-          listDashboard();
         })
         .catch(function (error) {
           //console.log(error.response.data.message);
@@ -156,7 +113,7 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         });
       setLoading(false);
     },
-    [setUser, setUserCookies, listDashboard]
+    [setUser, setUserCookies]
   );
 
   const SignOut = useCallback(() => {
@@ -258,13 +215,8 @@ const AuthContextProvider: React.FC<IProps> = ({ children }) => {
         setExpanded,
         getRole,
         getCookie,
-        listDashboard,
-        dataDashboard,
-        setDataDashboard,
         list,
-        setList,
-        consultationsData,
-        setConsultationsData
+        setList
       }}
     >
       {children}

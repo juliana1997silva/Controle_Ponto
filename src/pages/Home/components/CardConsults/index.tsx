@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Chart } from 'react-google-charts';
 import { useAuth } from '../../../../hooks/hooksAuth';
 import { Container, Divider, Title } from './styles';
+import { useHome } from '../../hooks/hooksHome';
 
 const CardConsults: React.FC = () => {
-  const { dataDashboard, consultationsData } = useAuth();
+  const { dataDashboard, consultationsData } = useHome();
 
   return (
     <Container>

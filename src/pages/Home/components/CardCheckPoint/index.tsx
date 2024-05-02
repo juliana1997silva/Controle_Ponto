@@ -1,11 +1,11 @@
 import React from 'react';
 import { Table } from 'rsuite';
-import { useAuth } from '../../../../hooks/hooksAuth';
+import { useHome } from '../../hooks/hooksHome';
 import { Circle, Container, ContainerStatus, Divider, DividerFichas, Status, Title } from './styles';
 
 const CardCheckPoint: React.FC = () => {
   const { Column, HeaderCell, Cell } = Table;
-  const { dataDashboard } = useAuth();
+  const { dataDashboard } = useHome();
 
   return (
     <Container>

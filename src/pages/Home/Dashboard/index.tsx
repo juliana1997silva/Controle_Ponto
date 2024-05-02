@@ -7,10 +7,11 @@ import CardCheckPoint from '../components/CardCheckPoint';
 import CardConsults from '../components/CardConsults';
 import './animation.css';
 import { Container, ContainerGlobal, ContainerGrafic } from './styles';
+import { useHome } from '../hooks/hooksHome';
 
 const Dashboard: React.FC = () => {
   const [show, setShow] = useState(false);
-  const { dataDashboard, listDashboard, list } = useAuth();
+  const { dataDashboard, listDashboard, list } = useHome();
 
   useEffect(() => {
     setShow(true);
@@ -44,6 +45,10 @@ const Dashboard: React.FC = () => {
       <CardCheckPoint />
     </div>
   ));
+
+  useEffect(() => {
+    console.log(dataDashboard);
+  }, [dataDashboard]);
 
   return (
     <>
